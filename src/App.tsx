@@ -41,6 +41,9 @@ const App: React.FC = () => {
             <Route path="/young" exact={true} component={Young} />
             <Route path="/chapter" exact={true} component={Chapter} />
             <Route path="/event/:id/" component={Event} />
+            <Route path="/event/" exact>
+              <Redirect to="/home" />
+            </Route>
             {/* <Route>
               <Redirect to="/"></Redirect>
             </Route> */}

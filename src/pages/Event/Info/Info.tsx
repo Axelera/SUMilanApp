@@ -10,10 +10,10 @@ import {
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import EventTimeComponent from '../../../components/EventTime/EventTimeComponent';
 import SocialLinkComponent from '../../../components/SocialLinkComponent/SocialLinkComponent';
-import { EventComponentProps } from "../event.model";
+import { EventComponentProps, EventRelatorModel } from "../../../models/event.model";
 import './Info.css';
 
-const Relator = (data: { relator: any }) => {
+const Relator = (data: { relator: EventRelatorModel }) => {
     const relator = data.relator;
     return (
         <IonItem>
@@ -63,7 +63,7 @@ const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                     (
                         <IonList style={{marginBottom: 10}}>
                             <IonListHeader style={{ paddingLeft: 10 }}>Relatori</IonListHeader>
-                            {event.relators.map((relator: any, index: number) => <Relator key={index} relator={relator} />)}
+                            {event.relators.map((relator: EventRelatorModel, index: number) => <Relator key={index} relator={relator} />)}
                         </IonList>
                     )
                     :

@@ -9,7 +9,7 @@ import {
 } from '@ionic/react';
 import { ellipse } from 'ionicons/icons';
 import { DateTime } from 'luxon';
-import { EventComponentProps } from '../../pages/Event/event.model';
+import { EventComponentProps } from '../../models/event.model';
 import { EventTimeStatus, getEventTimeStatus } from '../../utils/eventTimeUtils';
 import './EventHeaderComponent.css';
 

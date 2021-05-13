@@ -8,11 +8,9 @@ import {
     IonPage,
 } from '@ionic/react';
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
-import { EventComponentProps } from '../event.model';
+import { EventComponentProps } from '../../../models/event.model';
 
 const Mentimeter: React.FC<EventComponentProps> = (props: EventComponentProps) => {
-    // const { id } = useParams<{ id: string; }>();
-    // console.log(id);
     return (
         <IonPage>
             <EventHeaderComponent event={props.event} />

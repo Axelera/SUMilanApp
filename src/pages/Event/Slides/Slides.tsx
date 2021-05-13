@@ -10,7 +10,7 @@ import {
 } from '@ionic/react';
 import { cloudDownloadOutline } from 'ionicons/icons';
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
-import { EventComponentProps } from '../event.model';
+import { EventComponentProps, EventSlideModel } from '../../../models/event.model';
 import './Slides.css';
 
 const Slides: React.FC<EventComponentProps> = (props: EventComponentProps) => {
@@ -19,7 +19,7 @@ const Slides: React.FC<EventComponentProps> = (props: EventComponentProps) => {
             <EventHeaderComponent event={props.event} />
             <IonContent>
                 <IonList>
-                    {props.event.slides?.map((slideData: any, index: number) => {
+                    {props.event.slides?.map((slideData: EventSlideModel, index: number) => {
                         return (
                             <IonItem key={index} href={slideData.url} download={`${slideData.title}.pdf`} detail={false}>
                                 <IonAvatar slot="start">

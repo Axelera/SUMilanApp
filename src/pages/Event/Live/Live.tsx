@@ -9,12 +9,12 @@ import {
 import ReactPlayer from 'react-player';
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import SocialLinkComponent from '../../../components/SocialLinkComponent/SocialLinkComponent';
-import { EventComponentProps } from '../event.model';
+import { EventComponentProps, EventStreamingUrlModel } from '../../../models/event.model';
 import './Live.css';
 
 const Live: React.FC<EventComponentProps> = (props: EventComponentProps) => {
 
-    const StreamingUrl = (item: {streamingUrl: any}) => {
+    const StreamingUrl = (item: {streamingUrl: EventStreamingUrlModel}) => {
         const streamingUrl = item.streamingUrl;
         return (
             <IonCol className="streaming-url-col">
@@ -35,7 +35,7 @@ const Live: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                         </IonText>
                         <IonGrid>
                             <IonRow>
-                                {props.event.streamingUrls.map((streamingUrl: any, index: number) => <StreamingUrl key={index} streamingUrl={streamingUrl} />)}
+                                {props.event.streamingUrls.map((streamingUrl: EventStreamingUrlModel, index: number) => <StreamingUrl key={index} streamingUrl={streamingUrl} />)}
                             </IonRow>
                         </IonGrid>
                     </div>

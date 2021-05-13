@@ -11,7 +11,7 @@ import {
     IonRow,
 } from "@ionic/react";
 import { fileTrayFull, help, logoYoutube } from "ionicons/icons";
-import { EventComponentWithRouteProps } from "../../pages/Event/event.model";
+import { EventComponentWithRouteProps } from "../../models/event.model";
 import EventTimeComponent from "../EventTime/EventTimeComponent";
 import './EventCardComponent.css';
 
@@ -50,7 +50,7 @@ const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: Event
                 <EventTimeComponent date={event.date} duration={event.duration}/>
             </IonCardHeader>
             <IonCardContent>
-                <EventDescription description={event.description as string} />
+                <EventDescription description={event.description} />
                 <IonGrid className="event-actions-grid">
                     <IonRow>
                         <IonCol>
