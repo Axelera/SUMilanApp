@@ -1,11 +1,14 @@
 import {
     IonButton,
     IonButtons,
+    IonCol,
     IonContent,
+    IonGrid,
     IonHeader,
     IonIcon,
     IonMenuButton,
     IonPage,
+    IonRow,
     IonSearchbar,
     IonTitle,
     IonToolbar
@@ -95,13 +98,27 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
                 {toolbar}
             </IonHeader>
             <IonContent fullscreen>
-                {filteredEvents?.length > 0 ? filteredEvents.map((event, index) => {
-                    return (
-                        <EventCardComponent {...props} event={event} />
-                    );
-                }) : (
-                    <p style={{ margin: 15 }}>Nessun evento soddisfa la tua ricerca</p>
-                )}
+                <IonGrid style={{padding: 0}}>
+                    <IonRow>
+                        {filteredEvents?.length > 0 ? filteredEvents.map((event, index) => {
+                            return (
+                                <IonCol
+                                    key={index}
+                                    sizeXs="12"
+                                    sizeSm="6"
+                                    sizeMd="6"
+                                    sizeLg="6"
+                                    sizeXl="4"
+                                    style={{padding: 0}}
+                                >
+                                    <EventCardComponent {...props} event={event} />
+                                </IonCol>
+                            );
+                        }) : (
+                            <p style={{ margin: 15 }}>Nessun evento soddisfa la tua ricerca</p>
+                        )}
+                    </IonRow>
+                </IonGrid>
             </IonContent>
         </IonPage>
     );

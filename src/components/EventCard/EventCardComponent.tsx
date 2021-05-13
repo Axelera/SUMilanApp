@@ -38,7 +38,7 @@ const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: Event
     return (
         <IonCard key={event.id} onClick={() => {
             props.history.push(`/event/${event.id}/info`);
-        }}  button={true}>
+        }}  button={true} className="event-card">
             <div className="card-image" style={{ backgroundImage: `url(${event.imageUrl}` }}></div>
             <IonCardHeader>
                 <IonCardTitle>
