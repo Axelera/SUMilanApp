@@ -5,7 +5,7 @@ export interface EventComponentProps {
 }
 
 export interface EventComponentWithRouteProps extends RouteComponentProps {
-    event: EventModel;
+    event?: EventModel;
 }
 
 export interface EventModel {

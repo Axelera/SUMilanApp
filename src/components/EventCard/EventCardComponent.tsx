@@ -9,8 +9,9 @@ import {
     IonGrid,
     IonIcon,
     IonRow,
+    IonSkeletonText,
 } from "@ionic/react";
-import { fileTrayFull, help, logoYoutube } from "ionicons/icons";
+import { fileTrayFull, help, logoYoutube, timeOutline } from "ionicons/icons";
 import { EventComponentWithRouteProps } from "../../models/event.model";
 import EventTimeComponent from "../EventTime/EventTimeComponent";
 import './EventCardComponent.css';
@@ -32,8 +33,53 @@ const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: Event
 
     const cardButtonClickHandler = (ev: any, page: string) => {
         ev.stopPropagation();
-        props.history.push(`/event/${event.id}/${page}`);
+        props.history.push(`/event/${event?.id}/${page}`);
     };
+
+    if (!event) {
+        return (
+            <IonCard className="event-card">
+                <div className="card-image">
+                    <IonSkeletonText animated style={{height: '100%', width: '100%'}}/>
+                </div>
+                <IonCardHeader>
+                    <IonCardTitle>
+                        <IonSkeletonText animated style={{width: 175, height: 20}}/>
+                    </IonCardTitle>
+                    <IonCardSubtitle>
+                        <IonSkeletonText animated style={{width: 75, height: 15}}/>
+                    </IonCardSubtitle>
+                    <div className="time-container-loading"><IonIcon icon={timeOutline} /><IonSkeletonText animated style={{width: 100}} /></div>
+                </IonCardHeader>
+                <IonCardContent>
+                    <IonSkeletonText animated style={{width: '100%', marginBottom: 8}}/>
+                    <IonSkeletonText animated style={{width: '100%', marginBottom: 8}}/>
+                    <IonSkeletonText animated style={{width: '100%', marginBottom: 8}}/>
+                    <IonSkeletonText animated style={{width: '80%'}}/>
+                    <IonGrid className="event-actions-grid">
+                        <IonRow>
+                            <IonCol>
+                                <IonButton fill="clear" color="medium">
+                                    <IonIcon slot="icon-only" icon={logoYoutube} />
+                                </IonButton>
+                            </IonCol>
+                            <IonCol>
+                                <IonButton fill="clear" color="medium">
+                                    <IonIcon slot="icon-only" icon={help} />
+                                </IonButton>
+                            </IonCol>
+                            <IonCol>
+                                <IonButton fill="clear" color="medium">
+                                    <IonIcon slot="icon-only" icon={fileTrayFull} />
+                                </IonButton>
+                            </IonCol>
+                        </IonRow>
+                    </IonGrid>
+    
+                </IonCardContent>
+            </IonCard>
+        );
+    }
 
     return (
         <IonCard key={event.id} onClick={() => {

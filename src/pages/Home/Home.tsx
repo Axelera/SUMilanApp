@@ -108,7 +108,7 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
                     {toolbar}
                 </IonHeader>
                 <IonContent fullscreen>
-                    <p style={{ margin: 15 }}>Error! {error.message}</p>
+                    <p style={{ margin: 15 }}>Errore! {error.message}</p>
                 </IonContent>
             </IonPage>
         );
@@ -121,7 +121,25 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
                     {toolbar}
                 </IonHeader>
                 <IonContent fullscreen>
-                    <p style={{ margin: 15 }}>Caricamento...</p>
+                <IonGrid style={{ padding: 0 }}>
+                    <IonRow>
+                        {[0, 1, 2].map((i, index) => {
+                            return (
+                                <IonCol
+                                    key={index}
+                                    sizeXs="12"
+                                    sizeSm="6"
+                                    sizeMd="6"
+                                    sizeLg="6"
+                                    sizeXl="4"
+                                    style={{ padding: 0 }}
+                                >
+                                    <EventCardComponent {...props} event={undefined} />
+                                </IonCol>
+                            );
+                        })}
+                    </IonRow>
+                </IonGrid>
                 </IonContent>
             </IonPage>
         );

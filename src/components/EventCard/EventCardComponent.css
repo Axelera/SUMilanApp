@@ -20,3 +20,11 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.time-container-loading {
+    display: inline-flex;
+}
+
+.time-container-loading ion-icon {
+    margin: 2px 4px 0 0;
+}
