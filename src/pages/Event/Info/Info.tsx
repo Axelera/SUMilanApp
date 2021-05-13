@@ -43,7 +43,7 @@ const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
             <EventHeaderComponent event={event} />
             <IonContent>
                 <div style={{ width: '100%' }}>
-                    <div className="event-image" style={{ backgroundImage: `url(${event.imageUrl}` }}></div>
+                    <div className="event-image" style={{ backgroundImage: `url(${event.imageUrl})` }}></div>
                 </div>
                 <IonItem lines="none" className="event-name">
                     <IonLabel style={{ marginBottom: 0 }}>

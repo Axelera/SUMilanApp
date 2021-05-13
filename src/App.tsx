@@ -24,6 +24,8 @@ import './theme/variables.css';
 
 import Home from './pages/Home/Home';
 import Event from './pages/Event/Event';
+import Young from './pages/Young/Young';
+import Chapter from './pages/Chapter/Chapter';
 
 const App: React.FC = () => {
   return (
@@ -36,6 +38,8 @@ const App: React.FC = () => {
               <Redirect to="/home" />
             </Route>
             <Route path="/home" exact={true} component={Home} />
+            <Route path="/young" exact={true} component={Young} />
+            <Route path="/chapter" exact={true} component={Chapter} />
             <Route path="/event/:id/" component={Event} />
             {/* <Route>
               <Redirect to="/"></Redirect>
