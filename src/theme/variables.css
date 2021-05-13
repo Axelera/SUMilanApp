@@ -1,31 +1,46 @@
 /* Ionic Variables and Theming. For more info, please see:
 http://ionicframework.com/docs/theming/ */
 
+/* Nexa Font */
+@font-face {
+  font-family: 'Nexa';
+  font-style: normal;
+  font-weight: normal;
+  src: url('../assets/fonts/Nexa/Nexa-Light.ttf');
+}
+
+@font-face {
+  font-family: 'Nexa';
+  font-style: normal;
+  font-weight: bold;
+  src: url('../assets/fonts/Nexa/Nexa-Bold.ttf');
+}
+
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
   --ion-color-primary: #2a65af;
-  --ion-color-primary-rgb: 42, 101, 175;
+  --ion-color-primary-rgb: 42,101,175;
   --ion-color-primary-contrast: #ffffff;
-  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-contrast-rgb: 255,255,255;
   --ion-color-primary-shade: #25599a;
   --ion-color-primary-tint: #3f74b7;
 
   /** secondary **/
-  --ion-color-secondary: #3dc2ff;
-  --ion-color-secondary-rgb: 61, 194, 255;
-  --ion-color-secondary-contrast: #ffffff;
-  --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #36abe0;
-  --ion-color-secondary-tint: #50c8ff;
+  --ion-color-secondary: #ec6629;
+  --ion-color-secondary-rgb: 236,102,41;
+  --ion-color-secondary-contrast: #000000;
+  --ion-color-secondary-contrast-rgb: 0,0,0;
+  --ion-color-secondary-shade: #d05a24;
+  --ion-color-secondary-tint: #ee753e;
 
   /** tertiary **/
-  --ion-color-tertiary: #5260ff;
-  --ion-color-tertiary-rgb: 82, 96, 255;
+  --ion-color-tertiary: #e4168d;
+  --ion-color-tertiary-rgb: 228,22,141;
   --ion-color-tertiary-contrast: #ffffff;
-  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
-  --ion-color-tertiary-shade: #4854e0;
-  --ion-color-tertiary-tint: #6370ff;
+  --ion-color-tertiary-contrast-rgb: 255,255,255;
+  --ion-color-tertiary-shade: #c9137c;
+  --ion-color-tertiary-tint: #e72d98;
 
   /** success **/
   --ion-color-success: #2dd36f;
@@ -74,6 +89,14 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  /* Font */
+  --ion-font-family: 'Nexa';
+
+  /* Custom Theme */
+  --ion-toolbar-background: rgb(var(--ion-color-primary-rgb));
+  --ion-toolbar-color: rgb(var(--ion-color-primary-contrast-rgb));
+  --ion-tab-bar-color-selected: rgb(var(--ion-color-tertiary-rgb))
 }
 
 @media (prefers-color-scheme: dark) {

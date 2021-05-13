@@ -1,0 +1,9 @@
+.ios ion-searchbar {
+    --color: rgb(var(--ion-color-primary-contrast-rgb));
+    --icon-color: rgb(var(--ion-color-primary-contrast-rgb));
+    --placeholder-color: rgb(var(--ion-color-primary-contrast-rgb));
+    --cancel-button-color: rgb(var(--ion-color-primary-contrast-rgb));
+    --clear-button-color: rgb(var(--ion-color-primary-contrast-rgb));
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

@@ -1,0 +1,15 @@
+.event-image {
+    max-width: 700px;
+    height: 250px;
+    background-size: cover;
+    background-position: center;
+    margin: auto;
+}
+
+ion-item {
+    --padding-start: 10px;
+}
+
+.event-name p {
+    text-transform: uppercase;
+}

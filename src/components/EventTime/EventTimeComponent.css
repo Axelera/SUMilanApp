@@ -1,0 +1,17 @@
+@keyframes blinker {  
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.blinking {
+    animation: blinker 0.8s cubic-bezier(.5, 0, 1, 1) infinite alternate;
+}
+
+.time-container {
+    margin: 0;
+}
+
+.time-icon {
+    vertical-align: middle;
+    margin-right: 4px;
+}
