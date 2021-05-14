@@ -12,7 +12,8 @@ import {
     IonSearchbar,
     IonText,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    IonSkeletonText,
 } from '@ionic/react';
 import './Home.css';
 import EventCardComponent from '../../components/EventCard/EventCardComponent';
@@ -22,7 +23,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchEvents } from '../../store/actions/events/eventsActions';
 import { EventModel, EventRelatorModel, EventStateModel } from '../../models/event.model';
-import { EventTimeStatus, getEventTimeStatus } from '../../utils/eventTimeUtils';
+import { isEventToday } from '../../utils/eventTimeUtils';
 import { DateTime } from 'luxon';
 
 const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
@@ -31,7 +32,7 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
 
     const [isSearchbarVisible, setIsSearchbarVisible] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    const [liveEvent, setLiveEvent] = useState<EventModel | undefined>();
+    const [liveEvents, setLiveEvents] = useState<EventModel[] | undefined>();
     const [filteredEvents, setFilteredEvents] = useState([...items]);
     const searchbarRef = useRef<HTMLIonSearchbarElement>(null);
 
@@ -65,18 +66,11 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
                     isQueryInRelators(searchQuery, ev.relators);
             });
         }
-        const liveEvIndex = fEvents.findIndex(event => {
-            const dateTime = DateTime.fromISO(event.date);
-            return getEventTimeStatus(dateTime, event.duration) === EventTimeStatus.TODAY_LIVE;
-        })
-        let liveEv;
-        if (liveEvIndex >= 0) {
-            liveEv = fEvents.splice(liveEvIndex, 1)[0];
-        }
-        setFilteredEvents(fEvents.sort((a, b) => {
+        const liveEvs = fEvents.filter(ev => isEventToday(ev.date))
+        setFilteredEvents(fEvents.filter(ev => !liveEvs.find(e => e.id === ev.id)).sort((a, b) => {
             return DateTime.fromISO(b.date) > DateTime.fromISO(a.date) ? 0 : -1;
         }));
-        setLiveEvent(liveEv);
+        setLiveEvents(liveEvs);
     }, [searchQuery, items]);
 
     useEffect(() => {
@@ -136,6 +130,7 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
                 </IonHeader>
                 <IonContent fullscreen>
                     <IonGrid style={{ padding: 0 }}>
+                        <IonSkeletonText animated style={{ width: 150, height: 20, marginTop: 16, marginLeft: 10 }} />
                         <IonRow>
                             {[0, 1, 2].map((i, index) => {
                                 return (
@@ -159,24 +154,10 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
         );
     }
 
-    const liveEventRow = liveEvent ? (
-        <IonRow>
-            <IonCol
-                key={Math.random()}
-                sizeXs="12"
-                sizeSm="6"
-                sizeMd="6"
-                sizeLg="6"
-                sizeXl="4"
-                style={{ padding: 0 }}
-            >
-                <IonText color="danger">
-                    <h4 style={{ marginLeft: 10 }}><b>In Onda Ora</b></h4>
-                </IonText>
-                <EventCardComponent {...props} event={liveEvent} />
-            </IonCol>
-        </IonRow>
-    ) : null;
+    const todayEventsTitle = liveEvents && liveEvents!.length > 0 ?
+        <IonText color="medium">
+            <h4 style={{ marginLeft: 10 }}><b>Eventi oggi</b></h4>
+        </IonText> : null;
 
     return (
         <IonPage>
@@ -185,7 +166,26 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
             </IonHeader>
             <IonContent fullscreen>
                 <IonGrid style={{ padding: 0 }}>
-                    {liveEventRow}
+                    {todayEventsTitle}
+                    {
+                        (liveEvents && liveEvents!.length > 0) ?
+                            <IonRow>
+                                {liveEvents!.map((liveEvent: EventModel, index: number) =>
+                                    <IonCol
+                                        key={Math.random()}
+                                        sizeXs="12"
+                                        sizeSm="6"
+                                        sizeMd="6"
+                                        sizeLg="6"
+                                        sizeXl="4"
+                                        style={{ padding: 0 }}
+                                    >
+                                        <EventCardComponent key={index} {...props} event={liveEvent} />
+                                    </IonCol>
+                                )}
+                            </IonRow>
+                            : null
+                    }
                     <IonText color="medium">
                         <h4 style={{ marginLeft: 10 }}>Eventi in programma e passati</h4>
                     </IonText>

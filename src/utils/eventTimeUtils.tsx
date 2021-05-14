@@ -41,3 +41,14 @@ export const formatTimeDuration = (duration: number): string => {
     }
     return res;
 }
+
+export const isEventToday = (date: string): boolean => {
+    const dt = DateTime.fromISO(date);
+    const now = DateTime.now();
+    if (!(dt.startOf('days') < now.startOf('days')) && dt.startOf('days') <= now.startOf('days')) { // === comparison doesn't work
+        // today
+        return true;
+    }
+    // default to tomorrow or later
+    return false;
+};
