@@ -18,7 +18,7 @@ import './EventCardComponent.css';
 
 const maxDescriptionLength = 90;
 
-const EventDescription = (props: {description: string}) => {
+const EventDescription = (props: { description: string }) => {
     let res = props.description;
     if (res.length > maxDescriptionLength) {
         res = res.substring(0, maxDescriptionLength).trim() + '...';
@@ -40,22 +40,22 @@ const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: Event
         return (
             <IonCard className="event-card">
                 <div className="card-image">
-                    <IonSkeletonText animated style={{height: '100%', width: '100%'}}/>
+                    <IonSkeletonText animated style={{ height: '100%', width: '100%' }} />
                 </div>
                 <IonCardHeader>
                     <IonCardTitle>
-                        <IonSkeletonText animated style={{width: 175, height: 20}}/>
+                        <IonSkeletonText animated style={{ width: 175, height: 20 }} />
                     </IonCardTitle>
                     <IonCardSubtitle>
-                        <IonSkeletonText animated style={{width: 75, height: 15}}/>
+                        <IonSkeletonText animated style={{ width: 75, height: 15 }} />
                     </IonCardSubtitle>
-                    <div className="time-container-loading"><IonIcon icon={timeOutline} /><IonSkeletonText animated style={{width: 100}} /></div>
+                    <div className="time-container-loading"><IonIcon icon={timeOutline} /><IonSkeletonText animated style={{ width: 100 }} /></div>
                 </IonCardHeader>
                 <IonCardContent>
-                    <IonSkeletonText animated style={{width: '100%', marginBottom: 8}}/>
-                    <IonSkeletonText animated style={{width: '100%', marginBottom: 8}}/>
-                    <IonSkeletonText animated style={{width: '100%', marginBottom: 8}}/>
-                    <IonSkeletonText animated style={{width: '80%'}}/>
+                    <IonSkeletonText animated style={{ width: '100%', marginBottom: 8 }} />
+                    <IonSkeletonText animated style={{ width: '100%', marginBottom: 8 }} />
+                    <IonSkeletonText animated style={{ width: '100%', marginBottom: 8 }} />
+                    <IonSkeletonText animated style={{ width: '80%' }} />
                     <IonGrid className="event-actions-grid">
                         <IonRow>
                             <IonCol>
@@ -75,16 +75,42 @@ const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: Event
                             </IonCol>
                         </IonRow>
                     </IonGrid>
-    
+
                 </IonCardContent>
             </IonCard>
+        );
+    }
+
+    const buttons = [];
+
+    if (event.videoUrl) {
+        buttons.push(
+            <IonButton fill="clear" onClick={(ev) => cardButtonClickHandler(ev, 'live')} color="tertiary">
+                <IonIcon slot="icon-only" icon={logoYoutube} />
+            </IonButton>
+        );
+    }
+
+    if (event.votingUrl) {
+        buttons.push(
+            <IonButton fill="clear" onClick={(ev) => cardButtonClickHandler(ev, 'mentimeter')} color="tertiary">
+                <IonIcon slot="icon-only" icon={help} />
+            </IonButton>
+        );
+    }
+
+    if (event.slides && event.slides.length) {
+        buttons.push(
+            <IonButton fill="clear" onClick={(ev) => cardButtonClickHandler(ev, 'slides')} color="tertiary">
+                <IonIcon slot="icon-only" icon={fileTrayFull} />
+            </IonButton>
         );
     }
 
     return (
         <IonCard key={event.id} onClick={() => {
             props.history.push(`/event/${event.id}/info`);
-        }}  button={true} className="event-card">
+        }} button={true} className="event-card">
             <div className="card-image" style={{ backgroundImage: `url(${event.imageUrl}` }}></div>
             <IonCardHeader>
                 <IonCardTitle>
@@ -93,30 +119,19 @@ const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: Event
                 <IonCardSubtitle>
                     {event.type.toUpperCase()}
                 </IonCardSubtitle>
-                <EventTimeComponent date={event.date} duration={event.duration}/>
+                <EventTimeComponent date={event.date} duration={event.duration} />
             </IonCardHeader>
             <IonCardContent>
                 <EventDescription description={event.description} />
-                <IonGrid className="event-actions-grid">
-                    <IonRow>
-                        <IonCol>
-                            <IonButton fill="clear" onClick={(ev) => cardButtonClickHandler(ev, 'live')} color="tertiary">
-                                <IonIcon slot="icon-only" icon={logoYoutube} />
-                            </IonButton>
-                        </IonCol>
-                        <IonCol>
-                            <IonButton fill="clear" onClick={(ev) => cardButtonClickHandler(ev, 'mentimeter')} color="tertiary">
-                                <IonIcon slot="icon-only" icon={help} />
-                            </IonButton>
-                        </IonCol>
-                        <IonCol>
-                            <IonButton fill="clear" onClick={(ev) => cardButtonClickHandler(ev, 'slides')} color="tertiary">
-                                <IonIcon slot="icon-only" icon={fileTrayFull} />
-                            </IonButton>
-                        </IonCol>
-                    </IonRow>
-                </IonGrid>
-
+                {
+                    buttons.length > 0 ?
+                        <IonGrid className="event-actions-grid">
+                            <IonRow>
+                                {buttons.map((button: any, index: number) => <IonCol key={index}>{button}</IonCol>)}
+                            </IonRow>
+                        </IonGrid>
+                        : null
+                }
             </IonCardContent>
         </IonCard>
     );

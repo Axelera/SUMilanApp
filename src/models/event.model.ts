@@ -9,7 +9,7 @@ export interface EventComponentWithRouteProps extends RouteComponentProps {
 }
 
 export interface EventModel {
-    id: number;
+    id: string;
     title: string;
     type: string;
     description: string;
@@ -17,6 +17,7 @@ export interface EventModel {
     duration: number; // in minutes
     imageUrl: string;
     videoUrl?: string;
+    votingUrl?: string;
     streamingUrls?: EventStreamingUrlModel[];
     relators?: EventRelatorModel[];
     slides?: EventSlideModel[];

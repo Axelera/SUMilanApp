@@ -1,6 +1,6 @@
 .event-card {
     max-width: 600px;
-    min-height: 350px;
+    /* min-height: 350px; */
 }
 
 .event-actions-grid ion-col {
