@@ -28,3 +28,16 @@ export const getEventTimeStatus = (date: DateTime, duration: number): EventTimeS
     // default to tomorrow or later
     return EventTimeStatus.SCHEDULED;
 };
+
+export const formatTimeDuration = (duration: number): string => {
+    let res = '';
+    const hours = Math.floor(duration / 60);
+    if (hours) {
+        res += `${hours}h`;
+    }
+    const minutes = duration % 60;
+    if (minutes) {
+        res += `${minutes}m`;
+    }
+    return res;
+}

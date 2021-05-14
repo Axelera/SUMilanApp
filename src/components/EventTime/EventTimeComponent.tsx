@@ -5,7 +5,7 @@ import {
 } from '@ionic/react';
 import { ellipse, timeOutline } from 'ionicons/icons';
 import { DateTime } from "luxon";
-import { getEventTimeStatus, EventTimeStatus } from '../../utils/eventTimeUtils';
+import { getEventTimeStatus, EventTimeStatus, formatTimeDuration } from '../../utils/eventTimeUtils';
 import './EventTimeComponent.css';
 
 const dateFormat = Object.assign({}, DateTime.DATETIME_MED);
@@ -33,28 +33,31 @@ const EventTimeComponent: React.FC<EventTimeProps> = (props: EventTimeProps) => 
         // yesterday or before
         return (
             <TimeContainer>
-                {dt.toLocaleString(dateFormat)}
+                {dt.toLocaleString(dateFormat)} ({formatTimeDuration(props.duration)})
             </TimeContainer>
         );
     } else if (eventTimeStatus === EventTimeStatus.TODAY_SCHEDULED || eventTimeStatus === EventTimeStatus.TODAY_PASSED) {
         return (
             <TimeContainer>
-                Oggi alle {dt.toLocaleString(DateTime.TIME_24_SIMPLE)}
+                Oggi alle {dt.toLocaleString(DateTime.TIME_24_SIMPLE)} ({formatTimeDuration(props.duration)})
             </TimeContainer>
         );
     } else if (eventTimeStatus === EventTimeStatus.TODAY_LIVE) {
         return (
-            <IonChip style={{ marginLeft: 0 }} color="danger" outline>
-                <IonLabel>
-                    LIVE
+            <span>
+                <IonChip style={{ marginLeft: 0 }} color="danger" outline>
+                    <IonLabel>
+                        LIVE
                     </IonLabel>
-                <IonIcon icon={ellipse} style={{ fontSize: '12px' }} className="blinking" />
-            </IonChip>
+                    <IonIcon icon={ellipse} style={{ fontSize: '12px' }} className="blinking" />
+                </IonChip>
+                ({formatTimeDuration(props.duration)}, termina alle {dt.plus({minutes: props.duration}).toLocaleString(DateTime.TIME_24_SIMPLE)})
+            </span>
         );
     } else if (eventTimeStatus === EventTimeStatus.SCHEDULED) {
         return (
             <TimeContainer>
-                {dt.toLocaleString(dateFormat)}
+                {dt.toLocaleString(dateFormat)} ({formatTimeDuration(props.duration)})
             </TimeContainer>
         );
     }
