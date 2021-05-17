@@ -16,18 +16,6 @@ import { EventComponentWithRouteProps } from "../../models/event.model";
 import EventTimeComponent from "../EventTime/EventTimeComponent";
 import './EventCardComponent.css';
 
-const maxDescriptionLength = 90;
-
-const EventDescription = (props: { description: string }) => {
-    let res = props.description;
-    if (res.length > maxDescriptionLength) {
-        res = res.substring(0, maxDescriptionLength).trim() + '...';
-    }
-    return (
-        <div>{res}</div>
-    );
-};
-
 const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: EventComponentWithRouteProps) => {
     const event = props.event;
 
@@ -122,7 +110,7 @@ const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: Event
                 <EventTimeComponent date={event.date} duration={event.duration} />
             </IonCardHeader>
             <IonCardContent>
-                <EventDescription description={event.description} />
+                <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{event.description}</div>
                 {
                     buttons.length > 0 ?
                         <IonGrid className="event-actions-grid">
