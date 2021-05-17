@@ -18,8 +18,10 @@ export interface EventModel {
     imageUrl: string;
     videoUrl?: string;
     votingUrl?: string;
+    ticketsLink?: TicketsLinkModel;
     streamingUrls?: EventStreamingUrlModel[];
     relators?: EventRelatorModel[];
+    moderators?: EventRelatorModel[];
     slides?: EventSlideModel[];
 }
 
@@ -47,4 +49,9 @@ export interface EventStateModel {
     items: EventModel[];
     loading: boolean;
     error: any;
+}
+
+export interface TicketsLinkModel {
+    type: string;
+    url: string;
 }
