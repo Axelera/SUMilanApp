@@ -1,10 +1,16 @@
 import {
+    IonButton,
+    IonContent,
+    IonHeader,
     IonIcon,
     IonLabel,
+    IonPage,
     IonRouterOutlet,
     IonTabBar,
     IonTabButton,
     IonTabs,
+    IonTitle,
+    IonToolbar,
 } from '@ionic/react';
 import { Link, Route } from 'react-router-dom';
 import { RouteComponentProps, useParams } from "react-router";
@@ -17,6 +23,7 @@ import Info from './Info/Info';
 import { EventModel, EventStateModel } from '../../models/event.model';
 import { useEffect, useState } from 'react';
 import { fetchEvents } from '../../store/actions/events/eventsActions';
+import './Event.css';;
 
 const Event: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     const { id } = useParams<{ id: string; }>();
@@ -42,7 +49,21 @@ const Event: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     }
 
     if (!event) {
-        return <p style={{ margin: 15 }}>Questo evento non e' piu' disponibile.</p>
+        return (
+            <IonPage>
+                <IonHeader>
+                    <IonToolbar>
+                        <IonTitle>Evento non disponibile</IonTitle>
+                    </IonToolbar>
+                </IonHeader>
+                <IonContent>
+                    <div className="center-container">
+                        <p>Questo evento non esiste o non è più disponibile.</p>
+                        <IonButton onClick={() => props.history.replace('/home')}>Torna alla Home</IonButton>
+                    </div>
+                </IonContent>
+            </IonPage>
+        );
     }
 
     const routes = ['info'];
