@@ -19,6 +19,7 @@ export interface EventModel {
     videoUrl?: string;
     votingUrl?: string;
     ticketsLink?: TicketsLinkModel;
+    roomUrl?: string;
     streamingUrls?: EventStreamingUrlModel[];
     relators?: EventRelatorModel[];
     moderators?: EventRelatorModel[];

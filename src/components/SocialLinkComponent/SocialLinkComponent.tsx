@@ -1,10 +1,11 @@
 import { IonButton, IonIcon } from "@ionic/react";
-import { logoFacebook, logoTwitter, logoTwitch, logoLinkedin, globeOutline } from "ionicons/icons";
+import { logoFacebook, logoTwitter, logoTwitch, logoLinkedin, globeOutline, videocam } from "ionicons/icons";
 
 interface SocialLinkProps {
     platform: string;
     url: string;
     ionicProps?: any;
+    color: string;
 }
 
 const SocialLinkComponent: React.FC<SocialLinkProps> = (props: SocialLinkProps) => {
@@ -27,11 +28,14 @@ const SocialLinkComponent: React.FC<SocialLinkProps> = (props: SocialLinkProps) 
         case 'website':
             icon = globeOutline;
             break;
+        case 'video':
+            icon = videocam;
+            break;
         default:
             break;
     }
     return (
-        <IonButton href={url} target="_blank" fill="clear" color="secondary" {...props.ionicProps}>
+        <IonButton href={url} target="_blank" fill="clear" color={props.color} {...props.ionicProps}>
             <IonIcon slot="icon-only" icon={icon} />
         </IonButton>
     );

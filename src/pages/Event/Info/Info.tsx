@@ -29,7 +29,7 @@ const Relator = (data: { relator: EventRelatorModel }) => {
             </IonLabel>
             {relator.socialLinks ?
                 relator.socialLinks.map((socialLink: { url: string; platform: string; }, index: number) =>
-                    <SocialLinkComponent key={index} url={socialLink.url} platform={socialLink.platform} ionicProps={{ slot: 'end' }} />
+                    <SocialLinkComponent key={index} url={socialLink.url} platform={socialLink.platform} color="secondary" ionicProps={{ slot: 'end' }} />
                 )
                 : null
             }
