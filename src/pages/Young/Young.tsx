@@ -8,8 +8,7 @@ import {
     IonToolbar,
 } from "@ionic/react";
 import './Young.css';
-import youngLogo from '../../assets/images/title-logo-young.png';
-
+import LogoImage from "../../components/LogoImage/LogoImage";
 
 const Young: React.FC = () => {
     return (
@@ -23,7 +22,7 @@ const Young: React.FC = () => {
                 </IonToolbar>
             </IonHeader>
             <IonContent>
-                <img src={youngLogo} alt="young-logo" className="young-image" />
+                <LogoImage young={true} className="young-image"/>
                 <p>Work in progress</p>
             </IonContent>
         </IonPage>

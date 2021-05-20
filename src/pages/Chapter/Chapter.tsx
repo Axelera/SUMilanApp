@@ -8,7 +8,7 @@ import {
     IonToolbar,
 } from "@ionic/react";
 import './Chapter.css';
-import chapterLogo from '../../assets/images/title-logo.png';
+import LogoImage from "../../components/LogoImage/LogoImage";
 
 const Chapter: React.FC = () => {
     return (
@@ -22,7 +22,7 @@ const Chapter: React.FC = () => {
                 </IonToolbar>
             </IonHeader>
             <IonContent>
-                <img src={chapterLogo} alt="chapter-logo" className="chapter-image" />
+                <LogoImage className="chapter-image" />
                 <p>Work in progress</p>
             </IonContent>
         </IonPage>

@@ -11,7 +11,7 @@ import {
 import { useLocation } from 'react-router-dom';
 import { balloonOutline, balloonSharp, homeOutline, homeSharp, informationCircleOutline, informationCircleSharp, ticketOutline, ticketSharp } from 'ionicons/icons';
 import './Menu.css';
-import titleLogo from '../assets/images/logo_1_lines_sm.png';
+import LogoImage from './LogoImage/LogoImage';
 
 interface AppPage {
   url: string;
@@ -48,7 +48,7 @@ const Menu: React.FC = () => {
     <IonMenu contentId="main" type="overlay">
       <IonContent>
         <IonList id="inbox-list">
-          <img src={titleLogo} alt="SU-logo" />
+          <LogoImage small={true} />
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>

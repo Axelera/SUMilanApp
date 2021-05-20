@@ -10,11 +10,11 @@ import {
     IonRow,
 } from "@ionic/react";
 import './Start.css';
-import titleLogo from '../../assets/images/title-logo.png';
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { performLogin } from "../../store/actions/login/loginActions";
+import LogoImage from "../../components/LogoImage/LogoImage";
 
 const Start: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
 
@@ -38,7 +38,7 @@ const Start: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
         <IonPage>
             <IonContent>
                 <div className="center-container">
-                    <img src={titleLogo} alt="su-milan" />
+                    <LogoImage />
                     <IonGrid>
                         <IonRow className="ion-align-items-end">
                             <IonCol></IonCol>
