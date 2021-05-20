@@ -71,7 +71,7 @@ const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                     <div className="event-image" style={{ backgroundImage: `url(${event.imageUrl})` }}></div>
                 </div>
                 <IonItem lines="none" className="event-name">
-                    <IonLabel style={{ marginBottom: 0 }}>
+                    <IonLabel style={{ marginBottom: 0, whiteSpace: 'unset' }}>
                         <h2><b>{event.title}</b></h2>
                         <p>{event.type}</p>
                     </IonLabel>
