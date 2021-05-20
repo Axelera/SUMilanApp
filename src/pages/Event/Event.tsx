@@ -13,7 +13,7 @@ import {
     IonToolbar,
 } from '@ionic/react';
 import { Link, Route } from 'react-router-dom';
-import { RouteComponentProps, useParams } from "react-router";
+import { Redirect, RouteComponentProps, useParams } from "react-router";
 import { useDispatch, useSelector } from 'react-redux'
 import Live from './Live/Live';
 import { fileTrayFull, help, informationCircleOutline, logoYoutube } from 'ionicons/icons';
@@ -111,8 +111,11 @@ const Event: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
 
     return (
         <IonTabs>
+            {routes.map((route: string, index: number) => <Link key={index} to={`/event/${id}/${route}`} />)}
             <IonRouterOutlet>
-                {routes.map((route: string, index: number) => <Link key={index} to={`/event/${id}/${route}`} />)}
+                <Route path={`/event/${id}/`} exact>
+                    <Redirect to={`/event/${id}/info`} />
+                </Route>
                 <Route path={`/event/${id}/info`} render={() => <Info event={event as EventModel} />} exact />
                 <Route path={`/event/${id}/live`} render={() => <Live event={event as EventModel} />} exact />
                 <Route path={`/event/${id}/mentimeter`} render={() => <Mentimeter event={event as EventModel} />} exact />
