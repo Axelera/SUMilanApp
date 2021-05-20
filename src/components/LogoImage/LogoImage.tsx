@@ -4,11 +4,11 @@ import titleLogoSmall from '../../assets/images/logo_1_lines_sm.png';
 import titleLogoSmallWhite from '../../assets/images/logo_1_lines_sm-white.png';
 import titleYoung from '../../assets/images/title-logo-young.png';
 import titleYoungWhite from '../../assets/images/title-logo-young-white.png';
-import React, { ComponentPropsWithRef } from 'react';
 
-interface LogoImagePropsModel extends ComponentPropsWithRef<any> {
+interface LogoImagePropsModel {
     small?: boolean;
     young?: boolean;
+    className?: string;
 }
 
 const LogoImage: React.FC<LogoImagePropsModel> = (props: LogoImagePropsModel) => {
@@ -33,7 +33,7 @@ const LogoImage: React.FC<LogoImagePropsModel> = (props: LogoImagePropsModel) =>
         }
     }
 
-    return <img src={image} alt="SU-logo" {...props} />;
+    return <img src={image} alt="SU-logo" className={props.className} />;
 };
 
 export default LogoImage;
