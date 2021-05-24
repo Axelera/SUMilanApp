@@ -219,8 +219,8 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
             <IonContent fullscreen>
                 <IonGrid style={{ padding: 0 }}>
                     {filteredEvents.today.length > 0 ? <EventsList events={filteredEvents.today} title={<b>Eventi oggi</b>} props={{ ...props }} /> : null}
-                    {filteredEvents.scheduled.length > 0 ? <EventsList events={filteredEvents.scheduled} title="Eventi in programma" props={{ ...props }} /> : null}
-                    {filteredEvents.passed.length > 0 ? <EventsList events={filteredEvents.passed} title="Eventi passati" props={{ ...props }} /> : null}
+                    {filteredEvents.scheduled.length > 0 ? <EventsList events={filteredEvents.scheduled} title={<b>Eventi in programma</b>} props={{ ...props }} /> : null}
+                    {filteredEvents.passed.length > 0 ? <EventsList events={filteredEvents.passed} title={<b>Eventi passati</b>} props={{ ...props }} /> : null}
                     {isSearchbarVisible &&
                         filteredEvents.passed.length === 0 &&
                         filteredEvents.scheduled.length === 0 &&
