@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "@capacitor/core": "2.4.7",
+    "@hookform/resolvers": "^2.5.1",
     "@ionic/react": "^5.5.0",
     "@ionic/react-router": "^5.5.0",
+    "@supabase/supabase-js": "^1.11.15",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.6.3",
@@ -16,10 +18,12 @@
     "@types/react-redux": "^7.1.16",
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
+    "@types/yup": "^0.29.11",
     "ionicons": "^5.4.0",
     "luxon": "^1.26.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-hook-form": "^7.6.6",
     "react-player": "^2.9.0",
     "react-redux": "^7.2.4",
     "react-router": "^5.2.0",
@@ -39,7 +43,8 @@
     "workbox-range-requests": "^5.1.4",
     "workbox-routing": "^5.1.4",
     "workbox-strategies": "^5.1.4",
-    "workbox-streams": "^5.1.4"
+    "workbox-streams": "^5.1.4",
+    "yup": "^0.32.9"
   },
   "scripts": {
     "start": "react-scripts start",

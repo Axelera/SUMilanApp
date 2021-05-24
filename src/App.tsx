@@ -27,14 +27,11 @@ import Event from './pages/Event/Event';
 import Young from './pages/Young/Young';
 import Chapter from './pages/Chapter/Chapter';
 import Start from './pages/Start/Start';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { getLoginState } from './store/actions/login/loginActions';
+import { useAuth } from './contexts/Auth';
 
 const App: React.FC = () => {
 
-  const { isLoggedIn, isLoading } = useSelector<{ login: { isLoggedIn: boolean, isLoading: boolean } }, { isLoggedIn: boolean, isLoading: boolean }>((state) => state.login);
-  const dispatch = useDispatch();
+  const { user } = useAuth();
 
   const startRouter = (
     <>
@@ -63,18 +60,10 @@ const App: React.FC = () => {
     </IonSplitPane>
   );
 
-  useEffect(() => {
-    dispatch(getLoginState());
-  }, [dispatch]);
-
-  if (isLoading) {
-    return null;
-  }
-
   return (
     <IonApp>
       <IonReactRouter>
-        {isLoggedIn ? homeRouter : startRouter}
+        {user ? homeRouter : startRouter}
       </IonReactRouter>
     </IonApp>
   );

@@ -5,11 +5,14 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux'
 import { store } from './store/store';
+import { AuthProvider } from './contexts/Auth';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
