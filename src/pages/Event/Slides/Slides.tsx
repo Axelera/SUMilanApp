@@ -2,14 +2,10 @@ import {
     IonContent,
     IonList,
     IonPage,
-    IonItem,
-    IonLabel,
-    IonAvatar,
-    IonButton,
-    IonIcon,
+    IonListHeader,
 } from '@ionic/react';
-import { cloudDownloadOutline } from 'ionicons/icons';
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
+import EventSlideItemComponent from '../../../components/EventSlideItemComponent/EventSlideItemComponent';
 import { EventComponentProps, EventSlideModel } from '../../../models/event.model';
 import './Slides.css';
 
@@ -18,23 +14,26 @@ const Slides: React.FC<EventComponentProps> = (props: EventComponentProps) => {
         <IonPage>
             <EventHeaderComponent event={props.event} />
             <IonContent>
-                <IonList>
-                    {props.event.slides?.map((slideData: EventSlideModel, index: number) => {
-                        return (
-                            <IonItem key={index} href={slideData.url} download={`${slideData.title}.pdf`} detail={false}>
-                                <IonAvatar slot="start">
-                                    <img src={slideData.imageUrl} alt={slideData.title}/>
-                                </IonAvatar>
-                                <IonLabel>
-                                    <p>{slideData.title}</p>
-                                </IonLabel>
-                                <IonButton slot="end" fill="clear" color="medium">
-                                    <IonIcon slot="icon-only" size="small" icon={cloudDownloadOutline} />
-                                </IonButton>
-                            </IonItem>
-                        );
-                    })}
-                </IonList>
+                {
+                    props.event.preSlides && props.event.preSlides.length > 0 ?
+                        (
+                            <IonList>
+                                <IonListHeader>Materiale di studio</IonListHeader>
+                                {props.event.preSlides.map((slideData: EventSlideModel, index: number) => <EventSlideItemComponent key={Math.random()} slideData={slideData} />)}
+                            </IonList>
+                        )
+                        : null
+                }
+                {
+                    props.event.slides && props.event.slides.length > 0 ?
+                        (
+                            <IonList>
+                                <IonListHeader>Slides relatori</IonListHeader>
+                                {props.event.slides.map((slideData: EventSlideModel, index: number) => <EventSlideItemComponent key={Math.random()} slideData={slideData} />)}
+                            </IonList>
+                        )
+                        : null
+                }
             </IonContent>
         </IonPage>
     );

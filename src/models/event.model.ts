@@ -24,6 +24,7 @@ export interface EventModel {
     relators?: EventRelatorModel[];
     moderators?: EventRelatorModel[];
     slides?: EventSlideModel[];
+    preSlides?: EventSlideModel[];
 }
 
 export interface EventStreamingUrlModel {
@@ -43,7 +44,8 @@ export interface EventRelatorModel {
 export interface EventSlideModel {
     title: string;
     url: string;
-    imageUrl: string;
+    imageUrl?: string;
+    type?: string;
 }
 
 export interface EventStateModel {

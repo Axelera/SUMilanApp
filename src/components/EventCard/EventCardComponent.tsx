@@ -87,7 +87,7 @@ const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: Event
         );
     }
 
-    if (event.slides && event.slides.length) {
+    if ((event.slides && event.slides.length > 0) || (event.preSlides && event.preSlides.length > 0)) {
         buttons.push(
             <IonButton fill="clear" onClick={(ev) => cardButtonClickHandler(ev, 'slides')} color="tertiary">
                 <IonIcon slot="icon-only" icon={fileTrayFull} />

@@ -100,10 +100,10 @@ const Event: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
         );
     }
 
-    if (event?.slides && event?.slides.length > 0) {
+    if ((event?.slides && event?.slides.length > 0) || (event?.preSlides && event?.preSlides.length > 0)) {
         additionalTabButtons.push(
             <IonTabButton key="slides-tab-button" tab="slides" href={`/event/${id}/slides`}>
-                <IonLabel>Slides</IonLabel>
+                <IonLabel>Materiale</IonLabel>
                 <IonIcon icon={fileTrayFull}></IonIcon>
             </IonTabButton>
         );
