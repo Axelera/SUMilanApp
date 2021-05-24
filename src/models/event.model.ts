@@ -9,7 +9,8 @@ export interface EventComponentWithRouteProps extends RouteComponentProps {
 }
 
 export interface EventModel {
-    id: string;
+    id: number;
+    identifier: string;
     title: string;
     type: string;
     description: string;

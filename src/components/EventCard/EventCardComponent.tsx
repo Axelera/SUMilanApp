@@ -21,7 +21,7 @@ const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: Event
 
     const cardButtonClickHandler = (ev: any, page: string) => {
         ev.stopPropagation();
-        props.history.push(`/event/${event?.id}/${page}`);
+        props.history.push(`/event/${event?.identifier}/${page}`);
     };
 
     if (!event) {
@@ -97,7 +97,7 @@ const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: Event
 
     return (
         <IonCard key={event.id} onClick={() => {
-            props.history.push(`/event/${event.id}/info`);
+            props.history.push(`/event/${event.identifier}/info`);
         }} button={true} className="event-card">
             <div className="card-image" style={{ backgroundImage: `url(${event.imageUrl}` }}></div>
             <IonCardHeader>

@@ -30,13 +30,13 @@ const Event: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
 
     const dispatch = useDispatch();
     const { items, loading, error } = useSelector<{ events: EventStateModel }, EventStateModel>(state => state.events);
-    const [event, setEvent] = useState(items.find(ev => ev.id === id));
+    const [event, setEvent] = useState(items.find(ev => ev.identifier === id));
 
     useEffect(() => {
         if (!items || items.length === 0) {
             dispatch(fetchEvents());
         } else {
-            setEvent(items.find(ev => ev.id === id));
+            setEvent(items.find(ev => ev.identifier === id));
         }
     }, [items, dispatch, event, id]);
 

@@ -118,15 +118,6 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
                 groupedEvents.today.push(ev);
             }
         }
-        groupedEvents.passed = groupedEvents.passed.sort((a, b) => {
-            return DateTime.fromISO(b.date) > DateTime.fromISO(a.date) ? 0 : -1;
-        })
-        groupedEvents.scheduled = groupedEvents.scheduled.sort((a, b) => {
-            return DateTime.fromISO(b.date) > DateTime.fromISO(a.date) ? 0 : -1;
-        })
-        groupedEvents.today = groupedEvents.today.sort((a, b) => {
-            return DateTime.fromISO(b.date) > DateTime.fromISO(a.date) ? 0 : -1;
-        })
         setFilteredEvents(groupedEvents);
     }, [searchQuery, items]);
 

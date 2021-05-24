@@ -1,18 +1,20 @@
 import { EventModel } from "../../../models/event.model";
+import { supabase } from '../../../supabase';
+import { PostgrestResponse } from '@supabase/postgrest-js/src/lib/types';
 
-function getEvents() {
-    return fetch("https://api.npoint.io/20b69ad2dc9f39ef4c37")
+const getEvents = async () => {
+    return supabase.from<EventModel>('events').select('*').order('date', { ascending: false })
         .then(handleErrors)
-        .then(res => res.json());
+        .then(data => data);
 }
 
 export function fetchEvents() {
     return (dispatch: any) => {
         dispatch(fetchEventsBegin());
         return getEvents()
-            .then(json => {
-                dispatch(fetchEventsSuccess(json.events));
-                return json.events;
+            .then(response => {
+                dispatch(fetchEventsSuccess(response.data as EventModel[]));
+                return response.data;
             })
             .catch(error =>
                 dispatch(fetchEventsFailure(error))
@@ -21,8 +23,8 @@ export function fetchEvents() {
 }
 
 // Handle HTTP errors since fetch won't.
-function handleErrors(response: any) {
-    if (!response.ok) {
+function handleErrors(response: PostgrestResponse<EventModel>) {
+    if (response.status !== 200) {
         throw Error(response.statusText);
     }
     return response;
