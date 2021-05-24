@@ -15,6 +15,7 @@ import EventHeaderComponent from '../../../components/EventHeader/EventHeaderCom
 import EventTimeComponent from '../../../components/EventTime/EventTimeComponent';
 import SocialLinkComponent from '../../../components/SocialLinkComponent/SocialLinkComponent';
 import { EventComponentProps, EventRelatorModel, TicketsLinkModel } from "../../../models/event.model";
+import avatar from '../../../assets/images/avatar.png';
 import './Info.css';
 
 const Relator = (data: { relator: EventRelatorModel }) => {
@@ -22,7 +23,7 @@ const Relator = (data: { relator: EventRelatorModel }) => {
     return (
         <IonItem>
             <IonAvatar slot="start">
-                <img src={relator.imageUrl} alt={relator.name} />
+                <img src={relator.imageUrl ? relator.imageUrl : avatar} alt={relator.name} />
             </IonAvatar>
             <IonLabel>
                 {relator.name}
@@ -82,7 +83,7 @@ const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                     </IonLabel>
                 </IonItem>
                 <IonItem style={{ whiteSpace: 'pre-wrap' }}>
-                    {event.description}
+                    {event.description.replaceAll('\\n', '\n')}
                 </IonItem>
                 {event.relators ?
                     (
