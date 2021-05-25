@@ -118,6 +118,7 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
                 groupedEvents.today.push(ev);
             }
         }
+        groupedEvents.passed = groupedEvents.passed.reverse();
         setFilteredEvents(groupedEvents);
     }, [searchQuery, items]);
 

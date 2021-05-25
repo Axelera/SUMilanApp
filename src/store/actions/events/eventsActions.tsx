@@ -3,7 +3,7 @@ import { supabase } from '../../../supabase';
 import { PostgrestResponse } from '@supabase/postgrest-js/src/lib/types';
 
 const getEvents = async () => {
-    return supabase.from<EventModel>('events').select('*').order('date', { ascending: false })
+    return supabase.from<EventModel>('events').select('*').order('date', { ascending: true })
         .then(handleErrors)
         .then(data => data);
 }
