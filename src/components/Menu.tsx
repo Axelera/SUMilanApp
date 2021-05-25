@@ -78,8 +78,6 @@ const Menu: React.FC = () => {
             );
           })}
         </IonList>
-      </IonContent>
-      <IonFooter>
         {user &&
           <IonList lines="full" style={{ padding: 0 }}>
             <IonItem>
@@ -93,6 +91,8 @@ const Menu: React.FC = () => {
             </IonItem>
           </IonList>
         }
+      </IonContent>
+      <IonFooter>
         <IonList style={{ padding: 0 }}>
           <IonListHeader>Credits:</IonListHeader>
           <IonItem lines="full">
