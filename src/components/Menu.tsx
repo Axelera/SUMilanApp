@@ -33,16 +33,16 @@ const appPages: AppPage[] = [
     mdIcon: homeSharp
   },
   {
-    title: 'SU Young',
-    url: '/young',
-    iosIcon: balloonOutline,
-    mdIcon: balloonSharp
-  },
-  {
     title: 'Info sul Chapter',
     url: '/chapter',
     iosIcon: informationCircleOutline,
     mdIcon: informationCircleSharp,
+  },
+  {
+    title: 'SU Young',
+    url: '/young',
+    iosIcon: balloonOutline,
+    mdIcon: balloonSharp
   },
 ];
 
