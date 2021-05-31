@@ -17,6 +17,8 @@ import SocialLinkComponent from '../../../components/SocialLinkComponent/SocialL
 import { EventComponentProps, EventRelatorModel, TicketsLinkModel } from "../../../models/event.model";
 import avatar from '../../../assets/images/avatar.png';
 import './Info.css';
+import { EventTimeStatus, getEventTimeStatus } from '../../../utils/eventTimeUtils';
+import { DateTime } from 'luxon';
 
 const Relator = (data: { relator: EventRelatorModel }) => {
     const relator = data.relator;
@@ -63,7 +65,8 @@ const TicketsButton = (data: { ticketsLink: TicketsLinkModel }) => {
 const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
 
     const event = props.event;
-
+    const eventTimeStatus = getEventTimeStatus(DateTime.fromISO(event.date), event.duration);
+    
     return (
         <IonPage>
             <EventHeaderComponent event={event} />
@@ -103,7 +106,7 @@ const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                     )
                     :
                     null}
-                {event.ticketsLink ? <TicketsButton ticketsLink={event.ticketsLink} /> : null}
+                {event.ticketsLink && eventTimeStatus !== EventTimeStatus.PASSED && <TicketsButton ticketsLink={event.ticketsLink} />}
             </IonContent>
         </IonPage>
     );
