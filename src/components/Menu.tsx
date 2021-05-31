@@ -13,7 +13,7 @@ import {
 } from '@ionic/react';
 
 import { useLocation } from 'react-router-dom';
-import { balloonOutline, balloonSharp, documentTextOutline, documentTextSharp, globeOutline, homeOutline, homeSharp, informationCircleOutline, informationCircleSharp, logoGithub, logOutOutline, openOutline } from 'ionicons/icons';
+import { balloonOutline, balloonSharp, documentTextOutline, documentTextSharp, globeOutline, homeOutline, homeSharp, informationCircleOutline, informationCircleSharp, logoGithub, logOutOutline, openOutline, peopleOutline, peopleSharp } from 'ionicons/icons';
 import './Menu.css';
 import LogoImage from './LogoImage/LogoImage';
 import { useAuth } from '../contexts/Auth';
@@ -43,6 +43,12 @@ const appPages: AppPage[] = [
     url: '/young',
     iosIcon: balloonOutline,
     mdIcon: balloonSharp
+  },
+  {
+    title: 'Diventa activist',
+    url: '/activist',
+    iosIcon: peopleOutline,
+    mdIcon: peopleSharp
   },
 ];
 

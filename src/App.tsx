@@ -28,6 +28,7 @@ import Young from './pages/Young/Young';
 import Chapter from './pages/Chapter/Chapter';
 import Start from './pages/Start/Start';
 import { useAuth } from './contexts/Auth';
+import Activist from './pages/Activist/Activits';
 
 const App: React.FC = () => {
 
@@ -55,6 +56,7 @@ const App: React.FC = () => {
         <Route path="/home" exact={true} component={Home} />
         <Route path="/young" exact={true} component={Young} />
         <Route path="/chapter" exact={true} component={Chapter} />
+        <Route path="/activist" exact={true} component={Activist} />
         <Route path="/event/:id/" component={Event} />
       </IonRouterOutlet>
     </IonSplitPane>

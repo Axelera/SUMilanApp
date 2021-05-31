@@ -13,17 +13,22 @@ import {
     IonTitle,
     IonToolbar,
     IonSkeletonText,
+    useIonAlert,
 } from '@ionic/react';
 import './Home.css';
 import EventCardComponent from '../../components/EventCard/EventCardComponent';
 import { RouteComponentProps } from 'react-router';
 import { search } from 'ionicons/icons';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchEvents } from '../../store/actions/events/eventsActions';
 import { EventModel, EventRelatorModel, EventStateModel } from '../../models/event.model';
 import { EventTimeStatus, getEventTimeStatus } from '../../utils/eventTimeUtils';
 import { DateTime } from 'luxon';
+import { ActivistRequest } from '../../models/activist-request.model';
+import { fetchRequest, registerRequest } from '../../services/activist-request/activistRequest';
+import { useAuth } from '../../contexts/Auth';
+import { User } from '@supabase/gotrue-js';
 
 interface GroupedEventsModel {
     passed: EventModel[];
@@ -59,6 +64,7 @@ const EventsList = (data: { events: EventModel[], title: any, props: any }) => {
 const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     const dispatch = useDispatch();
     const { items, loading, error } = useSelector<{ events: EventStateModel }, EventStateModel>(state => state.events);
+    const { user } = useAuth();
 
     const [isSearchbarVisible, setIsSearchbarVisible] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -68,6 +74,9 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
         today: [],
     });
     const searchbarRef = useRef<HTMLIonSearchbarElement>(null);
+    const [isAlertPresented, setIsAlertPresented] = useState(false);
+    const [hasAccepted, setHasAccepted] = useState(false);
+    const [present] = useIonAlert();
 
     const toggleSearchbarHandler = () => {
         setIsSearchbarVisible((state) => !state);
@@ -88,6 +97,27 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
         }
         return false;
     }
+
+    const presentAlert = useCallback((user: User, request?: ActivistRequest) => {
+        present({
+            header: 'Stiamo cercando activist!',
+            message: 'Stiamo cercando <b>activist</b> per contribuire alla crescita del <b>Chapter</b>.<br>Desideri avere maggiori informazioni?',
+            buttons: [
+                { text: 'Non ora', role: 'cancel', handler: () => registerRequest(user, false, request) },
+                {
+                    text: 'Sì!', role: 'accept', handler: () => {
+                        registerRequest(user, true, request);
+                    }
+                },
+            ],
+            backdropDismiss: false,
+            onDidDismiss: (d) => {
+                if (d.detail.role === 'accept') {
+                    setHasAccepted(true);
+                }
+            },
+        });
+    }, [present]);
 
     useEffect(() => {
         let fEvents = [...items];
@@ -128,6 +158,34 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     useEffect(() => {
         dispatch(fetchEvents());
     }, [dispatch]);
+
+    useEffect(() => {
+        if (!isAlertPresented) {
+            setIsAlertPresented(true);
+            fetchRequest(user).then(req => {
+                if (!req) {
+                    presentAlert(user, req);
+                } else {
+                    const dt = DateTime.fromISO(req.timestamp);
+                    const accepted = req.accepted;
+                    if (!accepted && dt.diffNow('days').days < -7) {
+                        presentAlert(user, req);
+                    }
+                }
+            });
+        }
+    }, [user, presentAlert, isAlertPresented]);
+
+    useEffect(() => {
+        if (hasAccepted) {
+            setHasAccepted(false);
+            present({
+                header: 'Grazie!',
+                message: `Ti contatteremo all'email: <b>${user.email}</b>`,
+                buttons: ['Ok']
+            });
+        }
+    }, [user, hasAccepted, present]);
 
     const toolbar = isSearchbarVisible ?
         (
