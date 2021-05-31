@@ -13,7 +13,7 @@ import {
 } from '@ionic/react';
 
 import { useLocation } from 'react-router-dom';
-import { balloonOutline, balloonSharp, globeOutline, homeOutline, homeSharp, informationCircleOutline, informationCircleSharp, logoGithub, logOutOutline, ticketOutline, ticketSharp } from 'ionicons/icons';
+import { balloonOutline, balloonSharp, documentTextOutline, documentTextSharp, globeOutline, homeOutline, homeSharp, informationCircleOutline, informationCircleSharp, logoGithub, logOutOutline, openOutline } from 'ionicons/icons';
 import './Menu.css';
 import LogoImage from './LogoImage/LogoImage';
 import { useAuth } from '../contexts/Auth';
@@ -77,6 +77,12 @@ const Menu: React.FC = () => {
               </IonMenuToggle>
             );
           })}
+        </IonList>
+        <IonList lines="full">
+          <IonItem href="https://www.singularityumilan.com/guida-rapida-app" target="_blank" detail={true} detailIcon={openOutline}>
+            <IonIcon slot="start" ios={documentTextOutline} md={documentTextSharp} />
+            <IonLabel>Istruzioni di utilizzo</IonLabel>
+          </IonItem>
         </IonList>
         {user &&
           <IonList lines="full" style={{ padding: 0 }}>
