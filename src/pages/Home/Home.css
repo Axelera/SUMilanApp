@@ -7,3 +7,27 @@
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
+.events-separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: rgb(var(--ion-color-primary-rgb));
+    font-weight: bold;
+    margin: 20px 0px;
+    padding: 0 10px;
+    font-size: 20px;
+}
+.events-separator::before,
+.events-separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgb(var(--ion-color-primary-rgb));
+}
+.events-separator:not(:empty)::before {
+    margin-right: 0.3em;
+}
+
+.events-separator:not(:empty)::after {
+    margin-left: 0.3em;
+}

@@ -10,7 +10,6 @@ import {
     IonPage,
     IonRow,
     IonSearchbar,
-    IonText,
     IonTitle,
     IonToolbar,
     IonSkeletonText,
@@ -35,9 +34,7 @@ interface GroupedEventsModel {
 const EventsList = (data: { events: EventModel[], title: any, props: any }) => {
     return (
         <React.Fragment>
-            <IonText color="medium">
-                <h4 style={{ marginLeft: 10 }}>{data.title}</h4>
-            </IonText>
+            {data.title}
             <IonRow>
                 {data.events.map(event => {
                     return (
@@ -210,9 +207,9 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
             </IonHeader>
             <IonContent fullscreen>
                 <IonGrid style={{ padding: 0 }}>
-                    {filteredEvents.today.length > 0 ? <EventsList events={filteredEvents.today} title={<b>Eventi oggi</b>} props={{ ...props }} /> : null}
-                    {filteredEvents.scheduled.length > 0 ? <EventsList events={filteredEvents.scheduled} title={<b>Eventi in programma</b>} props={{ ...props }} /> : null}
-                    {filteredEvents.passed.length > 0 ? <EventsList events={filteredEvents.passed} title={<b>Eventi passati</b>} props={{ ...props }} /> : null}
+                    {filteredEvents.today.length > 0 ? <EventsList events={filteredEvents.today} title={<div className="events-separator">Eventi oggi</div>} props={{ ...props }} /> : null}
+                    {filteredEvents.scheduled.length > 0 ? <EventsList events={filteredEvents.scheduled} title={<div className="events-separator">Eventi in programma</div>} props={{ ...props }} /> : null}
+                    {filteredEvents.passed.length > 0 ? <EventsList events={filteredEvents.passed} title={<div className="events-separator">Eventi passati</div>} props={{ ...props }} /> : null}
                     {isSearchbarVisible &&
                         filteredEvents.passed.length === 0 &&
                         filteredEvents.scheduled.length === 0 &&
