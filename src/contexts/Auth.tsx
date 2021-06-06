@@ -34,6 +34,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         signIn: (data: UserCredentials) => supabase.auth.signIn(data),
         signOut: () => supabase.auth.signOut(),
         user,
+        loading,
     }
 
     return (
