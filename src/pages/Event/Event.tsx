@@ -14,22 +14,23 @@ import {
 } from '@ionic/react';
 import { Link, Route } from 'react-router-dom';
 import { Redirect, RouteComponentProps, useParams } from "react-router";
-import { useDispatch, useSelector } from 'react-redux'
-import Live from './Live/Live';
 import { fileTrayFull, help, informationCircleOutline, logoYoutube } from 'ionicons/icons';
+import { useEffect, useState } from 'react';
+
+import './Event.css';
+import Live from './Live/Live';
 import Mentimeter from './Mentimeter/Mentimeter';
 import Slides from './Slides/Slides';
 import Info from './Info/Info';
 import { EventModel, EventStateModel } from '../../models/event.model';
-import { useEffect, useState } from 'react';
-import { fetchEvents } from '../../store/actions/events/eventsActions';
-import './Event.css';;
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { fetchEvents } from '../../store/events/eventsSlice';
 
 const Event: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     const { id } = useParams<{ id: string; }>();
 
-    const dispatch = useDispatch();
-    const { items, loading, error } = useSelector<{ events: EventStateModel }, EventStateModel>(state => state.events);
+    const dispatch = useAppDispatch();
+    const { items, status, error } = useAppSelector<EventStateModel>(state => state.events);
     const [event, setEvent] = useState(items.find(ev => ev.identifier === id));
 
     useEffect(() => {
@@ -44,7 +45,7 @@ const Event: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
         return <p style={{ margin: 15 }}>Error! {error.message}</p>;
     }
 
-    if (loading) {
+    if (status === 'loading') {
         return <p style={{ margin: 15 }}>Caricamento...</p>;
     }
 

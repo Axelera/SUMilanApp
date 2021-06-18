@@ -15,20 +15,19 @@ import {
     IonSkeletonText,
     useIonAlert,
 } from '@ionic/react';
-import './Home.css';
-import EventCardComponent from '../../components/EventCard/EventCardComponent';
 import { RouteComponentProps } from 'react-router';
 import { search } from 'ionicons/icons';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchEvents } from '../../store/actions/events/eventsActions';
+import { DateTime } from 'luxon';
+
+import './Home.css';
+import EventCardComponent from '../../components/EventCard/EventCardComponent';
 import { EventModel, EventRelatorModel, EventStateModel } from '../../models/event.model';
 import { EventTimeStatus, getEventTimeStatus } from '../../utils/eventTimeUtils';
-import { DateTime } from 'luxon';
-import { ActivistRequest } from '../../models/activist-request.model';
-import { fetchRequest, registerRequest } from '../../services/activist-request/activistRequest';
-import { useAuth } from '../../contexts/Auth';
-import { User } from '@supabase/gotrue-js';
+import { fetchEvents } from '../../store/events/eventsSlice';
+import { ActivistRequestState } from '../../models/activist-request.model';
+import { loadActivistRequest, storeActivistRequest } from '../../store/activist/activistSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 interface GroupedEventsModel {
     passed: EventModel[];
@@ -61,10 +60,21 @@ const EventsList = (data: { events: EventModel[], title: any, props: any }) => {
     );
 };
 
+const isQueryInRelators = (query: string, relators: EventRelatorModel[] | undefined): boolean => {
+    if (relators) {
+        for (const relator of relators) {
+            if (relator.name.toLowerCase().includes(query)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
-    const dispatch = useDispatch();
-    const { items, loading, error } = useSelector<{ events: EventStateModel }, EventStateModel>(state => state.events);
-    const { user } = useAuth();
+    const dispatch = useAppDispatch();
+    const { items, status, error } = useAppSelector<EventStateModel>(state => state.events);
+    const activistRequestState = useAppSelector<ActivistRequestState>(state => state.activistRequest);
 
     const [isSearchbarVisible, setIsSearchbarVisible] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -75,8 +85,9 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     });
     const searchbarRef = useRef<HTMLIonSearchbarElement>(null);
     const [isAlertPresented, setIsAlertPresented] = useState(false);
-    const [hasAccepted, setHasAccepted] = useState(false);
     const [present] = useIonAlert();
+
+    const { history } = props;
 
     const toggleSearchbarHandler = () => {
         setIsSearchbarVisible((state) => !state);
@@ -87,37 +98,23 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
         setSearchQuery(input);
     };
 
-    const isQueryInRelators = (query: string, relators: EventRelatorModel[] | undefined): boolean => {
-        if (relators) {
-            for (const relator of relators) {
-                if (relator.name.toLowerCase().includes(query)) {
-                    return true;
-                }
+    const presentAlert = useCallback(() => {
+        const alertChoiceHandler = (accepted: boolean) => {
+            dispatch(storeActivistRequest(accepted));
+            if (accepted) {
+                history.push('activist');
             }
-        }
-        return false;
-    }
-
-    const presentAlert = useCallback((user: User, request?: ActivistRequest) => {
+        };
         present({
             header: 'Stiamo cercando activist!',
             message: 'Stiamo cercando <b>activist</b> per contribuire alla crescita del <b>Chapter</b>.<br>Desideri avere maggiori informazioni?',
             buttons: [
-                { text: 'Non ora', role: 'cancel', handler: () => registerRequest(user, false, request) },
-                {
-                    text: 'Sì!', role: 'accept', handler: () => {
-                        registerRequest(user, true, request);
-                    }
-                },
+                { text: 'Non ora', role: 'cancel', handler: alertChoiceHandler.bind(this, false) },
+                { text: 'Sì!', role: 'accept', handler: alertChoiceHandler.bind(this, true) },
             ],
             backdropDismiss: false,
-            onDidDismiss: (d) => {
-                if (d.detail.role === 'accept') {
-                    setHasAccepted(true);
-                }
-            },
         });
-    }, [present]);
+    }, [present, history, dispatch]);
 
     useEffect(() => {
         let fEvents = [...items];
@@ -157,35 +154,23 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
 
     useEffect(() => {
         dispatch(fetchEvents());
+        dispatch(loadActivistRequest());
     }, [dispatch]);
 
     useEffect(() => {
-        if (!isAlertPresented) {
+        if (!isAlertPresented && activistRequestState.status !== 'loading') {
             setIsAlertPresented(true);
-            fetchRequest(user).then(req => {
-                if (!req) {
-                    presentAlert(user, req);
-                } else {
-                    const dt = DateTime.fromISO(req.timestamp);
-                    const accepted = req.accepted;
-                    if (!accepted && dt.diffNow('days').days < -7) {
-                        presentAlert(user, req);
-                    }
+            if (!activistRequestState.askedRequest) {
+                presentAlert();
+            } else {
+                const dt = DateTime.fromISO(activistRequestState.askedRequest.askedAt);
+                const accepted = activistRequestState.askedRequest.accepted;
+                if (!accepted && dt.diffNow('days').days < -7) {
+                    presentAlert();
                 }
-            });
+            }
         }
-    }, [user, presentAlert, isAlertPresented]);
-
-    useEffect(() => {
-        if (hasAccepted) {
-            setHasAccepted(false);
-            present({
-                header: 'Grazie!',
-                message: `Ti contatteremo all'email: <b>${user.email}</b>`,
-                buttons: ['Ok']
-            });
-        }
-    }, [user, hasAccepted, present]);
+    }, [presentAlert, isAlertPresented, activistRequestState]);
 
     const toolbar = isSearchbarVisible ?
         (
@@ -226,7 +211,7 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
         );
     }
 
-    if (loading) {
+    if (status === 'loading') {
         return (
             <IonPage>
                 <IonHeader>

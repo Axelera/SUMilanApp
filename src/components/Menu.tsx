@@ -9,14 +9,12 @@ import {
   IonListHeader,
   IonMenu,
   IonMenuToggle,
-  useIonAlert,
 } from '@ionic/react';
 
 import { useLocation } from 'react-router-dom';
 import { balloonOutline, balloonSharp, documentTextOutline, documentTextSharp, globeOutline, homeOutline, homeSharp, informationCircleOutline, informationCircleSharp, logoGithub, logOutOutline, openOutline, peopleOutline, peopleSharp } from 'ionicons/icons';
 import './Menu.css';
 import LogoImage from './LogoImage/LogoImage';
-import { useAuth } from '../contexts/Auth';
 
 interface AppPage {
   url: string;
@@ -54,19 +52,6 @@ const appPages: AppPage[] = [
 
 const Menu: React.FC = () => {
   const location = useLocation();
-  const [present] = useIonAlert();
-  const { user, signOut } = useAuth();
-
-  const logoutHandler = () => {
-    present({
-      header: 'Log out?',
-      message: 'Vuoi effettuare il logout?',
-      buttons: [
-        { text: 'Annulla', role: 'cancel' },
-        { text: 'Logout', handler: () => signOut() },
-      ],
-    });
-  };
 
   return (
     <IonMenu contentId="main" type="overlay">
@@ -90,19 +75,6 @@ const Menu: React.FC = () => {
             <IonLabel>Istruzioni di utilizzo</IonLabel>
           </IonItem>
         </IonList>
-        {user &&
-          <IonList lines="full" style={{ padding: 0 }}>
-            <IonItem>
-              <IonLabel>
-                <h3>Email di login:</h3>
-                <p>{user?.email}</p>
-              </IonLabel>
-              <IonButton slot="end" fill="clear" onClick={logoutHandler} color="secondary">
-                <IonIcon slot="icon-only" icon={logOutOutline} />
-              </IonButton>
-            </IonItem>
-          </IonList>
-        }
       </IonContent>
       <IonFooter>
         <IonList style={{ padding: 0 }}>

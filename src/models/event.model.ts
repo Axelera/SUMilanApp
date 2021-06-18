@@ -51,7 +51,7 @@ export interface EventSlideModel {
 
 export interface EventStateModel {
     items: EventModel[];
-    loading: boolean;
+    status: 'loading' | 'idle' | 'error';
     error: any;
 }
 

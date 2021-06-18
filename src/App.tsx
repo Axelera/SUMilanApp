@@ -1,4 +1,4 @@
-import { IonApp, IonContent, IonPage, IonRouterOutlet, IonSplitPane } from '@ionic/react';
+import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
 import Menu from './components/Menu';
@@ -26,11 +26,8 @@ import Home from './pages/Home/Home';
 import Event from './pages/Event/Event';
 import Young from './pages/Young/Young';
 import Chapter from './pages/Chapter/Chapter';
-import Start from './pages/Start/Start';
-import { useAuth } from './contexts/Auth';
 import Activist from './pages/Activist/Activits';
 import OneSignal, { useOneSignalSetup } from 'react-onesignal';
-import Loading from './components/Loading/Loading';
 
 const oneSignalAppId = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? 'afa55ec4-2681-41d4-8927-1caf2aabd5d7' : '0207a79f-f4d6-4593-8f30-969b8719e41b';
 const safariWebId = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? undefined : 'web.onesignal.auto.35f9fdf2-e602-4832-95b7-1c199bdb2bd7';
@@ -46,36 +43,9 @@ OneSignal.initialize(oneSignalAppId, {
 
 const App: React.FC = () => {
 
-  const { user, loading } = useAuth();
-
   useOneSignalSetup(() => {
-    if (!loading && user) {
-      OneSignal.showSlidedownPrompt();
-      OneSignal.setEmail(user.email);
-      OneSignal.setExternalUserId(user.id);
-    }
+    OneSignal.showSlidedownPrompt();
   });
-
-  if (loading) {
-    return (
-      <IonApp>
-        <IonPage>
-          <IonContent>
-            <Loading />
-          </IonContent>
-        </IonPage>
-      </IonApp>
-    );
-  }
-
-  const startRouter = (
-    <>
-      <Route path="/*">
-        <Redirect to="/start" />
-      </Route>
-      <Route path="/start" exact={true} component={Start} />
-    </>
-  );
 
   const homeRouter = (
     <IonSplitPane contentId="main">
@@ -99,7 +69,7 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <IonReactRouter>
-        {user ? homeRouter : startRouter}
+        {homeRouter}
       </IonReactRouter>
     </IonApp>
   );
