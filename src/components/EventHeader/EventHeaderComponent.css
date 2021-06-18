@@ -6,3 +6,8 @@
 .blinking {
     animation: blinker 0.8s cubic-bezier(.5, 0, 1, 1) infinite alternate;
 }
+
+.copied-message {
+    font-size: small;
+    color: var(--ion-color-success);
+}
