@@ -33,6 +33,26 @@ const oneSignalAppId = !process.env.NODE_ENV || process.env.NODE_ENV === 'develo
 const safariWebId = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? undefined : 'web.onesignal.auto.35f9fdf2-e602-4832-95b7-1c199bdb2bd7';
 const allowLocalhost = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 
+/* RESET OneSignal */
+const oneSignalDbReset = window.localStorage.getItem('ONESIGNAL_DB_RESET');
+const isDbReset = oneSignalDbReset ? JSON.parse(oneSignalDbReset).value : false;
+if (!isDbReset) {
+  const res = window.indexedDB.deleteDatabase("ONE_SIGNAL_SDK_DB");
+  res.onsuccess = ev => {
+    console.log('DELETED ONE_SIGNAL_SDK_DB indexedDB', ev);
+    window.localStorage.setItem('ONESIGNAL_DB_RESET', JSON.stringify({ timestamp: new Date().getTime(), value: true }));
+  };
+  res.onerror = ev => {
+    console.log('Error deleting ONE_SIGNAL_SDK_DB indexedDB', ev);
+    window.localStorage.setItem('ONESIGNAL_DB_RESET', JSON.stringify({ timestamp: new Date().getTime(), value: false }));
+  };
+  res.onblocked = ev => {
+    console.log('Blocked when deleting ONE_SIGNAL_SDK_DB indexedDB', ev);
+    window.localStorage.setItem('ONESIGNAL_DB_RESET', JSON.stringify({ timestamp: new Date().getTime(), value: false }));
+  };
+}
+/* */
+
 OneSignal.initialize(oneSignalAppId, {
   allowLocalhostAsSecureOrigin: allowLocalhost,
   notifyButton: {
@@ -43,8 +63,13 @@ OneSignal.initialize(oneSignalAppId, {
 
 const App: React.FC = () => {
 
-  useOneSignalSetup(() => {
-    OneSignal.showSlidedownPrompt();
+  useOneSignalSetup(async () => {
+    if (OneSignal.isPushNotificationsSupported()) {
+      const isPushEnabled = await OneSignal.isPushNotificationsEnabled()
+      if (!isPushEnabled) {
+        await OneSignal.registerForPushNotifications();
+      }
+    }
   });
 
   const homeRouter = (
