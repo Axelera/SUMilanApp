@@ -19,6 +19,7 @@ import { RouteComponentProps } from 'react-router';
 import { search } from 'ionicons/icons';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { DateTime } from 'luxon';
+import OneSignal, { useOneSignalSetup } from "react-onesignal";
 
 import './Home.css';
 import EventCardComponent from '../../components/EventCard/EventCardComponent';
@@ -115,6 +116,15 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
             backdropDismiss: false,
         });
     }, [present, history, dispatch]);
+
+    useOneSignalSetup(async () => {
+        if (OneSignal.isPushNotificationsSupported()) {
+            const isPushEnabled = await OneSignal.isPushNotificationsEnabled()
+            if (!isPushEnabled) {
+                await OneSignal.registerForPushNotifications();
+            }
+        }
+    });
 
     useEffect(() => {
         let fEvents = [...items];

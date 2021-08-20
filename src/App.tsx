@@ -1,7 +1,8 @@
+import { useEffect } from 'react';
 import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
-import Menu from './components/Menu';
+import OneSignal from 'react-onesignal';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -22,15 +23,21 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+import Menu from './components/Menu';
 import Home from './pages/Home/Home';
 import Event from './pages/Event/Event';
 import Young from './pages/Young/Young';
 import Chapter from './pages/Chapter/Chapter';
 import Activist from './pages/Activist/Activits';
-import OneSignal, { useOneSignalSetup } from 'react-onesignal';
 
-const oneSignalAppId = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? 'afa55ec4-2681-41d4-8927-1caf2aabd5d7' : '0207a79f-f4d6-4593-8f30-969b8719e41b';
-const safariWebId = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? undefined : 'web.onesignal.auto.35f9fdf2-e602-4832-95b7-1c199bdb2bd7';
+const oneSignalAppId = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ?
+  process.env.REACT_APP_ONESIGNAL_DEVELOPMENT_KEY as string
+  :
+  process.env.REACT_APP_ONESIGNAL_PRODUCTION_KEY as string;
+const safariWebId = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ?
+  undefined
+  :
+  process.env.REACT_APP_ONESIGNAL_SAFARI_WEB_ID as string;
 const allowLocalhost = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 
 /* RESET OneSignal */
@@ -53,24 +60,22 @@ if (!isDbReset) {
 }
 /* */
 
-OneSignal.initialize(oneSignalAppId, {
+const oneSignalConfigurtion = {
   allowLocalhostAsSecureOrigin: allowLocalhost,
   notifyButton: {
     enable: false,
   },
+  persistNotification: true,
+  autoResubscribe: true,
+  autoRegister: true,
   safari_web_id: safariWebId,
-});
+};
 
 const App: React.FC = () => {
 
-  useOneSignalSetup(async () => {
-    if (OneSignal.isPushNotificationsSupported()) {
-      const isPushEnabled = await OneSignal.isPushNotificationsEnabled()
-      if (!isPushEnabled) {
-        await OneSignal.registerForPushNotifications();
-      }
-    }
-  });
+  useEffect(() => {
+    OneSignal.initialize(oneSignalAppId, oneSignalConfigurtion);
+  }, []);
 
   const homeRouter = (
     <IonSplitPane contentId="main">
