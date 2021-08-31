@@ -1,5 +1,5 @@
 import { IonButton, IonIcon } from "@ionic/react";
-import { logoFacebook, logoTwitter, logoTwitch, logoLinkedin, globeOutline, videocam } from "ionicons/icons";
+import { logoFacebook, logoTwitter, logoTwitch, logoLinkedin, globeOutline, videocam, logoYoutube } from "ionicons/icons";
 
 interface SocialLinkProps {
     platform: string;
@@ -27,6 +27,9 @@ const SocialLinkComponent: React.FC<SocialLinkProps> = (props: SocialLinkProps) 
             break;
         case 'website':
             icon = globeOutline;
+            break;
+        case 'youtube':
+            icon = logoYoutube;
             break;
         case 'video':
             icon = videocam;

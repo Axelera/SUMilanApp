@@ -2,6 +2,13 @@ import { RouteComponentProps } from "react-router";
 
 export interface EventComponentProps {
     event: EventModel;
+    showBottomPlayer?: boolean;
+    isVideoPlaying?: boolean;
+    playedSeconds?: number;
+    videoDuration?: number;
+    onToggleVideoPlaying: () => any;
+    onCloseBottomPlayer: () => any;
+    onPlayedSeconds?: (seconds: number) => any;
 }
 
 export interface EventComponentWithRouteProps extends RouteComponentProps {

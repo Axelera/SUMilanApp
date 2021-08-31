@@ -15,10 +15,14 @@ import { DateTime } from 'luxon';
 import { useState } from 'react';
 
 import './EventHeaderComponent.css';
-import { EventComponentProps } from '../../models/event.model';
+import { EventModel } from '../../models/event.model';
 import { EventTimeStatus, getEventTimeStatus } from '../../utils/eventTimeUtils';
 
-const EventHeaderComponent: React.FC<EventComponentProps> = (props: EventComponentProps) => {
+type Props = {
+    event: EventModel;
+};
+
+const EventHeaderComponent: React.FC<Props> = (props: Props) => {
     const date = DateTime.fromISO(props.event.date);
     const [isLoading, setIsLoading] = useState(false);
     const [isShared, setIsShared] = useState(false);

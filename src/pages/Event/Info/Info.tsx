@@ -11,14 +11,16 @@ import {
     IonPage,
 } from '@ionic/react';
 import { headsetOutline, ticketOutline } from 'ionicons/icons';
+import { DateTime } from 'luxon';
+
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import EventTimeComponent from '../../../components/EventTime/EventTimeComponent';
 import SocialLinkComponent from '../../../components/SocialLinkComponent/SocialLinkComponent';
 import { EventComponentProps, EventRelatorModel, TicketsLinkModel } from "../../../models/event.model";
 import avatar from '../../../assets/images/avatar.png';
-import './Info.css';
 import { EventTimeStatus, getEventTimeStatus } from '../../../utils/eventTimeUtils';
-import { DateTime } from 'luxon';
+import BottomLivePlayer from '../../../components/BottomLivePlayer/BottomLivePlayer';
+import './Info.css';
 
 const Relator = (data: { relator: EventRelatorModel }) => {
     const relator = data.relator;
@@ -66,7 +68,7 @@ const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
 
     const event = props.event;
     const eventTimeStatus = getEventTimeStatus(DateTime.fromISO(event.date), event.duration);
-    
+
     return (
         <IonPage>
             <EventHeaderComponent event={event} />
@@ -107,7 +109,16 @@ const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                     :
                     null}
                 {event.ticketsLink && eventTimeStatus !== EventTimeStatus.PASSED && <TicketsButton ticketsLink={event.ticketsLink} />}
+                {props.showBottomPlayer && <div style={{ height: 120 }}></div>}
             </IonContent>
+            {props.showBottomPlayer && <BottomLivePlayer
+                isLive={eventTimeStatus === EventTimeStatus.TODAY_LIVE}
+                isVideoPlaying={props.isVideoPlaying}
+                playedSeconds={props.playedSeconds as number}
+                onTogglePlaying={props.onToggleVideoPlaying}
+                onCloseBottomPlayer={props.onCloseBottomPlayer}
+                videoDuration={props.videoDuration}
+            />}
         </IonPage>
     );
 };
