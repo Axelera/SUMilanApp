@@ -3,6 +3,7 @@ export interface VideoPlayerContextModel {
     isBottomPlayerVisible: boolean;
     playedSeconds: number;
     videoDuration?: number;
+    isVideoEnded?: boolean;
     playVideo: (showBottomPlayer?: boolean) => any;
     pauseVideo: () => any;
     toggleVideoPlay: () => any;
@@ -10,4 +11,5 @@ export interface VideoPlayerContextModel {
     closeBottomPlayer: () => any;
     setPlayedSeconds: (seconds: number) => any;
     setVideoDuration: (seconds: number) => any;
+    onVideoEnded: () => any;
 }

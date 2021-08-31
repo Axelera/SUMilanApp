@@ -6,11 +6,13 @@ export const VideoPlayerContext = createContext<VideoPlayerContextModel | null>(
 
 export const VideoPlayerProvider: React.FC = ({ children }) => {
     const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+    const [isVideoEnded, setIsVideoEnded] = useState(false);
     const [isBottomPlayerVisible, setIsBottomPlayerVisible] = useState(false);
     const [playedSeconds, setPlayedSeconds] = useState(0);
     const [videoDuration, setVideoDuration] = useState(0);
 
     const playVideo = (showBottomPlayer?: boolean) => {
+        setIsVideoEnded(false);
         setIsVideoPlaying(true);
         if (showBottomPlayer) {
             setIsBottomPlayerVisible(true);
@@ -22,6 +24,7 @@ export const VideoPlayerProvider: React.FC = ({ children }) => {
     };
 
     const toggleVideoPlay = () => {
+        setIsVideoEnded(false);
         setIsVideoPlaying(prevState => !prevState);
     };
 
@@ -33,12 +36,18 @@ export const VideoPlayerProvider: React.FC = ({ children }) => {
         setIsBottomPlayerVisible(false);
     };
 
+    const onVideoEnded = () => {
+        setIsVideoEnded(true);
+        setIsVideoPlaying(false);
+    };
+
     return (
         <VideoPlayerContext.Provider value={{
             isVideoPlaying,
             isBottomPlayerVisible,
             playedSeconds,
             videoDuration,
+            isVideoEnded,
             playVideo,
             pauseVideo,
             toggleVideoPlay,
@@ -46,6 +55,7 @@ export const VideoPlayerProvider: React.FC = ({ children }) => {
             closeBottomPlayer,
             setPlayedSeconds,
             setVideoDuration,
+            onVideoEnded,
         }}>
             {children}
         </VideoPlayerContext.Provider>

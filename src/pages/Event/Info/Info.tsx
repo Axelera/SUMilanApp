@@ -3,6 +3,7 @@ import {
     IonContent,
     IonFab,
     IonFabButton,
+    IonFooter,
     IonIcon,
     IonItem,
     IonLabel,
@@ -12,7 +13,6 @@ import {
 } from '@ionic/react';
 import { headsetOutline, ticketOutline } from 'ionicons/icons';
 import { DateTime } from 'luxon';
-import { useContext } from 'react';
 
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import EventTimeComponent from '../../../components/EventTime/EventTimeComponent';
@@ -21,8 +21,6 @@ import { EventComponentProps, EventRelatorModel, TicketsLinkModel } from "../../
 import avatar from '../../../assets/images/avatar.png';
 import { EventTimeStatus, getEventTimeStatus } from '../../../utils/eventTimeUtils';
 import BottomLivePlayer from '../../../components/BottomLivePlayer/BottomLivePlayer';
-import { VideoPlayerContext } from '../../../contexts/VideoPlayer';
-import { VideoPlayerContextModel } from '../../../models/videoplayer.model';
 
 import './Info.css';
 
@@ -69,7 +67,6 @@ const TicketsButton = (data: { ticketsLink: TicketsLinkModel }) => {
 };
 
 const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
-    const { isBottomPlayerVisible } = useContext(VideoPlayerContext) as VideoPlayerContextModel;
 
     const event = props.event;
     const eventTimeStatus = getEventTimeStatus(DateTime.fromISO(event.date), event.duration);
@@ -114,11 +111,14 @@ const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                     :
                     null}
                 {event.ticketsLink && eventTimeStatus !== EventTimeStatus.PASSED && <TicketsButton ticketsLink={event.ticketsLink} />}
-                {isBottomPlayerVisible && <div style={{ height: 120 }}></div>}
             </IonContent>
-            {isBottomPlayerVisible && <BottomLivePlayer
-                isLive={eventTimeStatus === EventTimeStatus.TODAY_LIVE}
-            />}
+            <IonFooter>
+                <BottomLivePlayer
+                    eventId={event.identifier}
+                    eventImageUrl={event.imageUrl}
+                    isLive={eventTimeStatus === EventTimeStatus.TODAY_LIVE}
+                />
+            </IonFooter>
         </IonPage>
     );
 };

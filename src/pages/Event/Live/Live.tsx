@@ -21,7 +21,7 @@ import { VideoPlayerContextModel } from '../../../models/videoplayer.model';
 import './Live.css';
 
 const Live: React.FC<EventComponentProps> = (props: EventComponentProps) => {
-    const { isVideoPlaying, playVideo, pauseVideo, setPlayedSeconds, setVideoDuration } = useContext(VideoPlayerContext) as VideoPlayerContextModel;
+    const { isVideoPlaying, playVideo, pauseVideo, setPlayedSeconds, setVideoDuration, onVideoEnded } = useContext(VideoPlayerContext) as VideoPlayerContextModel;
 
     const StreamingUrl = (item: { streamingUrl: EventStreamingUrlModel }) => {
         const streamingUrl = item.streamingUrl;
@@ -69,6 +69,7 @@ const Live: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                     onPause={pauseVideo}
                     onProgress={onVideoProgress}
                     onDuration={onVideoDuration}
+                    onEnded={onVideoEnded}
                 />
                 <div>
                     <IonText color="medium">
