@@ -15,7 +15,7 @@ export const fetchEvents = createAsyncThunk('events/fetchEvents', async () => {
 });
 
 const eventsSlice = createSlice({
-    name: 'activist',
+    name: 'events',
     initialState,
     reducers: {},
     extraReducers: builder => {
