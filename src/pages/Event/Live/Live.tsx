@@ -10,21 +10,18 @@ import {
 } from '@ionic/react';
 import { refresh } from 'ionicons/icons';
 import ReactPlayer from 'react-player';
+import { useContext } from 'react';
+
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import SocialLinkComponent from '../../../components/SocialLinkComponent/SocialLinkComponent';
-import { EventModel, EventStreamingUrlModel } from '../../../models/event.model';
+import { VideoPlayerContext } from '../../../contexts/VideoPlayer';
+import { EventComponentProps, EventStreamingUrlModel } from '../../../models/event.model';
+import { VideoPlayerContextModel } from '../../../models/videoplayer.model';
+
 import './Live.css';
 
-type Props = {
-    event: EventModel;
-    isVideoPlaying?: boolean;
-    onPlayVideo: () => any;
-    onPauseVideo: () => any;
-    onPlayedSeconds: (seconds: number) => any;
-    onVideoDuration: (duration: number) => any;
-};
-
-const Live: React.FC<Props> = (props: Props) => {
+const Live: React.FC<EventComponentProps> = (props: EventComponentProps) => {
+    const { isVideoPlaying, playVideo, pauseVideo, setPlayedSeconds, setVideoDuration } = useContext(VideoPlayerContext) as VideoPlayerContextModel;
 
     const StreamingUrl = (item: { streamingUrl: EventStreamingUrlModel }) => {
         const streamingUrl = item.streamingUrl;
@@ -39,22 +36,12 @@ const Live: React.FC<Props> = (props: Props) => {
         window.location.reload();
     };
 
-    const onPlayVideo = () => {
-        props.onPlayVideo();
-    };
-
-    const onPauseVideo = () => {
-        props.onPauseVideo();
-    };
-
     const onVideoProgress = ({ playedSeconds }: any) => {
-        if (props.onPlayedSeconds) {
-            props.onPlayedSeconds(playedSeconds);
-        }
+        setPlayedSeconds(playedSeconds);
     };
 
     const onVideoDuration = (seconds: number) => {
-        props.onVideoDuration(seconds);
+        setVideoDuration(seconds);
     };
 
     return (
@@ -75,11 +62,11 @@ const Live: React.FC<Props> = (props: Props) => {
                 </div>
                 <ReactPlayer
                     url={props.event.videoUrl}
-                    playing={props.isVideoPlaying}
+                    playing={isVideoPlaying}
                     controls={true}
                     width="100%"
-                    onPlay={onPlayVideo}
-                    onPause={onPauseVideo}
+                    onPlay={playVideo.bind(this, true)}
+                    onPause={pauseVideo}
                     onProgress={onVideoProgress}
                     onDuration={onVideoDuration}
                 />

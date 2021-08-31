@@ -1,15 +1,14 @@
 import { IonButton, IonIcon, IonText } from '@ionic/react';
 import { close, ellipse, pause, play } from 'ionicons/icons';
+import { useContext } from 'react';
+
+import { VideoPlayerContext } from '../../contexts/VideoPlayer';
+import { VideoPlayerContextModel } from '../../models/videoplayer.model';
 
 import './BottomLivePlayer.css';
 
 type Props = {
-    playedSeconds: number;
-    onTogglePlaying: () => any;
-    onCloseBottomPlayer: () => any;
-    isVideoPlaying?: boolean;
     isLive?: boolean;
-    videoDuration?: number;
 };
 
 const formatTime = (totalSeconds: number) => {
@@ -26,13 +25,20 @@ const formatTime = (totalSeconds: number) => {
     return '0:00';
 }
 
-const BottomLivePlayer = ({ playedSeconds, isVideoPlaying, onTogglePlaying, onCloseBottomPlayer, isLive, videoDuration }: Props) => {
+const BottomLivePlayer = ({ isLive }: Props) => {
+    const { isVideoPlaying, playedSeconds, videoDuration, toggleVideoPlay, closeBottomPlayer } = useContext(VideoPlayerContext) as VideoPlayerContextModel;
+
+    const onCloseBottomPlayer = () => {
+        toggleVideoPlay();
+        closeBottomPlayer();
+    };
+
     return (
         <div className="bottom-video-container">
             <IonButton
                 fill="clear"
                 shape="round"
-                onClick={onTogglePlaying}
+                onClick={toggleVideoPlay}
             >
                 <IonIcon slot="icon-only" icon={isVideoPlaying ? pause : play} />
             </IonButton>

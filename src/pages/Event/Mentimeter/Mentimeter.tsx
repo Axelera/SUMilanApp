@@ -4,13 +4,18 @@ import {
     IonPage,
 } from '@ionic/react';
 import { DateTime } from 'luxon';
+import { useContext } from 'react';
 
 import BottomLivePlayer from '../../../components/BottomLivePlayer/BottomLivePlayer';
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
+import { VideoPlayerContext } from '../../../contexts/VideoPlayer';
 import { EventComponentProps } from '../../../models/event.model';
+import { VideoPlayerContextModel } from '../../../models/videoplayer.model';
 import { EventTimeStatus, getEventTimeStatus } from '../../../utils/eventTimeUtils';
 
 const Mentimeter: React.FC<EventComponentProps> = (props: EventComponentProps) => {
+    const { isBottomPlayerVisible } = useContext(VideoPlayerContext) as VideoPlayerContextModel;
+    
     return (
         <IonPage>
             <EventHeaderComponent event={props.event} />
@@ -34,15 +39,10 @@ const Mentimeter: React.FC<EventComponentProps> = (props: EventComponentProps) =
                         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', }}
                     ></iframe>
                 </div>
-                {props.showBottomPlayer && <div style={{ height: 120 }}></div>}
+                {isBottomPlayerVisible && <div style={{ height: 120 }}></div>}
             </IonContent>
-            {props.showBottomPlayer && <BottomLivePlayer
+            {isBottomPlayerVisible && <BottomLivePlayer
                 isLive={getEventTimeStatus(DateTime.fromISO(props.event.date), props.event.duration) === EventTimeStatus.TODAY_LIVE}
-                isVideoPlaying={props.isVideoPlaying}
-                playedSeconds={props.playedSeconds as number}
-                onTogglePlaying={props.onToggleVideoPlaying}
-                onCloseBottomPlayer={props.onCloseBottomPlayer}
-                videoDuration={props.videoDuration}
             />}
         </IonPage>
     );

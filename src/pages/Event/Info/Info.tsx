@@ -12,6 +12,7 @@ import {
 } from '@ionic/react';
 import { headsetOutline, ticketOutline } from 'ionicons/icons';
 import { DateTime } from 'luxon';
+import { useContext } from 'react';
 
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import EventTimeComponent from '../../../components/EventTime/EventTimeComponent';
@@ -20,6 +21,9 @@ import { EventComponentProps, EventRelatorModel, TicketsLinkModel } from "../../
 import avatar from '../../../assets/images/avatar.png';
 import { EventTimeStatus, getEventTimeStatus } from '../../../utils/eventTimeUtils';
 import BottomLivePlayer from '../../../components/BottomLivePlayer/BottomLivePlayer';
+import { VideoPlayerContext } from '../../../contexts/VideoPlayer';
+import { VideoPlayerContextModel } from '../../../models/videoplayer.model';
+
 import './Info.css';
 
 const Relator = (data: { relator: EventRelatorModel }) => {
@@ -65,6 +69,7 @@ const TicketsButton = (data: { ticketsLink: TicketsLinkModel }) => {
 };
 
 const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
+    const { isBottomPlayerVisible } = useContext(VideoPlayerContext) as VideoPlayerContextModel;
 
     const event = props.event;
     const eventTimeStatus = getEventTimeStatus(DateTime.fromISO(event.date), event.duration);
@@ -109,15 +114,10 @@ const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                     :
                     null}
                 {event.ticketsLink && eventTimeStatus !== EventTimeStatus.PASSED && <TicketsButton ticketsLink={event.ticketsLink} />}
-                {props.showBottomPlayer && <div style={{ height: 120 }}></div>}
+                {isBottomPlayerVisible && <div style={{ height: 120 }}></div>}
             </IonContent>
-            {props.showBottomPlayer && <BottomLivePlayer
+            {isBottomPlayerVisible && <BottomLivePlayer
                 isLive={eventTimeStatus === EventTimeStatus.TODAY_LIVE}
-                isVideoPlaying={props.isVideoPlaying}
-                playedSeconds={props.playedSeconds as number}
-                onTogglePlaying={props.onToggleVideoPlaying}
-                onCloseBottomPlayer={props.onCloseBottomPlayer}
-                videoDuration={props.videoDuration}
             />}
         </IonPage>
     );
