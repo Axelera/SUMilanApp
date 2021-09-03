@@ -1,6 +1,6 @@
-import { IonButton, IonButtons, IonIcon, IonText, IonTitle, IonToolbar } from '@ionic/react';
-import { closeCircle, ellipse, pause, play, reload } from 'ionicons/icons';
 import { useContext } from 'react';
+import { IonButton, IonButtons, IonIcon, IonText, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
+import { closeCircle, ellipse, pause, play, reload } from 'ionicons/icons';
 import { Link } from 'react-router-dom';
 
 import { VideoPlayerContext } from '../../contexts/VideoPlayer';
@@ -42,7 +42,7 @@ const BottomLivePlayer = ({ isLive, eventId, eventImageUrl }: Props) => {
                 <Link to={`/event/${eventId}/live`} style={{ height: '100%' }}>
                     <div className="player-image" style={{ backgroundImage: `url(${eventImageUrl})` }}></div>
                 </Link>
-                <IonToolbar color="light">
+                <IonToolbar color="light" className="bottom-toolbar">
                     <IonButtons slot="start">
                         <IonButton
                             color="primary"
@@ -55,7 +55,7 @@ const BottomLivePlayer = ({ isLive, eventId, eventImageUrl }: Props) => {
                     </IonButtons>
                     <IonTitle style={{
                         fontSize: 16,
-                        paddingLeft: 0,
+                        paddingLeft: isPlatform('ios') ? 40 : 0,
                         paddingRight: 0,
                     }}>
                         <div className="time-container" style={{

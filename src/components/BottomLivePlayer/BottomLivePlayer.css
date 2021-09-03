@@ -36,3 +36,7 @@
     top: 50%;
     transform: translateY(-50%);
 }
+
+.bottom-toolbar {
+    --border-width: 0 !important;
+}
