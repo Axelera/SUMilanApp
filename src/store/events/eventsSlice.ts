@@ -10,7 +10,7 @@ const initialState: EventStateModel = {
 };
 
 export const fetchEvents = createAsyncThunk('events/fetchEvents', async () => {
-    const response = await supabase.from<EventModel>('events').select('*').order('date', { ascending: true });
+    const response = await supabase.from<EventModel>('events').select('*').eq('show', true).order('date', { ascending: true });
     return response.data as EventModel[];
 });
 

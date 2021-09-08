@@ -26,6 +26,7 @@ export interface EventModel {
     moderators?: EventRelatorModel[];
     slides?: EventSlideModel[];
     preSlides?: EventSlideModel[];
+    show: boolean;
 }
 
 export interface EventStreamingUrlModel {
