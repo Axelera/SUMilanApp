@@ -13,6 +13,8 @@ import {
 } from '@ionic/react';
 import { headsetOutline, ticketOutline } from 'ionicons/icons';
 import { DateTime } from 'luxon';
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
 
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import EventTimeComponent from '../../../components/EventTime/EventTimeComponent';
@@ -89,8 +91,10 @@ const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                         <EventTimeComponent date={event.date} duration={event.duration} />
                     </IonLabel>
                 </IonItem>
-                <IonItem style={{ whiteSpace: 'pre-wrap' }}>
-                    {event.description.replaceAll('\\n', '\n')}
+                <IonItem>
+                    <div>
+                        <ReactMarkdown rehypePlugins={[rehypeRaw]} children={event.description.replaceAll('\\n', '\n')} />
+                    </div>
                 </IonItem>
                 {event.relators ?
                     (

@@ -12,6 +12,9 @@ import {
     IonSkeletonText,
 } from "@ionic/react";
 import { fileTrayFull, help, logoYoutube, timeOutline } from "ionicons/icons";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+
 import { EventComponentWithRouteProps } from "../../models/event.model";
 import EventTimeComponent from "../EventTime/EventTimeComponent";
 import './EventCardComponent.css';
@@ -110,7 +113,19 @@ const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: Event
                 <EventTimeComponent date={event.date} duration={event.duration} />
             </IonCardHeader>
             <IonCardContent>
-                <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{event.description}</div>
+                <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <ReactMarkdown
+                        rehypePlugins={[rehypeRaw]}
+                        children={event.description.replaceAll('\\n', '\n')}
+                        components={{
+                            p({ children }) {
+                                return (
+                                    <span>{children}</span>
+                                )
+                            }
+                        }}
+                    />
+                </div>
                 {
                     buttons.length > 0 ?
                         <IonGrid className="event-actions-grid">
