@@ -102,7 +102,7 @@ const EventHeaderComponent: React.FC<Props> = (props: Props) => {
             {isShared ?
                 <IonIcon slot="icon-only" icon={isPlatform('ios') ? checkmarkCircleOutline : checkmark} /> :
                 <IonIcon slot="icon-only" icon={isPlatform('ios') ? shareOutline : shareSocial} />
-            };
+            }
         </IonButton>
 
     return (
