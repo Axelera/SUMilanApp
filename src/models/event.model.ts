@@ -40,6 +40,7 @@ export interface EventRelatorModel {
         platform: string;
         url: string;
     }[];
+    description?: string;
 }
 
 export interface EventSlideModel {

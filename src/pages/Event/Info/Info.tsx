@@ -34,7 +34,8 @@ const Relator = (data: { relator: EventRelatorModel }) => {
                 <img src={relator.imageUrl ? relator.imageUrl : avatar} alt={relator.name} />
             </IonAvatar>
             <IonLabel>
-                {relator.name}
+                <h2>{relator.name}</h2>
+                {relator.description && <p>{relator.description}</p>}
             </IonLabel>
             {relator.socialLinks ?
                 relator.socialLinks.map((socialLink: { url: string; platform: string; }, index: number) =>
