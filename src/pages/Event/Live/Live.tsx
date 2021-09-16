@@ -17,6 +17,7 @@ import SocialLinkComponent from '../../../components/SocialLinkComponent/SocialL
 import { VideoPlayerContext } from '../../../contexts/VideoPlayer';
 import { EventComponentProps, EventStreamingUrlModel } from '../../../models/event.model';
 import { VideoPlayerContextModel } from '../../../models/videoplayer.model';
+import { SocialLinkType } from '../../../models/types.model';
 
 import './Live.css';
 
@@ -78,7 +79,7 @@ const Live: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                     <IonGrid>
                         <IonRow>
                             <StreamingUrl streamingUrl={{
-                                platform: 'youtube',
+                                platform: SocialLinkType.YOUTUBE,
                                 url: props.event.videoUrl as string
                             }} />
                             {props.event.streamingUrls && props.event.streamingUrls.map((streamingUrl: EventStreamingUrlModel, index: number) => <StreamingUrl key={index} streamingUrl={streamingUrl} />)}

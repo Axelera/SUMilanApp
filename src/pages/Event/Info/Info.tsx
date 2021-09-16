@@ -23,6 +23,7 @@ import { EventComponentProps, EventRelatorModel, TicketsLinkModel } from "../../
 import avatar from '../../../assets/images/avatar.png';
 import { EventTimeStatus, getEventTimeStatus } from '../../../utils/eventTimeUtils';
 import BottomLivePlayer from '../../../components/BottomLivePlayer/BottomLivePlayer';
+import { TicketsLinkType } from '../../../models/types.model';
 
 import './Info.css';
 
@@ -52,10 +53,10 @@ const TicketsButton = (data: { ticketsLink: TicketsLinkModel }) => {
     let icon;
 
     switch (data.ticketsLink.type) {
-        case 'eventbrite':
+        case TicketsLinkType.EVENTBRITE:
             icon = ticketOutline;
             break;
-        case 'clubhouse':
+        case TicketsLinkType.CLUBHOUSE:
             icon = headsetOutline;
             break;
         default:

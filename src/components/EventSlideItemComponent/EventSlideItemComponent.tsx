@@ -5,9 +5,10 @@ import {
     IonButton,
     IonIcon,
 } from '@ionic/react';
-import { cloudDownloadOutline, logoYoutube, newspaperOutline } from 'ionicons/icons';
+import { documentTextOutline, logoYoutube, newspaperOutline } from 'ionicons/icons';
 import logo from '../../assets/images/logo-150x150.png';
 import { EventSlideModel } from '../../models/event.model';
+import { SlideType } from '../../models/types.model';
 
 interface EventSlideItemProps {
     slideData: EventSlideModel;
@@ -15,29 +16,23 @@ interface EventSlideItemProps {
 
 const EventSlideItemComponent: React.FC<EventSlideItemProps> = ({ slideData }: EventSlideItemProps) => {
     let icon;
-    let downloadAttr;
-    let target;
 
     switch (slideData.type) {
-        case 'slides':
-            icon = cloudDownloadOutline;
-            downloadAttr = `${slideData.title}.pdf`;
+        case SlideType.SLIDES:
+            icon = documentTextOutline;
             break;
-        case 'video':
+        case SlideType.VIDEO:
             icon = logoYoutube;
-            target = '_blank';
             break;
-        case 'article':
+        case SlideType.ARTICLE:
             icon = newspaperOutline;
-            target = '_blank';
             break;
         default:
-            icon = cloudDownloadOutline;
-            downloadAttr = `${slideData.title}.pdf`;
+            icon = documentTextOutline;
     };
 
     return (
-        <IonItem href={slideData.url} download={downloadAttr} target={target} detail={false}>
+        <IonItem href={slideData.url} target="_blank" detail={false}>
             {slideData.imageUrl ?
                 <IonAvatar slot="start">
                     <img src={slideData.imageUrl === 'logo' ? logo : slideData.imageUrl} alt={slideData.title} />

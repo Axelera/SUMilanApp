@@ -1,5 +1,7 @@
 import { RouteComponentProps } from "react-router";
 
+import { EventType, SlideType, SocialLinkType, TicketsLinkType } from "./types.model";
+
 export interface EventComponentProps {
     event: EventModel;
 }
@@ -12,7 +14,7 @@ export interface EventModel {
     id: number;
     identifier: string;
     title: string;
-    type: string;
+    type: EventType;
     description: string;
     date: string;
     duration: number; // in minutes
@@ -32,7 +34,7 @@ export interface EventModel {
 }
 
 export interface EventStreamingUrlModel {
-    platform: string;
+    platform: SocialLinkType;
     url: string;
 }
 
@@ -40,7 +42,7 @@ export interface EventRelatorModel {
     name: string;
     imageUrl: string;
     socialLinks: {
-        platform: string;
+        platform: SocialLinkType;
         url: string;
     }[];
     description?: string;
@@ -50,7 +52,7 @@ export interface EventSlideModel {
     title: string;
     url: string;
     imageUrl?: string;
-    type?: string;
+    type?: SlideType;
     description?: string;
 }
 
@@ -61,7 +63,7 @@ export interface EventStateModel {
 }
 
 export interface TicketsLinkModel {
-    type: string;
+    type: TicketsLinkType;
     url: string;
 }
 
