@@ -27,6 +27,7 @@ import LogoImage from "../../components/LogoImage/LogoImage";
 import { ActivistRequest } from "../../models/activist-request.model";
 import { loadRequest, registerRequest } from "../../services/activist-request/activistRequest";
 import InputComponent from "../../components/Input/InputComponent";
+import CenteredContainer from "../../components/CenteredContainer/CenteredContainer";
 
 const validationSchema = object().shape({
     email: string().required('Inserisci un\'email').email('Inserisci un\'email valida'),
@@ -102,22 +103,9 @@ const Activist: React.FC = () => {
                 <div style={{ padding: 10, textAlign: 'center' }}>
                     <LogoImage />
                     <p>Stiamo cercando <b>activist</b> che contribuiscano attivamente alla crescita del <IonText color="primary"><span><b>Chapter</b></span></IonText>.</p>
-                    <IonGrid>
-                        <IonRow className="ion-align-items-end">
-                            <IonCol></IonCol>
-                            <IonCol
-                                size="4"
-                                sizeXs="10"
-                                sizeSm="5"
-                                sizeMd="5"
-                                sizeLg="3"
-                                sizeXl="3"
-                            >
-                                {enrollActivist}
-                            </IonCol>
-                            <IonCol></IonCol>
-                        </IonRow>
-                    </IonGrid>
+                    <CenteredContainer>
+                        {enrollActivist}
+                    </CenteredContainer>
                 </div>
             </IonContent>
         </IonPage>
