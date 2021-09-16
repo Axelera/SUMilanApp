@@ -13,8 +13,7 @@ interface EventSlideItemProps {
     slideData: EventSlideModel;
 }
 
-const EventSlideItemComponent: React.FC<EventSlideItemProps> = (props: EventSlideItemProps) => {
-    const { slideData } = props;
+const EventSlideItemComponent: React.FC<EventSlideItemProps> = ({ slideData }: EventSlideItemProps) => {
     let icon;
     let downloadAttr;
     let target;
@@ -46,7 +45,8 @@ const EventSlideItemComponent: React.FC<EventSlideItemProps> = (props: EventSlid
                 : null
             }
             <IonLabel>
-                <p>{slideData.title}</p>
+                <h2>{slideData.title}</h2>
+                {slideData.description && <p>{slideData.description}</p>}
             </IonLabel>
             <IonButton slot="end" fill="clear" color="medium">
                 <IonIcon slot="icon-only" size="small" icon={icon} />

@@ -51,6 +51,7 @@ export interface EventSlideModel {
     url: string;
     imageUrl?: string;
     type?: string;
+    description?: string;
 }
 
 export interface EventStateModel {
