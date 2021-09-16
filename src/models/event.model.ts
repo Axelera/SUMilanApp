@@ -27,6 +27,8 @@ export interface EventModel {
     slides?: EventSlideModel[];
     preSlides?: EventSlideModel[];
     show: boolean;
+    ebEventId?: string;
+    slidesAuthRequired: boolean;
 }
 
 export interface EventStreamingUrlModel {
@@ -61,3 +63,7 @@ export interface TicketsLinkModel {
     type: string;
     url: string;
 }
+
+export interface LocalTicketData {
+    email: string;
+};

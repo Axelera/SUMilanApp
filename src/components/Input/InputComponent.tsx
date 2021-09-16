@@ -32,7 +32,7 @@ const InputComponent: React.FC<InputProps> = ({
                 />
             </IonItem>
             {errors && errors[name] && (
-                <IonText color="danger" className="ion-padding-start">
+                <IonText color="danger">
                     <small>
                         <span role="alert" id={`${name}Error`}>
                             {errors[name].message}

@@ -17,6 +17,7 @@ It is also a collection of past SU Milan Chapter events with related study mater
 - Ionic CLI ([instructions](https://ionicframework.com/docs/intro/cli#install-the-ionic-cli))
 - Supabase API Keys ([how to obtain](https://supabase.io/docs/guides/with-react))
 - Onesignal API Keys ([how to obtain](https://documentation.onesignal.com/docs/web-push-custom-code-setup))
+- IBM Cloud Function API Key [details](cloud-functions/README.md)
 
 ### Install
 - clone this repo: `git clone https://github.com/Luca8991/su-milan.git`
@@ -28,6 +29,7 @@ REACT_APP_SUPABASE_PUBLIC_KEY="<obtained in the requirements>"
 REACT_APP_ONESIGNAL_DEVELOPMENT_KEY="<obtained in the requirements>"
 REACT_APP_ONESIGNAL_PRODUCTION_KEY="<obtained in the requirements>"
 REACT_APP_ONESIGNAL_SAFARI_WEB_ID="<obtained in the requirements>"
+REACT_APP_IBM_EVENTBRITE_WRAPPER_KEY="<obtained in the requirements>"
 ```
 - install dependencies: `npm install`
 
