@@ -16,6 +16,7 @@ import { Link, Route } from 'react-router-dom';
 import { Redirect, RouteComponentProps, useParams } from "react-router";
 import { fileTrayFull, help, informationCircleOutline, logoYoutube } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Live from './Live/Live';
 import Mentimeter from './Mentimeter/Mentimeter';
@@ -34,6 +35,7 @@ const Event: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     const dispatch = useAppDispatch();
     const { items, status, error } = useAppSelector<EventStateModel>(state => state.events);
     const [event, setEvent] = useState(items.find(ev => ev.identifier === id));
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (!items || items.length === 0) {
@@ -44,11 +46,11 @@ const Event: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     }, [items, dispatch, event, id]);
 
     if (error) {
-        return <p style={{ margin: 15 }}>Error! {error.message}</p>;
+        return <p style={{ margin: 15 }}>{t('GENERAL.error')}! {error.message}</p>;
     }
 
     if (status === 'loading') {
-        return <p style={{ margin: 15 }}>Caricamento...</p>;
+        return <p style={{ margin: 15 }}>{t('GENERAL.loading')}</p>;
     }
 
     if (!event) {
@@ -56,13 +58,13 @@ const Event: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
             <IonPage>
                 <IonHeader>
                     <IonToolbar>
-                        <IonTitle>Evento non disponibile</IonTitle>
+                        <IonTitle>{t('EVENT.NOEVENT.title')}</IonTitle>
                     </IonToolbar>
                 </IonHeader>
                 <IonContent>
                     <div className="center-container">
-                        <p>Questo evento non esiste o non è più disponibile.</p>
-                        <IonButton onClick={() => props.history.replace('/home')}>Torna alla Home</IonButton>
+                        <p>{t('EVENT.NOEVENT.message')}</p>
+                        <IonButton onClick={() => props.history.replace('/home')}>{t('GENERAL.backHome')}</IonButton>
                     </div>
                 </IonContent>
             </IonPage>
@@ -88,7 +90,7 @@ const Event: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     if (event?.videoUrl) {
         additionalTabButtons.push(
             <IonTabButton key="live-tab-button" tab="live" href={`/event/${id}/live`}>
-                <IonLabel>Diretta</IonLabel>
+                <IonLabel>{t('EVENT.LIVE.title')}</IonLabel>
                 <IonIcon icon={logoYoutube}></IonIcon>
             </IonTabButton>
         );
@@ -97,7 +99,7 @@ const Event: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     if (event?.votingUrl) {
         additionalTabButtons.push(
             <IonTabButton key="mentimeter-tab-button" tab="mentimeter" href={`/event/${id}/mentimeter`}>
-                <IonLabel>Mentimeter</IonLabel>
+                <IonLabel>{t('EVENT.MENTIMETER.title')}</IonLabel>
                 <IonIcon icon={help}></IonIcon>
             </IonTabButton>
         );
@@ -106,7 +108,7 @@ const Event: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     if ((event?.slides && event?.slides.length > 0) || (event?.preSlides && event?.preSlides.length > 0)) {
         additionalTabButtons.push(
             <IonTabButton key="slides-tab-button" tab="slides" href={`/event/${id}/slides`}>
-                <IonLabel>Materiale</IonLabel>
+                <IonLabel>{t('EVENT.SLIDES.title')}</IonLabel>
                 <IonIcon icon={fileTrayFull}></IonIcon>
             </IonTabButton>
         );
@@ -151,7 +153,7 @@ const Event: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
                     </IonRouterOutlet>
                     <IonTabBar slot="bottom">
                         <IonTabButton tab="Info" href={`/event/${id}/info`}>
-                            <IonLabel>Info</IonLabel>
+                            <IonLabel>{t('EVENT.INFO.title')}</IonLabel>
                             <IonIcon icon={informationCircleOutline}></IonIcon>
                         </IonTabButton>
                         {additionalTabButtons.map((btn: any, index: number) => btn)}

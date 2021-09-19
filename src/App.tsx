@@ -3,6 +3,9 @@ import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
 import OneSignal from 'react-onesignal';
+import i18n from "i18next";
+import LanguageDetector from 'i18next-browser-languagedetector';
+import { initReactI18next } from "react-i18next";
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -29,6 +32,9 @@ import Event from './pages/Event/Event';
 import Young from './pages/Young/Young';
 import Chapter from './pages/Chapter/Chapter';
 import Activist from './pages/Activist/Activits';
+
+import en from './assets/i18n/en.json';
+import it from './assets/i18n/it.json';
 
 const oneSignalAppId = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ?
   process.env.REACT_APP_ONESIGNAL_DEVELOPMENT_KEY as string
@@ -70,6 +76,27 @@ const oneSignalConfigurtion = {
   autoRegister: true,
   safari_web_id: safariWebId,
 };
+
+i18n
+  .use(LanguageDetector)
+  .use(initReactI18next) // passes i18n down to react-i18next
+  .init({
+    resources: {
+      en: {
+        translation: en,
+      },
+      it: {
+        translation: it,
+      },
+    },
+    fallbackLng: "en",
+    interpolation: {
+      escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
+    },
+    detection: {
+      order: ["navigator"],
+    },
+  });
 
 const App: React.FC = () => {
 

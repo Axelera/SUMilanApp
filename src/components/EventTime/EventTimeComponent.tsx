@@ -5,7 +5,10 @@ import {
 } from '@ionic/react';
 import { ellipse, timeOutline } from 'ionicons/icons';
 import { DateTime } from "luxon";
+import { useTranslation } from 'react-i18next';
+
 import { getEventTimeStatus, EventTimeStatus, formatTimeDuration } from '../../utils/eventTimeUtils';
+
 import './EventTimeComponent.css';
 
 const dateFormat = Object.assign({}, DateTime.DATETIME_MED);
@@ -29,6 +32,9 @@ const TimeContainer = (props: any) => {
 const EventTimeComponent: React.FC<EventTimeProps> = (props: EventTimeProps) => {
     const dt = DateTime.fromISO(props.date);
     const eventTimeStatus = getEventTimeStatus(dt, props.duration);
+
+    const { t } = useTranslation();
+
     if (eventTimeStatus === EventTimeStatus.PASSED) {
         // yesterday or before
         return (
@@ -39,7 +45,7 @@ const EventTimeComponent: React.FC<EventTimeProps> = (props: EventTimeProps) => 
     } else if (eventTimeStatus === EventTimeStatus.TODAY_SCHEDULED || eventTimeStatus === EventTimeStatus.TODAY_PASSED) {
         return (
             <TimeContainer>
-                Oggi alle {dt.toLocaleString(DateTime.TIME_24_SIMPLE)} ({formatTimeDuration(props.duration)})
+                {t('EVENT.Time.today', { time: dt.toLocaleString(DateTime.TIME_24_SIMPLE) })} ({formatTimeDuration(props.duration)})
             </TimeContainer>
         );
     } else if (eventTimeStatus === EventTimeStatus.TODAY_LIVE) {
@@ -51,7 +57,10 @@ const EventTimeComponent: React.FC<EventTimeProps> = (props: EventTimeProps) => 
                     </IonLabel>
                     <IonIcon icon={ellipse} style={{ fontSize: '12px' }} className="blinking" />
                 </IonChip>
-                ({formatTimeDuration(props.duration)}, termina alle {dt.plus({minutes: props.duration}).toLocaleString(DateTime.TIME_24_SIMPLE)})
+                ({t('EVENT.Time.ends', {
+                    duration: formatTimeDuration(props.duration),
+                    time: dt.plus({ minutes: props.duration }).toLocaleString(DateTime.TIME_24_SIMPLE),
+                })})
             </span>
         );
     } else if (eventTimeStatus === EventTimeStatus.SCHEDULED) {

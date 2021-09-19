@@ -5,6 +5,7 @@ import {
     IonText,
 } from "@ionic/react";
 import { Controller, Control, DeepMap, FieldError } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 export interface InputProps {
     name: string;
@@ -19,6 +20,8 @@ const InputComponent: React.FC<InputProps> = ({
     label,
     errors,
 }) => {
+    const { t } = useTranslation();
+
     return (
         <>
             <IonItem>
@@ -35,7 +38,7 @@ const InputComponent: React.FC<InputProps> = ({
                 <IonText color="danger">
                     <small>
                         <span role="alert" id={`${name}Error`}>
-                            {errors[name].message}
+                            {t('INPUTS.Errors.' + errors[name].message)}
                         </span>
                     </small>
                 </IonText>

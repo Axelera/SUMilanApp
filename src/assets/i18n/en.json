@@ -1,0 +1,121 @@
+{
+  "ACTIVIST": {
+    "accepted": "You requested to become an activist on {{date}}",
+    "description": "We are looking for <1>activists</1> who will actively contribute to the growth of the <3 />.",
+    "moreInfo": "Would you like to have more informations?",
+    "placeholder": "Enter your email",
+    "sendEmailButton": "Send me an email",
+    "title": "Become an activist"
+  },
+  "ALERTS": {
+    "ActivistSearch": {
+      "Buttons": {
+        "cancel": "Not now",
+        "ok": "Yes!"
+      },
+      "message": "We are looking for <b>activists</b> to help the <b>Chapter</b> grow.<br>Would you like to have more information?",
+      "title": "We are looking for new activists!"
+    },
+    "EnrolledActivist": {
+      "message": "We'll reach you out at this email: <b>{{email}}</b>",
+      "title": "Thank you!"
+    },
+    "Error": {
+      "title": "An error occurred"
+    },
+    "ok": "Ok"
+  },
+  "CHAPTER": {
+    "description": "<0/> is a community of activists studying exponential technologies to address the world's greatest challenges and build a better future for all.",
+    "title": "Chapter info",
+    "websiteButton": "Website"
+  },
+  "EVENT": {
+    "INFO": {
+      "moderators": "Moderators",
+      "relators": "Relators",
+      "title": "Info"
+    },
+    "LIVE": {
+      "availablePlatforms": "You'll find the live also on",
+      "networkingButton": "Networking room",
+      "noLive": "Can't see the live?",
+      "title": "Live"
+    },
+    "MENTIMETER": {
+      "noQuestions": "Can't see the questions?",
+      "title": "Mentimeter"
+    },
+    "NOEVENT": {
+      "message": "This event does not exist or is no longer available.",
+      "title": "Event not available"
+    },
+    "SLIDES": {
+      "slides": "Relators' slides",
+      "studyMaterial": "Study material",
+      "title": "Study material"
+    },
+    "Time": {
+      "ends": "{{duration}}, ends at {{time}}",
+      "today": "Today at {{time}}"
+    }
+  },
+  "GENERAL": {
+    "backHome": "Back to Home",
+    "copied": "Copied!",
+    "copy": "Copy",
+    "error": "Error",
+    "loading": "Loading...",
+    "longError": "An error occurred..."
+  },
+  "HOME": {
+    "Events": {
+      "past": "Past events",
+      "scheduled": "Scheduled events",
+      "today": "Today's events"
+    },
+    "Search": {
+      "empty": "No events match your search",
+      "placeholder": "Search events..."
+    },
+    "title": "Home"
+  },
+  "INPUTS": {
+    "Errors": {
+      "emailInvalid": "Enter a valid email",
+      "emailRequired": "Enter an email"
+    },
+    "emailPlaceholder": "Enter the email"
+  },
+  "MENU": {
+    "Credits": {
+      "development": "Development",
+      "marketing": "Marketing",
+      "title": "Credits:"
+    },
+    "instructions": "Usage instructions"
+  },
+  "SHARE": {
+    "Event": {
+      "header": "Share this event",
+      "message": "I would like to invite you to the event: {{eventTitle}} by SingularityU Milan Chapter",
+      "title": "SingularityU Milan Chapter event"
+    }
+  },
+  "SLIDES": {
+    "TicketRequired": {
+      "enterEmail": "Enter the email you used to get your ticket on Eventbrite",
+      "getTicketButton": "Get one on Eventbrite",
+      "noTicket": "There are no tickets found with this email.",
+      "noTicketQuestion": "Don't have a ticket?",
+      "title": "An Eventbrite ticket for this event is required to access the study materials.",
+      "unlockButton": "Unlock study material",
+      "yesTicketQuestion": "Do you already have a ticket?"
+    }
+  },
+  "YOUNG": {
+    "description": "<0/>'s group of young activists that study exponential technologies to address the world's greatest challenges and build a better future for all.",
+    "instagramButton": "Instagram page",
+    "title": "SU Young"
+  }
+}

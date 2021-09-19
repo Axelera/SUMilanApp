@@ -8,13 +8,17 @@ import {
     IonToolbar,
     IonButton,
     IonIcon,
-    IonText,
 } from "@ionic/react";
-import './Chapter.css';
 import { openOutline } from "ionicons/icons";
+import { Trans, useTranslation } from "react-i18next";
+
 import logo from '../../assets/images/logo-150x150.png';
+import ChapterName from "../../components/ChapterName/ChapterName";
+
+import './Chapter.css';
 
 const Chapter: React.FC = () => {
+    const { t } = useTranslation();
     return (
         <IonPage>
             <IonHeader>
@@ -22,15 +26,19 @@ const Chapter: React.FC = () => {
                     <IonButtons slot="start">
                         <IonMenuButton />
                     </IonButtons>
-                    <IonTitle>Chapter</IonTitle>
+                    <IonTitle>{t('CHAPTER.title')}</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent>
                 <div style={{ padding: 10, textAlign: 'center' }}>
                     <img src={logo} alt="su-logo" />
-                    <p><b>SingularityU</b> <IonText color="secondary"><span><b>Milan</b></span></IonText> <IonText color="primary"><span><b>Chapter</b></span></IonText> è una comunità di attivisti che studiano le tecnologie esponenziali per affrontare le più grandi sfide del mondo e costruire un futuro migliore per tutti.</p>
+                    <p>
+                        <Trans i18nKey="CHAPTER.description">
+                            <ChapterName /> is a community of activists studying exponential technologies to address the world's greatest challenges and build a better future for all.
+                        </Trans>
+                    </p>
                     <IonButton href="https://www.singularityumilan.com/" target="_blank" color="primary" strong>
-                        Sito web
+                        {t('CHAPTER.websiteButton')}
                         <IonIcon slot="end" icon={openOutline} />
                     </IonButton>
                 </div>

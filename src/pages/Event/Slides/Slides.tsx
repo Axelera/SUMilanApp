@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
 import { lockOpen, ticketOutline } from 'ionicons/icons';
+import { useTranslation } from 'react-i18next';
 
 import BottomLivePlayer from '../../../components/BottomLivePlayer/BottomLivePlayer';
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
@@ -27,7 +28,7 @@ import CenteredContainer from '../../../components/CenteredContainer/CenteredCon
 import './Slides.css';
 
 const validationSchema = object().shape({
-    email: string().required('Inserisci un\'email').email('Inserisci un\'email valida'),
+    email: string().required('emailRequired').email('emailInvalid'),
 });
 
 const Slides: React.FC<EventComponentProps> = ({ event }: EventComponentProps) => {
@@ -36,6 +37,7 @@ const Slides: React.FC<EventComponentProps> = ({ event }: EventComponentProps) =
     const [ticketCheckResult, setTicketCheckResult] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const { t } = useTranslation();
 
     const submitTicketEmail = async (data: any) => {
         setTicketCheckResult(null);
@@ -47,7 +49,7 @@ const Slides: React.FC<EventComponentProps> = ({ event }: EventComponentProps) =
                 await setLocTicket(email, event.ebEventId as string);
                 setLocalTicket({ email });
             } else {
-                setTicketCheckResult('Non risultano biglietti con questa email.');
+                setTicketCheckResult(t('SLIDES.TicketRequired.noTicket'));
             }
         } catch (e: any) {
             setError(e.message);
@@ -70,7 +72,7 @@ const Slides: React.FC<EventComponentProps> = ({ event }: EventComponentProps) =
             <IonPage>
                 <EventHeaderComponent event={event} />
                 <IonContent>
-                    <p>C'è stato un errore...</p>
+                    <p>{t('GENERAL.longError')}</p>
                 </IonContent>
             </IonPage>
         );
@@ -82,28 +84,28 @@ const Slides: React.FC<EventComponentProps> = ({ event }: EventComponentProps) =
                 <EventHeaderComponent event={event} />
                 <IonContent>
                     <div style={{ padding: 10, textAlign: 'center' }}>
-                        <p>Per accedere al materiale di studio è necessario il biglietto di Eventbrite per questo evento.</p>
-                        <h3>Non hai il biglietto?</h3>
+                        <p>{t('SLIDES.TicketRequired.title')}</p>
+                        <h3>{t('SLIDES.TicketRequired.noTicketQuestion')}</h3>
                         <IonButton
                             color="tertiary"
                             href={event.ticketsLink?.url}
                             strong
                         >
                             <IonIcon slot="start" icon={ticketOutline} />
-                            Iscriviti su Eventbrite
+                            {t('SLIDES.TicketRequired.getTicketButton')}
                         </IonButton>
-                        <h3>Hai già il biglietto?</h3>
-                        <p style={{ marginBottom: 0 }}>Indica l'email con cui hai ottenuto il biglietto su Eventbrite</p>
+                        <h3>{t('SLIDES.TicketRequired.yesTicketQuestion')}</h3>
+                        <p style={{ marginBottom: 0 }}>{t('SLIDES.TicketRequired.enterEmail')}</p>
                         <CenteredContainer>
                             <form onSubmit={handleSubmit(submitTicketEmail)}>
-                                <InputComponent control={control} name="email" label="Inserisci l'email" errors={errors} />
+                                <InputComponent control={control} name="email" label={t('INPUTS.emailPlaceholder')} errors={errors} />
                                 < br />
                                 {isLoading ?
                                     <IonSpinner color="secondary" />
                                     :
                                     <IonButton type="submit" color="secondary" strong>
                                         <IonIcon slot="start" icon={lockOpen} />
-                                        Sblocca materiale
+                                        {t('SLIDES.TicketRequired.unlockButton')}
                                     </IonButton>
                                 }
                             </form>
@@ -123,7 +125,7 @@ const Slides: React.FC<EventComponentProps> = ({ event }: EventComponentProps) =
                     event.preSlides && event.preSlides.length > 0 ?
                         (
                             <IonList>
-                                <IonListHeader>Materiale di studio</IonListHeader>
+                                <IonListHeader>{t('EVENT.SLIDES.studyMaterial')}</IonListHeader>
                                 {event.preSlides.map((slideData: EventSlideModel, index: number) => <EventSlideItemComponent key={Math.random()} slideData={slideData} />)}
                             </IonList>
                         )
@@ -133,7 +135,7 @@ const Slides: React.FC<EventComponentProps> = ({ event }: EventComponentProps) =
                     event.slides && event.slides.length > 0 ?
                         (
                             <IonList>
-                                <IonListHeader>Slides relatori</IonListHeader>
+                                <IonListHeader>{t('EVENT.SLIDES.slides')}</IonListHeader>
                                 {event.slides.map((slideData: EventSlideModel, index: number) => <EventSlideItemComponent key={Math.random()} slideData={slideData} />)}
                             </IonList>
                         )

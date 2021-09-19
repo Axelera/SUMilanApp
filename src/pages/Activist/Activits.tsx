@@ -21,16 +21,19 @@ import { object, string } from 'yup';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DateTime } from 'luxon';
+import { Trans, useTranslation } from "react-i18next";
 
-import './Activist.css';
 import LogoImage from "../../components/LogoImage/LogoImage";
 import { ActivistRequest } from "../../models/activist-request.model";
 import { loadRequest, registerRequest } from "../../services/activist-request/activistRequest";
 import InputComponent from "../../components/Input/InputComponent";
 import CenteredContainer from "../../components/CenteredContainer/CenteredContainer";
 
+import './Activist.css';
+import ChapterName from "../../components/ChapterName/ChapterName";
+
 const validationSchema = object().shape({
-    email: string().required('Inserisci un\'email').email('Inserisci un\'email valida'),
+    email: string().required('emailRequired').email('emailInvalid'),
 });
 
 const Activist: React.FC = () => {
@@ -38,6 +41,7 @@ const Activist: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const { control, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(validationSchema) });
     const [present] = useIonAlert();
+    const { t } = useTranslation();
 
     const submitRequest = async (data: any) => {
         const { email } = data;
@@ -47,18 +51,18 @@ const Activist: React.FC = () => {
 
         if (!res || res.error) {
             present({
-                header: 'Errore',
+                header: t('ALERTS.Error.title'),
                 message: `${res?.error.message}`,
                 buttons: [
-                    'Ok'
+                    t('ALERTS.ok'),
                 ],
             });
             return;
         }
         present({
-            header: 'Grazie!',
-            message: `Ti contatteremo all'email: <b>${email}</b>`,
-            buttons: ['Ok']
+            header: t('ALERTS.EnrolledActivist.title'),
+            message: t('ALERTS.EnrolledActivist.message', { email }),
+            buttons: [t('ALERTS.ok')]
         });
         setRequest(res.data[0]);
     };
@@ -75,16 +79,20 @@ const Activist: React.FC = () => {
 
     enrollActivist = request && request.accepted ? (
         <>
-            <p><i>Hai richiesto di diventare activist il {DateTime.fromISO(request.timestamp).toLocaleString()}</i></p>
+            <p>
+                <i>
+                    {t('ACTIVIST.accepted', { date: DateTime.fromISO(request.timestamp).toLocaleString() })}
+                </i>
+            </p>
         </>
     ) : (<>
-        <p>Desideri avere maggiori informazioni?</p>
+        <p>{t('ACTIVIST.moreInfo')}</p>
         <form onSubmit={handleSubmit(submitRequest)}>
-            <InputComponent control={control} name="email" label="Inserisci la tua email" errors={errors} />
+            <InputComponent control={control} name="email" label={t('ACTIVIST.placeholder')} errors={errors} />
             < br />
             <IonButton type="submit" color="secondary" strong>
                 <IonIcon slot="start" icon={mailOutline} />
-                Inviatemi un'email
+                {t('ACTIVIST.sendEmailButton')}
             </IonButton>
         </form >
     </>);
@@ -96,13 +104,17 @@ const Activist: React.FC = () => {
                     <IonButtons slot="start">
                         <IonMenuButton />
                     </IonButtons>
-                    <IonTitle>Diventa activist</IonTitle>
+                    <IonTitle>{t('ACTIVIST.title')}</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent>
                 <div style={{ padding: 10, textAlign: 'center' }}>
                     <LogoImage />
-                    <p>Stiamo cercando <b>activist</b> che contribuiscano attivamente alla crescita del <IonText color="primary"><span><b>Chapter</b></span></IonText>.</p>
+                    <p>
+                        <Trans i18nKey="ACTIVIST.description">
+                            We are looking for <b>activists</b> who will actively contribute to the growth of the <ChapterName onlyChapter />.
+                        </Trans>
+                    </p>
                     <CenteredContainer>
                         {enrollActivist}
                     </CenteredContainer>

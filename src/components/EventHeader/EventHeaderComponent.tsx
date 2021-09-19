@@ -13,10 +13,12 @@ import {
 import { checkmark, checkmarkCircleOutline, ellipse, shareOutline, shareSocial } from 'ionicons/icons';
 import { DateTime } from 'luxon';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import './EventHeaderComponent.css';
 import { EventModel } from '../../models/event.model';
 import { EventTimeStatus, getEventTimeStatus } from '../../utils/eventTimeUtils';
+
+import './EventHeaderComponent.css';
 
 type Props = {
     event: EventModel;
@@ -27,12 +29,13 @@ const EventHeaderComponent: React.FC<Props> = (props: Props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isShared, setIsShared] = useState(false);
     const [present] = useIonAlert();
+    const { t } = useTranslation();
 
     const shareButtonHandler = async () => {
         const url = `https://app.singularityumilan.com/event/${props.event.identifier}`;
         const shareData = {
-            title: 'Evento SingularityU Milan Chapter',
-            text: `Desidero invitarti all'evento: ${props.event.title}`,
+            title: t('SHARE.Event.title'),
+            text: t('SHARE.Event.message', {eventTitle: props.event.title}),
             url,
         };
         if (navigator.share?.name) {
@@ -45,7 +48,7 @@ const EventHeaderComponent: React.FC<Props> = (props: Props) => {
             }, 3000);
         } else {
             present({
-                header: 'Condividi questo evento',
+                header: t('SHARE.Event.header'),
                 message: `<div id="is-copied-message" class="copied-message" type="url" readonly value="${url}"></div>`,
                 inputs: [
                     {
@@ -65,7 +68,7 @@ const EventHeaderComponent: React.FC<Props> = (props: Props) => {
                 ],
                 buttons: [
                     {
-                        text: 'Copia', handler: () => {
+                        text: t('GENERAL.copy'), handler: () => {
                             const shareInput = document.getElementById("share-url") as HTMLInputElement;
 
                             /* Select the text field */
@@ -76,7 +79,7 @@ const EventHeaderComponent: React.FC<Props> = (props: Props) => {
                             document.execCommand("copy");
                             const copiedDivMessage = document.getElementById('is-copied-message');
                             if (copiedDivMessage) {
-                                copiedDivMessage.innerText = 'Copiato!';
+                                copiedDivMessage.innerText = t('GENERAL.copied');
                             }
                             return false;
                         }

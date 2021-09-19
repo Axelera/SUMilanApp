@@ -6,15 +6,20 @@ import {
     IonIcon,
     IonMenuButton,
     IonPage,
-    IonText,
     IonTitle,
     IonToolbar,
 } from "@ionic/react";
-import './Young.css';
-import LogoImage from "../../components/LogoImage/LogoImage";
 import { logoInstagram } from "ionicons/icons";
+import { Trans, useTranslation } from "react-i18next";
+
+import LogoImage from "../../components/LogoImage/LogoImage";
+import ChapterName from "../../components/ChapterName/ChapterName";
+
+import './Young.css';
 
 const Young: React.FC = () => {
+    const {t} = useTranslation();
+    
     return (
         <IonPage>
             <IonHeader>
@@ -22,16 +27,20 @@ const Young: React.FC = () => {
                     <IonButtons slot="start">
                         <IonMenuButton />
                     </IonButtons>
-                    <IonTitle>SU Young</IonTitle>
+                    <IonTitle>{t('YOUNG.title')}</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent>
                 <LogoImage young={true} className="young-image" />
                 <div style={{ padding: 10, textAlign: 'center' }}>
-                    <p>Gruppo di giovani attivisti del <b>SingularityU</b> <IonText color="secondary"><span><b>Milan</b></span></IonText> <IonText color="primary"><span><b>Chapter</b></span></IonText> che studiano le tecnologie esponenziali per affrontare le più grandi sfide del mondo e costruire un futuro migliore per tutti.</p>
+                    <p>
+                        <Trans i18nKey="YOUNG.description">
+                            <ChapterName />'s group of young activists that study exponential technologies to address the world's greatest challenges and build a better future for all.
+                        </Trans>
+                    </p>
                     <IonButton href="https://www.instagram.com/singularityumilanyoung/" target="_blank" color="tertiary" strong>
                         <IonIcon slot="start" icon={logoInstagram} />
-                        Pagina Instagram
+                        {t('YOUNG.instagramButton')}
                     </IonButton>
                 </div>
             </IonContent>

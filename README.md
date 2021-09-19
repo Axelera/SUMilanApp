@@ -4,7 +4,7 @@ This is the source code for the web app created by the [SingularityU Milan Chapt
 It is designed to help people find information and study materials more easily, without losing focus on the current event.
 It is also a collection of past SU Milan Chapter events with related study materials.
 
-**Live working (italian) version: [app.singularityumilan.com](https://app.singularityumilan.com)**
+**Live working version: [app.singularityumilan.com](https://app.singularityumilan.com)** (english, italian)
 
 ## Tech
 - [Ionic](https://ionicframework.com)+[React](https://reactjs.org/) used for **UI/UX**

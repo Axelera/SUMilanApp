@@ -11,6 +11,7 @@ import {
 import { refresh } from 'ionicons/icons';
 import ReactPlayer from 'react-player';
 import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import SocialLinkComponent from '../../../components/SocialLinkComponent/SocialLinkComponent';
@@ -21,17 +22,18 @@ import { SocialLinkType } from '../../../models/types.model';
 
 import './Live.css';
 
+const StreamingUrl = (item: { streamingUrl: EventStreamingUrlModel }) => {
+    const streamingUrl = item.streamingUrl;
+    return (
+        <IonCol className="streaming-url-col">
+            <SocialLinkComponent url={streamingUrl.url} platform={streamingUrl.platform} color="secondary" />
+        </IonCol>
+    );
+};
+
 const Live: React.FC<EventComponentProps> = (props: EventComponentProps) => {
     const { isVideoPlaying, playVideo, pauseVideo, setPlayedSeconds, setVideoDuration, onVideoEnded } = useContext(VideoPlayerContext) as VideoPlayerContextModel;
-
-    const StreamingUrl = (item: { streamingUrl: EventStreamingUrlModel }) => {
-        const streamingUrl = item.streamingUrl;
-        return (
-            <IonCol className="streaming-url-col">
-                <SocialLinkComponent url={streamingUrl.url} platform={streamingUrl.platform} color="secondary" />
-            </IonCol>
-        );
-    };
+    const { t } = useTranslation();
 
     const reloadPage = () => {
         window.location.reload();
@@ -51,7 +53,7 @@ const Live: React.FC<EventComponentProps> = (props: EventComponentProps) => {
             <IonContent>
                 <div style={{ width: '100%', textAlign: 'center' }}>
                     <IonText>
-                        <span style={{ verticalAlign: 'sub' }}>Non vedi la diretta?</span>
+                        <span style={{ verticalAlign: 'sub' }}>{t('EVENT.LIVE.noLive')}</span>
                     </IonText>
                     <IonButton
                         shape="round"
@@ -74,7 +76,7 @@ const Live: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                 />
                 <div>
                     <IonText color="medium">
-                        <h4 style={{ marginLeft: 10 }}>Trovi lo streaming anche su</h4>
+                        <h4 style={{ marginLeft: 10 }}>{t('EVENT.LIVE.availablePlatforms')}</h4>
                     </IonText>
                     <IonGrid>
                         <IonRow>
@@ -88,7 +90,7 @@ const Live: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                 </div>
                 {props.event.roomUrl ?
                     <div style={{ textAlign: 'center', marginTop: 20 }}>
-                        <IonButton href={props.event.roomUrl} target="_blank">Stanza networking</IonButton>
+                        <IonButton href={props.event.roomUrl} target="_blank">{t('EVENT.LIVE.networkingButton')}</IonButton>
                     </div>
                     : null
                 }

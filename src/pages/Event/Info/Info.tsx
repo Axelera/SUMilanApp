@@ -15,6 +15,7 @@ import { headsetOutline, ticketOutline } from 'ionicons/icons';
 import { DateTime } from 'luxon';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
+import { useTranslation } from 'react-i18next';
 
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import EventTimeComponent from '../../../components/EventTime/EventTimeComponent';
@@ -74,6 +75,7 @@ const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
 
     const event = props.event;
     const eventTimeStatus = getEventTimeStatus(DateTime.fromISO(event.date), event.duration);
+    const { t } = useTranslation();
 
     return (
         <IonPage>
@@ -101,7 +103,7 @@ const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                 {event.relators ?
                     (
                         <IonList style={{ marginBottom: 5 }}>
-                            <IonListHeader style={{ paddingLeft: 10 }}>Relatori</IonListHeader>
+                            <IonListHeader style={{ paddingLeft: 10 }}>{t('EVENT.INFO.relators')}</IonListHeader>
                             {event.relators.map((relator: EventRelatorModel, index: number) => <Relator key={index} relator={relator} />)}
                         </IonList>
                     )
@@ -110,7 +112,7 @@ const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                 {event.moderators ?
                     (
                         <IonList style={{ marginBottom: 66 }}>
-                            <IonListHeader style={{ paddingLeft: 10 }}>Moderatori</IonListHeader>
+                            <IonListHeader style={{ paddingLeft: 10 }}>{t('EVENT.INFO.moderators')}</IonListHeader>
                             {event.moderators.map((moderator: EventRelatorModel, index: number) => <Relator key={index} relator={moderator} />)}
                         </IonList>
                     )

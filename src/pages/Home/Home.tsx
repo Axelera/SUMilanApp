@@ -20,8 +20,8 @@ import { search } from 'ionicons/icons';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { DateTime } from 'luxon';
 import OneSignal, { useOneSignalSetup } from "react-onesignal";
+import { useTranslation } from 'react-i18next';
 
-import './Home.css';
 import EventCardComponent from '../../components/EventCard/EventCardComponent';
 import { EventModel, EventRelatorModel, EventStateModel } from '../../models/event.model';
 import { EventTimeStatus, getEventTimeStatus } from '../../utils/eventTimeUtils';
@@ -29,6 +29,8 @@ import { fetchEvents } from '../../store/events/eventsSlice';
 import { ActivistRequestState } from '../../models/activist-request.model';
 import { loadActivistRequest, storeActivistRequest } from '../../store/activist/activistSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+
+import './Home.css';
 
 interface GroupedEventsModel {
     passed: EventModel[];
@@ -87,6 +89,7 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     const searchbarRef = useRef<HTMLIonSearchbarElement>(null);
     const [isAlertPresented, setIsAlertPresented] = useState(false);
     const [present] = useIonAlert();
+    const { t } = useTranslation();
 
     const { history } = props;
 
@@ -107,15 +110,15 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
             }
         };
         present({
-            header: 'Stiamo cercando activist!',
-            message: 'Stiamo cercando <b>activist</b> per contribuire alla crescita del <b>Chapter</b>.<br>Desideri avere maggiori informazioni?',
+            header: t('ALERTS.ActivistSearch.title'),
+            message: t('ALERTS.ActivistSearch.message'),
             buttons: [
-                { text: 'Non ora', role: 'cancel', handler: alertChoiceHandler.bind(this, false) },
-                { text: 'Sì!', role: 'accept', handler: alertChoiceHandler.bind(this, true) },
+                { text: t('ALERTS.ActivistSearch.Buttons.cancel'), role: 'cancel', handler: alertChoiceHandler.bind(this, false) },
+                { text: t('ALERTS.ActivistSearch.Buttons.ok'), role: 'accept', handler: alertChoiceHandler.bind(this, true) },
             ],
             backdropDismiss: false,
         });
-    }, [present, history, dispatch]);
+    }, [present, history, dispatch, t]);
 
     useOneSignalSetup(async () => {
         if (OneSignal.isPushNotificationsSupported()) {
@@ -189,7 +192,7 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
                     showCancelButton="always"
                     onIonCancel={toggleSearchbarHandler}
                     onIonChange={searchInputHandler}
-                    placeholder="Cerca tra gli eventi..."
+                    placeholder={t('HOME.Search.placeholder')}
                     ref={searchbarRef}
                 />
             </IonToolbar>
@@ -199,7 +202,7 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
                 <IonButtons slot="start">
                     <IonMenuButton />
                 </IonButtons>
-                <IonTitle>Home</IonTitle>
+                <IonTitle>{t('HOME.title')}</IonTitle>
                 <IonButtons slot="end">
                     <IonButton onClick={toggleSearchbarHandler}>
                         <IonIcon slot="icon-only" icon={search} />
@@ -215,7 +218,7 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
                     {toolbar}
                 </IonHeader>
                 <IonContent fullscreen>
-                    <p style={{ margin: 15 }}>Errore! {error.message}</p>
+                    <p style={{ margin: 15 }}>{t('GENERAL.error')}! {error.message}</p>
                 </IonContent>
             </IonPage>
         );
@@ -260,14 +263,14 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
             </IonHeader>
             <IonContent fullscreen>
                 <IonGrid style={{ padding: 0 }}>
-                    {filteredEvents.today.length > 0 ? <EventsList events={filteredEvents.today} title={<div className="events-separator">Eventi oggi</div>} props={{ ...props }} /> : null}
-                    {filteredEvents.scheduled.length > 0 ? <EventsList events={filteredEvents.scheduled} title={<div className="events-separator">Eventi in programma</div>} props={{ ...props }} /> : null}
-                    {filteredEvents.passed.length > 0 ? <EventsList events={filteredEvents.passed} title={<div className="events-separator">Eventi passati</div>} props={{ ...props }} /> : null}
+                    {filteredEvents.today.length > 0 ? <EventsList events={filteredEvents.today} title={<div className="events-separator">{t('HOME.Events.today')}</div>} props={{ ...props }} /> : null}
+                    {filteredEvents.scheduled.length > 0 ? <EventsList events={filteredEvents.scheduled} title={<div className="events-separator">{t('HOME.Events.scheduled')}</div>} props={{ ...props }} /> : null}
+                    {filteredEvents.passed.length > 0 ? <EventsList events={filteredEvents.passed} title={<div className="events-separator">{t('HOME.Events.past')}</div>} props={{ ...props }} /> : null}
                     {isSearchbarVisible &&
                         filteredEvents.passed.length === 0 &&
                         filteredEvents.scheduled.length === 0 &&
                         filteredEvents.today.length === 0 ?
-                        <p style={{ margin: 15 }}>Nessun evento soddisfa la tua ricerca</p> : null
+                        <p style={{ margin: 15 }}>{t('HOME.Search.empty')}</p> : null
                     }
                 </IonGrid>
             </IonContent>

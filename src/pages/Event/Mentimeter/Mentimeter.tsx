@@ -5,6 +5,7 @@ import {
     IonPage,
 } from '@ionic/react';
 import { DateTime } from 'luxon';
+import { useTranslation } from 'react-i18next';
 
 import BottomLivePlayer from '../../../components/BottomLivePlayer/BottomLivePlayer';
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
@@ -12,6 +13,7 @@ import { EventComponentProps } from '../../../models/event.model';
 import { EventTimeStatus, getEventTimeStatus } from '../../../utils/eventTimeUtils';
 
 const Mentimeter: React.FC<EventComponentProps> = (props: EventComponentProps) => {
+    const { t } = useTranslation();
 
     return (
         <IonPage>
@@ -22,7 +24,7 @@ const Mentimeter: React.FC<EventComponentProps> = (props: EventComponentProps) =
                         href={props.event.votingUrl}
                         target="_blank"
                     >
-                        Non riesci a vedere le domande?
+                        {t('EVENT.MENTIMETER.noQuestions')}
                     </IonButton>
                 </div>
                 <div style={{ position: 'relative', height: '100%', overflow: 'hidden' }}>
