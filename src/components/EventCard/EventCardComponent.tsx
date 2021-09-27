@@ -17,6 +17,8 @@ import rehypeRaw from "rehype-raw";
 
 import { EventComponentWithRouteProps } from "../../models/event.model";
 import EventTimeComponent from "../EventTime/EventTimeComponent";
+import { EventTimeProvider } from "../../contexts/EventTime";
+
 import './EventCardComponent.css';
 
 const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: EventComponentWithRouteProps) => {
@@ -99,44 +101,46 @@ const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: Event
     }
 
     return (
-        <IonCard key={event.id} onClick={() => {
-            props.history.push(`/event/${event.identifier}/info`);
-        }} button={true} className="event-card">
-            <div className="card-image" style={{ backgroundImage: `url(${event.imageUrl}` }}></div>
-            <IonCardHeader>
-                <IonCardTitle>
-                    {event.title}
-                </IonCardTitle>
-                <IonCardSubtitle>
-                    {event.type.toUpperCase()}
-                </IonCardSubtitle>
-                <EventTimeComponent date={event.date} duration={event.duration} />
-            </IonCardHeader>
-            <IonCardContent>
-                <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    <ReactMarkdown
-                        rehypePlugins={[rehypeRaw]}
-                        children={event.description.replaceAll('\\n', '\n')}
-                        components={{
-                            p({ children }) {
-                                return (
-                                    <span>{children}</span>
-                                )
-                            }
-                        }}
-                    />
-                </div>
-                {
-                    buttons.length > 0 ?
-                        <IonGrid className="event-actions-grid">
-                            <IonRow>
-                                {buttons.map((button: any, index: number) => <IonCol key={index}>{button}</IonCol>)}
-                            </IonRow>
-                        </IonGrid>
-                        : null
-                }
-            </IonCardContent>
-        </IonCard>
+        <EventTimeProvider date={event.date} duration={event.duration}>
+            <IonCard key={event.id} onClick={() => {
+                props.history.push(`/event/${event.identifier}/info`);
+            }} button={true} className="event-card">
+                <div className="card-image" style={{ backgroundImage: `url(${event.imageUrl}` }}></div>
+                <IonCardHeader>
+                    <IonCardTitle>
+                        {event.title}
+                    </IonCardTitle>
+                    <IonCardSubtitle>
+                        {event.type.toUpperCase()}
+                    </IonCardSubtitle>
+                    <EventTimeComponent date={event.date} duration={event.duration} />
+                </IonCardHeader>
+                <IonCardContent>
+                    <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <ReactMarkdown
+                            rehypePlugins={[rehypeRaw]}
+                            children={event.description.replaceAll('\\n', '\n')}
+                            components={{
+                                p({ children }) {
+                                    return (
+                                        <span>{children}</span>
+                                    )
+                                }
+                            }}
+                        />
+                    </div>
+                    {
+                        buttons.length > 0 ?
+                            <IonGrid className="event-actions-grid">
+                                <IonRow>
+                                    {buttons.map((button: any, index: number) => <IonCol key={index}>{button}</IonCol>)}
+                                </IonRow>
+                            </IonGrid>
+                            : null
+                    }
+                </IonCardContent>
+            </IonCard>
+        </EventTimeProvider>
     );
 };
 

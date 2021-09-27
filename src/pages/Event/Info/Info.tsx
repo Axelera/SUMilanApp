@@ -12,19 +12,20 @@ import {
     IonPage,
 } from '@ionic/react';
 import { headsetOutline, ticketOutline } from 'ionicons/icons';
-import { DateTime } from 'luxon';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
 
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import EventTimeComponent from '../../../components/EventTime/EventTimeComponent';
 import SocialLinkComponent from '../../../components/SocialLinkComponent/SocialLinkComponent';
-import { EventComponentProps, EventRelatorModel, TicketsLinkModel } from "../../../models/event.model";
+import { EventComponentProps, EventRelatorModel, EventTimeContextModel, TicketsLinkModel } from "../../../models/event.model";
 import avatar from '../../../assets/images/avatar.png';
-import { EventTimeStatus, getEventTimeStatus } from '../../../utils/eventTimeUtils';
+import { EventTimeStatus } from '../../../utils/eventTimeUtils';
 import BottomLivePlayer from '../../../components/BottomLivePlayer/BottomLivePlayer';
 import { TicketsLinkType } from '../../../models/types.model';
+import { EventTimeContext } from '../../../contexts/EventTime';
 
 import './Info.css';
 
@@ -72,9 +73,8 @@ const TicketsButton = (data: { ticketsLink: TicketsLinkModel }) => {
 };
 
 const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
-
     const event = props.event;
-    const eventTimeStatus = getEventTimeStatus(DateTime.fromISO(event.date), event.duration);
+    const { timeStatus: eventTimeStatus } = useContext(EventTimeContext) as EventTimeContextModel;
     const { t } = useTranslation();
 
     return (
@@ -118,13 +118,15 @@ const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                     )
                     :
                     null}
-                {event.ticketsLink && eventTimeStatus !== EventTimeStatus.PASSED && <TicketsButton ticketsLink={event.ticketsLink} />}
+                {event.ticketsLink
+                    && eventTimeStatus !== EventTimeStatus.PASSED
+                    && eventTimeStatus !== EventTimeStatus.TODAY_PASSED
+                    && <TicketsButton ticketsLink={event.ticketsLink} />}
             </IonContent>
             <IonFooter>
                 <BottomLivePlayer
                     eventId={event.identifier}
                     eventImageUrl={event.imageUrl}
-                    isLive={eventTimeStatus === EventTimeStatus.TODAY_LIVE}
                 />
             </IonFooter>
         </IonPage>

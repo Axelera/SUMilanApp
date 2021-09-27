@@ -5,9 +5,12 @@ import {
 } from '@ionic/react';
 import { ellipse, timeOutline } from 'ionicons/icons';
 import { DateTime } from "luxon";
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { getEventTimeStatus, EventTimeStatus, formatTimeDuration } from '../../utils/eventTimeUtils';
+import { EventTimeStatus, formatTimeDuration } from '../../utils/eventTimeUtils';
+import { EventTimeContext } from '../../contexts/EventTime';
+import { EventTimeContextModel } from '../../models/event.model';
 
 import './EventTimeComponent.css';
 
@@ -31,7 +34,7 @@ const TimeContainer = (props: any) => {
 
 const EventTimeComponent: React.FC<EventTimeProps> = (props: EventTimeProps) => {
     const dt = DateTime.fromISO(props.date);
-    const eventTimeStatus = getEventTimeStatus(dt, props.duration);
+    const { timeStatus: eventTimeStatus } = useContext(EventTimeContext) as EventTimeContextModel;
 
     const { t } = useTranslation();
 
@@ -42,10 +45,16 @@ const EventTimeComponent: React.FC<EventTimeProps> = (props: EventTimeProps) => 
                 {dt.toLocaleString(dateFormat)} ({formatTimeDuration(props.duration)})
             </TimeContainer>
         );
-    } else if (eventTimeStatus === EventTimeStatus.TODAY_SCHEDULED || eventTimeStatus === EventTimeStatus.TODAY_PASSED) {
+    } else if (eventTimeStatus === EventTimeStatus.TODAY_SCHEDULED) {
         return (
             <TimeContainer>
                 {t('EVENT.Time.today', { time: dt.toLocaleString(DateTime.TIME_24_SIMPLE) })} ({formatTimeDuration(props.duration)})
+            </TimeContainer>
+        );
+    } else if (eventTimeStatus === EventTimeStatus.TODAY_PASSED) {
+        return (
+            <TimeContainer>
+                {t('EVENT.Time.today', { time: dt.toLocaleString(DateTime.TIME_24_SIMPLE) })} ({t('EVENT.Time.ended', { time: dt.plus({ minutes: props.duration }).toLocaleString(DateTime.TIME_24_SIMPLE) })})
             </TimeContainer>
         );
     } else if (eventTimeStatus === EventTimeStatus.TODAY_LIVE) {

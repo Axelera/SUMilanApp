@@ -11,12 +11,12 @@ import {
     useIonAlert,
 } from '@ionic/react';
 import { checkmark, checkmarkCircleOutline, ellipse, shareOutline, shareSocial } from 'ionicons/icons';
-import { DateTime } from 'luxon';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { EventModel } from '../../models/event.model';
-import { EventTimeStatus, getEventTimeStatus } from '../../utils/eventTimeUtils';
+import { EventTimeContext } from '../../contexts/EventTime';
+import { EventModel, EventTimeContextModel } from '../../models/event.model';
+import { EventTimeStatus } from '../../utils/eventTimeUtils';
 
 import './EventHeaderComponent.css';
 
@@ -25,11 +25,11 @@ type Props = {
 };
 
 const EventHeaderComponent: React.FC<Props> = (props: Props) => {
-    const date = DateTime.fromISO(props.event.date);
     const [isLoading, setIsLoading] = useState(false);
     const [isShared, setIsShared] = useState(false);
     const [present] = useIonAlert();
     const { t } = useTranslation();
+    const { timeStatus } = useContext(EventTimeContext) as EventTimeContextModel;
 
     const shareButtonHandler = async () => {
         const url = `https://app.singularityumilan.com/event/${props.event.identifier}`;
@@ -90,7 +90,7 @@ const EventHeaderComponent: React.FC<Props> = (props: Props) => {
     };
 
     const liveIndicator = () => {
-        if (getEventTimeStatus(date, props.event.duration) === EventTimeStatus.TODAY_LIVE) {
+        if (timeStatus === EventTimeStatus.TODAY_LIVE) {
             return (
                 <IonButton color="danger">
                     <IonIcon slot="icon-only" icon={ellipse} size="small" className="blinking" />

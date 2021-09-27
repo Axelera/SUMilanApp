@@ -25,8 +25,6 @@ interface AppPage {
   mdIcon: string;
 }
 
-console.log(i18next.isInitialized);
-
 const appPages: AppPage[] = [
   {
     url: '/home',

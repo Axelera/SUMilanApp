@@ -9,7 +9,6 @@ import {
     IonIcon,
     IonSpinner,
 } from '@ionic/react';
-import { DateTime } from 'luxon';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
@@ -20,7 +19,6 @@ import BottomLivePlayer from '../../../components/BottomLivePlayer/BottomLivePla
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import EventSlideItemComponent from '../../../components/EventSlideItemComponent/EventSlideItemComponent';
 import { EventComponentProps, EventSlideModel, LocalTicketData } from '../../../models/event.model';
-import { EventTimeStatus, getEventTimeStatus } from '../../../utils/eventTimeUtils';
 import { checkHasTicket, getLocalTicket, setLocalTicket as setLocTicket } from '../../../services/cloud-functions/eventbriteWrapper';
 import InputComponent from '../../../components/Input/InputComponent';
 import CenteredContainer from '../../../components/CenteredContainer/CenteredContainer';
@@ -146,7 +144,6 @@ const Slides: React.FC<EventComponentProps> = ({ event }: EventComponentProps) =
                 <BottomLivePlayer
                     eventId={event.identifier}
                     eventImageUrl={event.imageUrl}
-                    isLive={getEventTimeStatus(DateTime.fromISO(event.date), event.duration) === EventTimeStatus.TODAY_LIVE}
                 />
             </IonFooter>
         </IonPage>

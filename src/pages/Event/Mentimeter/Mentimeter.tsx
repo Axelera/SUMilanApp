@@ -4,13 +4,11 @@ import {
     IonFooter,
     IonPage,
 } from '@ionic/react';
-import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 
 import BottomLivePlayer from '../../../components/BottomLivePlayer/BottomLivePlayer';
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import { EventComponentProps } from '../../../models/event.model';
-import { EventTimeStatus, getEventTimeStatus } from '../../../utils/eventTimeUtils';
 
 const Mentimeter: React.FC<EventComponentProps> = (props: EventComponentProps) => {
     const { t } = useTranslation();
@@ -43,7 +41,6 @@ const Mentimeter: React.FC<EventComponentProps> = (props: EventComponentProps) =
                 <BottomLivePlayer
                     eventId={props.event.identifier}
                     eventImageUrl={props.event.imageUrl}
-                    isLive={getEventTimeStatus(DateTime.fromISO(props.event.date), props.event.duration) === EventTimeStatus.TODAY_LIVE}
                 />
             </IonFooter>
         </IonPage>

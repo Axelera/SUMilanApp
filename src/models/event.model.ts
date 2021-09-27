@@ -1,6 +1,7 @@
 import { RouteComponentProps } from "react-router";
 
 import { EventType, SlideType, SocialLinkType, TicketsLinkType } from "./types.model";
+import { EventTimeStatus } from "../utils/eventTimeUtils";
 
 export interface EventComponentProps {
     event: EventModel;
@@ -69,4 +70,8 @@ export interface TicketsLinkModel {
 
 export interface LocalTicketData {
     email: string;
+};
+
+export interface EventTimeContextModel {
+    timeStatus: EventTimeStatus;
 };

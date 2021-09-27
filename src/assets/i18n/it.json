@@ -56,6 +56,7 @@
       "title": "Materiale"
     },
     "Time": {
+      "ended": "terminato alle {{time}}",
       "ends": "{{duration}}, termina alle {{time}}",
       "today": "Oggi alle {{time}}"
     }

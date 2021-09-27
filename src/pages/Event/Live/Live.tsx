@@ -10,14 +10,15 @@ import {
 } from '@ionic/react';
 import { refresh } from 'ionicons/icons';
 import { useTranslation } from 'react-i18next';
-import { DateTime } from 'luxon';
+import { useContext } from 'react';
 
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import SocialLinkComponent from '../../../components/SocialLinkComponent/SocialLinkComponent';
-import { EventComponentProps, EventStreamingUrlModel } from '../../../models/event.model';
+import { EventComponentProps, EventStreamingUrlModel, EventTimeContextModel } from '../../../models/event.model';
 import { SocialLinkType } from '../../../models/types.model';
 import VideoPlayer from '../../../components/VideoPlayer/VideoPlayer';
-import { EventTimeStatus, getEventTimeStatus } from '../../../utils/eventTimeUtils';
+import { EventTimeStatus } from '../../../utils/eventTimeUtils';
+import { EventTimeContext } from '../../../contexts/EventTime';
 
 import './Live.css';
 
@@ -32,7 +33,7 @@ const StreamingUrl = (item: { streamingUrl: EventStreamingUrlModel }) => {
 
 const Live: React.FC<EventComponentProps> = (props: EventComponentProps) => {
     const { t } = useTranslation();
-    const eventTimeStatus = getEventTimeStatus(DateTime.fromISO(props.event.date), props.event.duration);
+    const { timeStatus: eventTimeStatus } = useContext(EventTimeContext) as EventTimeContextModel;
 
     const reloadPage = () => {
         window.location.reload();

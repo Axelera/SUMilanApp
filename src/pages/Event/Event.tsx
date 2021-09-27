@@ -26,6 +26,7 @@ import { EventModel, EventStateModel } from '../../models/event.model';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchEvents } from '../../store/events/eventsSlice';
 import { VideoPlayerProvider } from '../../contexts/VideoPlayer';
+import { EventTimeProvider } from '../../contexts/EventTime';
 
 import './Event.css';
 
@@ -116,50 +117,52 @@ const Event: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
 
     return (
         <VideoPlayerProvider>
-            <IonPage>
-                <IonTabs>
-                    {routes.map((route: string, index: number) => <Link key={index} to={`/event/${id}/${route}`} />)}
-                    <IonRouterOutlet>
-                        <Route path={`/event/${id}/`} exact>
-                            <Redirect to={`/event/${id}/info`} />
-                        </Route>
-                        <Route
-                            path={`/event/${id}/info`}
-                            render={() => <Info
-                                event={event as EventModel}
-                            />}
-                            exact
-                        />
-                        <Route
-                            path={`/event/${id}/live`}
-                            render={() => <Live
-                                event={event as EventModel}
-                            />}
-                            exact
-                        />
-                        <Route
-                            path={`/event/${id}/mentimeter`}
-                            render={() => <Mentimeter
-                                event={event as EventModel}
-                            />}
-                            exact
-                        />
-                        <Route
-                            path={`/event/${id}/slides`}
-                            render={() => <Slides
-                                event={event as EventModel}
-                            />}
-                            exact />
-                    </IonRouterOutlet>
-                    <IonTabBar slot="bottom">
-                        <IonTabButton tab="Info" href={`/event/${id}/info`}>
-                            <IonLabel>{t('EVENT.INFO.title')}</IonLabel>
-                            <IonIcon icon={informationCircleOutline}></IonIcon>
-                        </IonTabButton>
-                        {additionalTabButtons.map((btn: any, index: number) => btn)}
-                    </IonTabBar>
-                </IonTabs>
-            </IonPage>
+            <EventTimeProvider date={event.date} duration={event.duration}>
+                <IonPage>
+                    <IonTabs>
+                        {routes.map((route: string, index: number) => <Link key={index} to={`/event/${id}/${route}`} />)}
+                        <IonRouterOutlet>
+                            <Route path={`/event/${id}/`} exact>
+                                <Redirect to={`/event/${id}/info`} />
+                            </Route>
+                            <Route
+                                path={`/event/${id}/info`}
+                                render={() => <Info
+                                    event={event as EventModel}
+                                />}
+                                exact
+                            />
+                            <Route
+                                path={`/event/${id}/live`}
+                                render={() => <Live
+                                    event={event as EventModel}
+                                />}
+                                exact
+                            />
+                            <Route
+                                path={`/event/${id}/mentimeter`}
+                                render={() => <Mentimeter
+                                    event={event as EventModel}
+                                />}
+                                exact
+                            />
+                            <Route
+                                path={`/event/${id}/slides`}
+                                render={() => <Slides
+                                    event={event as EventModel}
+                                />}
+                                exact />
+                        </IonRouterOutlet>
+                        <IonTabBar slot="bottom">
+                            <IonTabButton tab="Info" href={`/event/${id}/info`}>
+                                <IonLabel>{t('EVENT.INFO.title')}</IonLabel>
+                                <IonIcon icon={informationCircleOutline}></IonIcon>
+                            </IonTabButton>
+                            {additionalTabButtons.map((btn: any, index: number) => btn)}
+                        </IonTabBar>
+                    </IonTabs>
+                </IonPage>
+            </EventTimeProvider>
         </VideoPlayerProvider>
     );
 };

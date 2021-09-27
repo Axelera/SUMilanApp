@@ -5,13 +5,15 @@ import { Link } from 'react-router-dom';
 
 import { VideoPlayerContext } from '../../contexts/VideoPlayer';
 import { VideoPlayerContextModel } from '../../models/videoplayer.model';
+import { EventTimeContext } from '../../contexts/EventTime';
+import { EventTimeContextModel } from '../../models/event.model';
+import { EventTimeStatus } from '../../utils/eventTimeUtils';
 
 import './BottomLivePlayer.css';
 
 type Props = {
     eventId: string;
     eventImageUrl: string;
-    isLive?: boolean;
 };
 
 const formatTime = (totalSeconds: number) => {
@@ -28,8 +30,11 @@ const formatTime = (totalSeconds: number) => {
     return '00:00';
 }
 
-const BottomLivePlayer = ({ isLive, eventId, eventImageUrl }: Props) => {
+const BottomLivePlayer = ({ eventId, eventImageUrl }: Props) => {
     const { isVideoPlaying, playedSeconds, videoDuration, isBottomPlayerVisible, isVideoEnded, pauseVideo, toggleVideoPlay, closeBottomPlayer } = useContext(VideoPlayerContext) as VideoPlayerContextModel;
+    const { timeStatus } = useContext(EventTimeContext) as EventTimeContextModel;
+
+    const isLive = timeStatus === EventTimeStatus.TODAY_LIVE;
 
     const onCloseBottomPlayer = () => {
         pauseVideo();

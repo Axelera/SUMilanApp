@@ -52,3 +52,13 @@ export const isEventToday = (date: string): boolean => {
     // default to tomorrow or later
     return false;
 };
+
+export const getMillisUntilLive = (date: DateTime): number => {
+    const diffInMillis = date.diffNow(['milliseconds']).milliseconds;
+    return diffInMillis;
+};
+
+export const getMillisUntilPassed = (date: DateTime, duration: number): number => {
+    const diffInMinutes = Math.abs(date.diffNow(['minutes']).minutes);
+    return (diffInMinutes + duration) * 60 * 1000;
+};
