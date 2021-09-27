@@ -9,16 +9,13 @@ import {
     IonText,
 } from '@ionic/react';
 import { refresh } from 'ionicons/icons';
-import ReactPlayer from 'react-player';
-import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import SocialLinkComponent from '../../../components/SocialLinkComponent/SocialLinkComponent';
-import { VideoPlayerContext } from '../../../contexts/VideoPlayer';
 import { EventComponentProps, EventStreamingUrlModel } from '../../../models/event.model';
-import { VideoPlayerContextModel } from '../../../models/videoplayer.model';
 import { SocialLinkType } from '../../../models/types.model';
+import VideoPlayer from '../../../components/VideoPlayer/VideoPlayer';
 
 import './Live.css';
 
@@ -32,19 +29,10 @@ const StreamingUrl = (item: { streamingUrl: EventStreamingUrlModel }) => {
 };
 
 const Live: React.FC<EventComponentProps> = (props: EventComponentProps) => {
-    const { isVideoPlaying, playVideo, pauseVideo, setPlayedSeconds, setVideoDuration, onVideoEnded } = useContext(VideoPlayerContext) as VideoPlayerContextModel;
     const { t } = useTranslation();
 
     const reloadPage = () => {
         window.location.reload();
-    };
-
-    const onVideoProgress = ({ playedSeconds }: any) => {
-        setPlayedSeconds(playedSeconds);
-    };
-
-    const onVideoDuration = (seconds: number) => {
-        setVideoDuration(seconds);
     };
 
     return (
@@ -63,16 +51,8 @@ const Live: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                         <IonIcon slot="icon-only" icon={refresh} />
                     </IonButton>
                 </div>
-                <ReactPlayer
-                    url={props.event.videoUrl}
-                    playing={isVideoPlaying}
-                    controls={true}
-                    width="100%"
-                    onPlay={playVideo.bind(this, true)}
-                    onPause={pauseVideo}
-                    onProgress={onVideoProgress}
-                    onDuration={onVideoDuration}
-                    onEnded={onVideoEnded}
+                <VideoPlayer
+                    videoUrl={props.event.videoUrl}
                 />
                 <div>
                     <IonText color="medium">
