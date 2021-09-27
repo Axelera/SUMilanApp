@@ -35,7 +35,7 @@ const Mentimeter: React.FC<EventComponentProps> = (props: EventComponentProps) =
                         height='100%'
                         width='100%'
                         src={props.event.votingUrl}
-                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', }}
+                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0}}
                     ></iframe>
                 </div>
             </IonContent>
