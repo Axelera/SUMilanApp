@@ -10,12 +10,14 @@ import {
 } from '@ionic/react';
 import { refresh } from 'ionicons/icons';
 import { useTranslation } from 'react-i18next';
+import { DateTime } from 'luxon';
 
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import SocialLinkComponent from '../../../components/SocialLinkComponent/SocialLinkComponent';
 import { EventComponentProps, EventStreamingUrlModel } from '../../../models/event.model';
 import { SocialLinkType } from '../../../models/types.model';
 import VideoPlayer from '../../../components/VideoPlayer/VideoPlayer';
+import { EventTimeStatus, getEventTimeStatus } from '../../../utils/eventTimeUtils';
 
 import './Live.css';
 
@@ -30,6 +32,7 @@ const StreamingUrl = (item: { streamingUrl: EventStreamingUrlModel }) => {
 
 const Live: React.FC<EventComponentProps> = (props: EventComponentProps) => {
     const { t } = useTranslation();
+    const eventTimeStatus = getEventTimeStatus(DateTime.fromISO(props.event.date), props.event.duration);
 
     const reloadPage = () => {
         window.location.reload();
@@ -68,7 +71,7 @@ const Live: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                         </IonRow>
                     </IonGrid>
                 </div>
-                {props.event.roomUrl ?
+                {props.event.roomUrl && eventTimeStatus !== EventTimeStatus.PASSED ?
                     <div style={{ textAlign: 'center', marginTop: 20 }}>
                         <IonButton href={props.event.roomUrl} target="_blank">{t('EVENT.LIVE.networkingButton')}</IonButton>
                     </div>
