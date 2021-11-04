@@ -1,0 +1,100 @@
+.progress-dots-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    top: 17px;
+    z-index: 1;
+}
+
+.progress-dot {
+    width: 30px;
+    height: 30px;
+    background-color: var(--ion-background-color, #fff);
+}
+.progress-dot div {
+    background-color: rgba(var(--ion-color-primary-rgb), 0.3);
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    color: var(--ion-background-color, #fff);
+    font-weight: bold;
+}
+.progress-dot span {
+    width: 100%;
+    text-align: center;
+}
+.progress-dot span ion-icon {
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+.progress-dot-active div {
+    background-color: var(--ion-color-primary);
+}
+
+.line-separator {
+    background-color: var(--ion-color-medium);
+    width: 50%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.certificate-preview-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.certificate-preview-img-container {
+    position: relative;
+    width: 500px;
+    margin: 20px 0;
+    padding: 10px 0;
+    border: var(--ion-color-medium) solid 1px;
+    border-radius: 10px;
+}
+.certificate-preview-img-container img {
+    width: 100%;
+}
+
+.certificate-preview-name {
+    position: absolute;
+    top: 95px;
+    width: 100%;
+}
+.certificate-preview-name p {
+    text-align: center;
+    font-size: 24px;
+    padding: 0 10px;
+}
+
+.certificate-preview-event {
+    position: absolute;
+    top: 185px;
+    width: 100%;
+}
+.certificate-preview-event p {
+    text-align: center;
+    font-size: 18px;
+    padding: 0 10px;
+}
+
+.certificate-preview-date {
+    position: absolute;
+    top: 250px;
+    width: 100%;
+}
+.certificate-preview-date p {
+    margin-right: 30px;
+    text-align: right;
+    font-size: 12px;
+}
+
+.alert-item {
+    margin-top: 5px;
+    border-radius: 10px;
+    --padding-end: 10px;
+}

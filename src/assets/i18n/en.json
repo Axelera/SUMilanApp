@@ -84,7 +84,9 @@
   "INPUTS": {
     "Errors": {
       "emailInvalid": "Enter a valid email",
-      "emailRequired": "Enter an email"
+      "emailRequired": "Enter an email",
+      "nameRequired": "Your name is required",
+      "nameTooShort": "This name is too short"
     },
     "emailPlaceholder": "Enter the email"
   },
@@ -118,5 +120,47 @@
     "description": "<0/>'s group of young activists that study exponential technologies to address the world's greatest challenges and build a better future for all.",
     "instagramButton": "Instagram page",
     "title": "SU Young"
+  },
+  "CERTIFICATES": {
+    "title": "NFT Certificates",
+    "TAB1": {
+      "title": "Connect a wallet",
+      "subTitle": "To start, first connect a crypto wallet to this page.\n<1/>\nWe suggest using <3>Metamask <1 /></3>.",
+      "walletInstalled": "Once you have installed a <strong>crypto wallet</strong> on this browser, click on the button below to connect it to this page.",
+      "connectWalletButton": "Connect wallet",
+      "installTitle": "Install",
+      "connectTitle": "Connect"
+    },
+    "TAB2": {
+      "title": "Select an event"
+    },
+    "description": "Generate an <strong>NFT participation certificate</strong> for an event using <strong>Ethereum</strong>.",
+    "disclaimer": "All generated NFTs comply with the <1>EIP-721 <1/></1> standard.",
+    "NOTE": {
+      "title": "This is a test",
+      "subTitle": "You won't lost any REAL fund because NFTs will be minted on the <strong>Ropsten testnet</strong>. More info <3>here</3>"
+    },
+    "connectedWallet": "Connected wallet",
+    "ERRORS": {
+      "wrongNetwork": "Please connect to Ropsten testnet to proceed.",
+      "noTicket": "There are no tickets found with this email for this event."
+    },
+    "selectedEvent": "Selected event",
+    "TAB3": {
+      "title": "NFT certificate data",
+      "submitButton": "Certificate preview",
+      "nameInputLabel": "Enter your name",
+      "emailInputLabel": "Enter the email you used to get your ticket on Eventbrite"
+    },
+    "certificateName": "Made out to",
+    "TAB4": {
+      "title": "NFT certificate preview",
+      "mintCertificateButton": "Mint certificate",
+      "alert": "You will NOT be able to cancel this operation"
+    },
+    "TAB5": {
+      "title": "NFT certificate successfully minted!",
+      "reloadButton": "Mint another certificate"
+    }
   }
 }

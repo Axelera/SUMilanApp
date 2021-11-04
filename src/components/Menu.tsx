@@ -11,7 +11,7 @@ import {
   IonMenuToggle,
 } from '@ionic/react';
 import { useLocation } from 'react-router-dom';
-import { balloonOutline, balloonSharp, documentTextOutline, documentTextSharp, globeOutline, homeOutline, homeSharp, informationCircleOutline, informationCircleSharp, logoGithub, logOutOutline, openOutline, peopleOutline, peopleSharp } from 'ionicons/icons';
+import { balloonOutline, balloonSharp, documentTextOutline, documentTextSharp, globeOutline, homeOutline, homeSharp, informationCircleOutline, informationCircleSharp, logoGithub, logOutOutline, openOutline, peopleOutline, peopleSharp, school, schoolOutline } from 'ionicons/icons';
 import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
 
@@ -67,6 +67,12 @@ const Menu: React.FC = () => {
               </IonMenuToggle>
             );
           })}
+        </IonList>
+        <IonList lines="full">
+          <IonItem routerLink="/certificates" routerDirection="none" detail={false}>
+            <IonIcon slot="start" ios={schoolOutline} md={school} />
+            <IonLabel>{t('CERTIFICATES.title')}</IonLabel>
+          </IonItem>
         </IonList>
         <IonList lines="full">
           <IonItem href="https://www.singularityumilan.com/guida-rapida-app" target="_blank" detail={true} detailIcon={openOutline}>

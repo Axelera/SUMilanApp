@@ -32,6 +32,7 @@ export interface EventModel {
     show: boolean;
     ebEventId?: string;
     slidesAuthRequired: boolean;
+    canMintCertificate: boolean;
 }
 
 export interface EventStreamingUrlModel {

@@ -84,7 +84,9 @@
   "INPUTS": {
     "Errors": {
       "emailInvalid": "Inserisci un'email valida",
-      "emailRequired": "Inserisci un'email"
+      "emailRequired": "Inserisci un'email",
+      "nameRequired": "Il tuo nome è richiesto",
+      "nameTooShort": "Questo nome è troppo corto"
     },
     "emailPlaceholder": "Inserisci l'email"
   },
@@ -118,5 +120,47 @@
     "description": "Gruppo di giovani attivisti del <0/> che studiano le tecnologie esponenziali per affrontare le più grandi sfide del mondo e costruire un futuro migliore per tutti.",
     "instagramButton": "Pagina Instagram",
     "title": "SU Young"
+  },
+  "CERTIFICATES": {
+    "title": "Certificati NFT",
+    "TAB1": {
+      "title": "Collega un portafoglio",
+      "subTitle": "Per iniziare, connetti un portafoglio di criptovalute a questa pagina.\n<1/>\nTi suggeriamo di usare <3>Metamask <1 /></3>.",
+      "walletInstalled": "Una volta che hai installato un <strong>portafoglio di criptovalute</strong> su questo browser, clicca sul pulsante sottostante per connetterlo a questa pagina.",
+      "connectWalletButton": "Collega portafoglio",
+      "installTitle": "Installa",
+      "connectTitle": "Collega"
+    },
+    "TAB2": {
+      "title": "Seleziona un evento"
+    },
+    "description": "Genera un <strong>certificato di partecipazione NFT</strong> per un evento su <strong>Ethereum</strong>.",
+    "disclaimer": "Tutti i certficati NFT generati sono conformi allo standard <1>EIP-721 <1 /></1>.",
+    "NOTE": {
+      "title": "Questo è un test",
+      "subTitle": "Non perderai nessun fondo REALE perché gli NFT verranno generati sulla <strong>Ropsten testnet</strong>. Maggiori informazioni <3>qui</3>."
+    },
+    "connectedWallet": "Portafoglio connesso",
+    "ERRORS": {
+      "wrongNetwork": "Per favore, connettiti alla Ropsten testnet per procedere.",
+      "noTicket": "Non risultano biglietti con questa email per questo evento."
+    },
+    "selectedEvent": "Evento selezionato",
+    "TAB3": {
+      "title": "Dati certificato NFT",
+      "submitButton": "Anteprima certificato",
+      "nameInputLabel": "Inserisci il tuo nome",
+      "emailInputLabel": "Indica l'email con cui hai ottenuto il biglietto su Eventbrite"
+    },
+    "certificateName": "Intestato a",
+    "TAB4": {
+      "title": "Anteprima certificato NFT",
+      "mintCertificateButton": "Genera certificato",
+      "alert": "NON potrai annullare questa operazione"
+    },
+    "TAB5": {
+      "title": "Certificato NFT generato con successo!",
+      "reloadButton": "Genera un altro certificato"
+    }
   }
 }

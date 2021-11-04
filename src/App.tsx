@@ -32,6 +32,7 @@ import Event from './pages/Event/Event';
 import Young from './pages/Young/Young';
 import Chapter from './pages/Chapter/Chapter';
 import Activist from './pages/Activist/Activits';
+import Certificates from './pages/Certificates/Certificates';
 
 import en from './assets/i18n/en.json';
 import it from './assets/i18n/it.json';
@@ -118,6 +119,7 @@ const App: React.FC = () => {
         <Route path="/young" exact={true} component={Young} />
         <Route path="/chapter" exact={true} component={Chapter} />
         <Route path="/activist" exact={true} component={Activist} />
+        <Route path="/certificates" exact={true} component={Certificates} />
         <Route path="/event/:id/" component={Event} />
       </IonRouterOutlet>
     </IonSplitPane>
