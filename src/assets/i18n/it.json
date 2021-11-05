@@ -134,7 +134,7 @@
     "TAB2": {
       "title": "Seleziona un evento"
     },
-    "description": "Genera un <strong>certificato di partecipazione NFT</strong> per un evento su <strong>Ethereum</strong>.",
+    "description": "Genera un <strong>certificato di partecipazione NFT</strong> per un evento sulla <strong>blockchain Ethereum</strong>.",
     "disclaimer": "Tutti i certficati NFT generati sono conformi allo standard <1>EIP-721 <1 /></1>.",
     "NOTE": {
       "title": "Questo è un test",
@@ -142,7 +142,7 @@
     },
     "connectedWallet": "Portafoglio connesso",
     "ERRORS": {
-      "wrongNetwork": "Per favore, connettiti alla Ropsten testnet per procedere.",
+      "wrongNetwork": "Per favore, connettiti alla <strong>Ropsten testnet</strong> per procedere.",
       "noTicket": "Non risultano biglietti con questa email per questo evento."
     },
     "selectedEvent": "Evento selezionato",
@@ -161,6 +161,7 @@
     "TAB5": {
       "title": "Certificato NFT generato con successo!",
       "reloadButton": "Genera un altro certificato"
-    }
+    },
+    "browserNotCompatible": "Questo browser non è compatibile con le dApp."
   }
 }

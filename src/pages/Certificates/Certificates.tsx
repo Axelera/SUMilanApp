@@ -1,6 +1,7 @@
 import {
     IonButton,
     IonButtons,
+    IonChip,
     IonCol,
     IonContent,
     IonGrid,
@@ -20,7 +21,7 @@ import {
 import { RouteComponentProps } from "react-router";
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { alert, calendar, checkmark, closeCircleOutline, openOutline, person, school, wallet } from 'ionicons/icons';
+import { alert, calendar, checkmark, closeCircleOutline, documentText, openOutline, person, refresh, school, wallet } from 'ionicons/icons';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
@@ -36,9 +37,15 @@ import certificateBase from '../../assets/images/certificateBase.png';
 import InputComponent from '../../components/Input/InputComponent';
 import { EventTimeStatus, getEventTimeStatus } from '../../utils/eventTimeUtils';
 import { checkHasTicket } from '../../services/cloud-functions/eventbriteWrapper';
+import { mintCertificate } from '../../services/mint-certificate/mintApi';
+import * as SUMilanCertificateService from '../../services/smart-contracts/SUMilanCertificate';
+import { ContractDataModel, NFTCertificateExtendedModel } from '../../models/certificates.model';
+import NFTCertificate from '../../components/NFTCertificate/NFTCertificate';
+import * as web3Utils from "../../utils/web3";
+import * as CONSTANTS from "../../constants";
+import CenteredContainer from '../../components/CenteredContainer/CenteredContainer';
 
 import './Certificates.css';
-import { mintCertificate } from '../../services/mint-certificate/mintApi';
 
 const STEPS = [
     {
@@ -65,14 +72,29 @@ const STEPS = [
 
 const validationSchema = object().shape({
     name: string().required('nameRequired').min(2, 'nameTooShort'),
-    email: string().required('emailRequired').email('emailInvalid'),
+    email: string(),
 });
+
+const isProduction = process.env.NODE_ENV && process.env.NODE_ENV === 'production';
+
+if (isProduction) {
+    validationSchema.fields.email = validationSchema.fields.email.required('emailRequired').email('emailInvalid');
+}
+
+const contractSubscriptionOptions = {
+    filter: {
+        value: [],
+    },
+    fromBlock: 0
+};
 
 const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
     const eventId = new URLSearchParams(location.search).get('eventId');
     const [step, setStep] = useState(STEPS[0]);
 
-    const [error, setError] = useState<{ message: string; canDismiss: boolean }>();
+    const [contractData, setContractData] = useState<ContractDataModel>();
+
+    const [error, setError] = useState<{ message: string; canDismiss?: boolean }>();
     const [isLoading, setIsLoading] = useState(false);
 
     const [account, setAccount] = useState<string>();
@@ -85,29 +107,70 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
     const { control, handleSubmit, formState: { errors: formErrors } } = useForm({ resolver: yupResolver(validationSchema) });
     const [certificateName, setCertificateName] = useState<string>('');
 
-    const [result, setResult] = useState<string>();
+    const [result, setResult] = useState<NFTCertificateExtendedModel>();
+    const [ownedCertificates, setOwnedCertificates] = useState<NFTCertificateExtendedModel[]>([]);
 
     const { t } = useTranslation();
 
-    const loadBlockChain = async () => {
-        const accounts = await web3.eth.getAccounts();
-        if (accounts.length > 0) {
-            const acc = accounts[0];
-            setAccount(acc);
+    const loadContractData = async () => {
+        const data = await SUMilanCertificateService.getContractData();
+        setContractData(data);
+    };
+
+    const loadAccount = async () => {
+        // @ts-ignore
+        if (window.ethereum) {
+            // @ts-ignore
+            const accounts = await window.ethereum.request({
+                method: 'eth_requestAccounts',
+            });
+            if (accounts.length > 0) {
+                const acc = accounts[0];
+                setAccount(acc);
+                const certificatesOfAddress = await SUMilanCertificateService.getNFTCertificatesOfAddress(acc);
+                setOwnedCertificates(certificatesOfAddress);
+            } else {
+                setAccount(undefined);
+            }
+        } else {
+            throw new Error('This browser is not compatible');
         }
     }
 
-    const connectHandler = async () => {
+    const loadBlockChain = async () => {
+        // @ts-ignore
+        if (window.ethereum) {
+            // @ts-ignore
+            window.ethereum.on('chainChanged', (chainId: string) => {
+                if (chainId !== '0x3') {
+                    setError({
+                        message: t('CERTIFICATES.ERRORS.wrongNetwork'),
+                    });
+                } else {
+                    setError(undefined);
+                }
+            });
+            // @ts-ignore
+            window.ethereum.on('accountsChanged', async (accounts) => {
+                await loadAccount();
+            });
+            // @ts-ignore
+            if (window.ethereum.networkVersion !== '3') {
+                setError({
+                    message: t('CERTIFICATES.ERRORS.wrongNetwork'),
+                });
+                return;
+            }
+            await loadContractData();
+            await loadAccount();
+        }
+    }
+
+    const connectWalletHandler = async () => {
         setIsLoading(true);
         setError(undefined);
         try {
-            if (web3.currentProvider) {
-                // @ts-ignore
-                await web3.currentProvider.enable();
-                const accounts = await web3.eth.getAccounts();
-                const acc = accounts[0];
-                setAccount(acc);
-            }
+            await loadAccount();
         } catch (e: any) {
             setError({
                 message: e.message,
@@ -130,11 +193,15 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
         setIsLoading(true);
         try {
             if (selectedEvent) {
-                const hasTicket = await checkHasTicket(email.trim().toLowerCase(), selectedEvent.ebEventId as string);
-                if (hasTicket) {
-                    setCertificateName(name.trim());
+                if (isProduction) {
+                    const hasTicket = await checkHasTicket(email.trim().toLowerCase(), selectedEvent.ebEventId as string);
+                    if (hasTicket) {
+                        setCertificateName(name.trim());
+                    } else {
+                        throw new Error(t('CERTIFICATES.ERRORS.noTicket'));
+                    }
                 } else {
-                    throw new Error(t('CERTIFICATES.ERRORS.noTicket'));
+                    setCertificateName(name.trim());
                 }
             }
         } catch (e: any) {
@@ -161,18 +228,36 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
         try {
             if (account && certificateName && selectedEvent) {
                 const res = await mintCertificate(account, certificateName, selectedEvent.identifier);
-                console.log(res);
-                setResult(res.transactionHash);
+                const subscription = SUMilanCertificateService.SUMilanCertificate.events.Transfer(contractSubscriptionOptions)
+                    .on('data', async (event: any) => {
+                        console.log('Transfer event data', event);
+                        const transactionHash = event.transactionHash;
+                        if (transactionHash === res.transactionHash) {
+                            const tokenId = event.returnValues.tokenId;
+                            const NFTCertificate = await SUMilanCertificateService.getNFTCertificateExtended(tokenId);
+                            setResult(NFTCertificate);
+                            subscription.unsubscribe();
+                            setIsLoading(false);
+                        }
+                    })
+                    .on('error', (err: any) => {
+                        console.log('Transfer event error', err);
+                        setError({
+                            message: err.message,
+                            canDismiss: false,
+                        });
+                    })
+                    .on('connected', (subscriptionId: string) => console.log('subscriptionId', subscriptionId));
             }
         } catch (e: any) {
             setError(
                 {
                     message: e.message,
-                    canDismiss: true,
+                    canDismiss: false,
                 }
             );
+            setIsLoading(false);
         }
-        setIsLoading(false);
     };
 
     useEffect(() => {
@@ -190,30 +275,12 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
 
     useEffect(() => {
         loadBlockChain();
-        // @ts-ignore
-        if (window.ethereum) {
-            // @ts-ignore
-            window.ethereum.on('networkChanged', function (networkId) {
-                if (networkId !== '3') {
-                    setError({
-                        message: t('CERTIFICATES.ERRORS.wrongNetwork'),
-                        canDismiss: false,
-                    });
-                } else {
-                    setError(undefined);
-                }
-            });
-            // @ts-ignore
-            window.ethereum.on('accountsChanged', function (accounts) {
-                if (accounts.length > 0) {
-                    setAccount(accounts[0]);
-                }
-            });
-        }
     }, []);
 
     useEffect(() => {
-        if (account && !selectedEvent && !certificateName && !result) {
+        if (!account && !selectedEvent && !certificateName && !result) {
+            setStep(STEPS[0]);
+        } else if (account && !selectedEvent && !certificateName && !result) {
             setStep(STEPS[1]);
         } else if (account && selectedEvent && !certificateName && !result) {
             setStep(STEPS[2]);
@@ -230,6 +297,32 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
 
     if (status === 'loading') {
         return <p style={{ margin: 15 }}>{t('GENERAL.loading')}</p>;
+    }
+
+    // @ts-ignore
+    if (!window.ethereum) {
+        return (
+            <IonPage>
+                <IonHeader>
+                    <IonToolbar>
+                        <IonButtons slot="start">
+                            <IonMenuButton />
+                        </IonButtons>
+                        <IonTitle>{t('CERTIFICATES.title')}</IonTitle>
+                    </IonToolbar>
+                </IonHeader>
+                <IonContent>
+                    <CenteredContainer>
+                        <Trans i18nKey="CERTIFICATES.description">
+                            Generate an <strong>NFT participation certificate</strong> for an event using the <strong>Ethereum blockchain</strong>.
+                        </Trans>
+                        <IonText color="danger">
+                            <p>{t('CERTIFICATES.browserNotCompatible')}</p>
+                        </IonText>
+                    </CenteredContainer>
+                </IonContent>
+            </IonPage>
+        );
     }
 
     return (
@@ -265,6 +358,28 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                                 </p>
                             </IonLabel>
                         </IonItem>
+                        {!!contractData &&
+                            <IonItem style={{ '--padding-start': 0 }}>
+                                <IonIcon icon={documentText} color="medium" />
+                                <IonLabel style={{ marginLeft: 10, whiteSpace: 'normal' }}>
+                                    <h2>
+                                        Smart Contract: <b>{contractData.name} ({contractData.symbol})</b>
+                                    </h2>
+                                    <h3>
+                                        Total supply: <i>{contractData.totalSupply} {contractData.symbol}</i>
+                                    </h3>
+                                    <p>
+                                        <a
+                                            href={web3Utils.getExplorerUrl(CONSTANTS.CONTRACT_ADDRESS, 'address')}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            {CONSTANTS.CONTRACT_ADDRESS} <IonIcon icon={openOutline} />
+                                        </a>
+                                    </p>
+                                </IonLabel>
+                            </IonItem>
+                        }
                     </div>
                     <hr className="line-separator" />
                     <div style={{ marginBottom: 30 }}>
@@ -291,68 +406,81 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                         </div>
                         <IonProgressBar value={step.progress} />
                     </div>
-                    {!!account &&
-                        <IonItem style={{ '--padding-start': 0 }}>
-                            <IonIcon icon={wallet} color="secondary" />
-                            <IonLabel style={{ marginLeft: 10, whiteSpace: 'normal' }}>
-                                <IonText color="secondary">
-                                    <h2>{t('CERTIFICATES.connectedWallet')}</h2>
-                                </IonText>
-                                <p>{account}</p>
-                            </IonLabel>
-                        </IonItem>
-                    }
-                    {!!selectedEvent &&
-                        <IonItem style={{ '--padding-start': 0 }}>
-                            <IonIcon icon={calendar} color="tertiary" />
-                            <IonLabel style={{ marginLeft: 10, whiteSpace: 'normal' }}>
-                                <IonText color="tertiary">
-                                    <h2>{t('CERTIFICATES.selectedEvent')}</h2>
-                                </IonText>
-                                <p>{selectedEvent.title}</p>
-                            </IonLabel>
-                            {!result &&
-                                <IonButton
-                                    color="medium"
-                                    fill="clear"
-                                    slot="end"
-                                    onClick={unselectEventHandler}
-                                >
-                                    <IonIcon icon={closeCircleOutline} slot="icon-only" />
-                                </IonButton>
+                    {(!error || error.canDismiss !== undefined) &&
+                        <>
+                            {!!account &&
+                                <IonItem style={{ '--padding-start': 0 }}>
+                                    <IonIcon icon={wallet} color="secondary" />
+                                    <IonLabel style={{ marginLeft: 10, whiteSpace: 'normal' }}>
+                                        <IonText color="secondary">
+                                            <h2>
+                                                {t('CERTIFICATES.connectedWallet')}
+                                                <IonChip color="tertiary">Ropsten Test Network</IonChip>
+                                            </h2>
+                                        </IonText>
+                                        <p>
+                                            {account}
+                                        </p>
+                                    </IonLabel>
+                                </IonItem>
                             }
-                        </IonItem>
-                    }
-                    {!!certificateName &&
-                        <IonItem style={{ '--padding-start': 0 }}>
-                            <IonIcon icon={person} color="primary" />
-                            <IonLabel style={{ marginLeft: 10, whiteSpace: 'normal' }}>
-                                <IonText color="primary">
-                                    <h2>{t('CERTIFICATES.certificateName')}</h2>
-                                </IonText>
-                                <p>{certificateName}</p>
-                            </IonLabel>
-                            {!result &&
-                                <IonButton
-                                    color="medium"
-                                    fill="clear"
-                                    slot="end"
-                                    onClick={deleteNameHandler}
-                                >
-                                    <IonIcon icon={closeCircleOutline} slot="icon-only" />
-                                </IonButton>
+                            {!!selectedEvent &&
+                                <IonItem style={{ '--padding-start': 0 }}>
+                                    <IonIcon icon={calendar} color="tertiary" />
+                                    <IonLabel style={{ marginLeft: 10, whiteSpace: 'normal' }}>
+                                        <IonText color="tertiary">
+                                            <h2>{t('CERTIFICATES.selectedEvent')}</h2>
+                                        </IonText>
+                                        <p>{selectedEvent.title}</p>
+                                    </IonLabel>
+                                    {!result &&
+                                        <IonButton
+                                            color="medium"
+                                            fill="clear"
+                                            slot="end"
+                                            onClick={unselectEventHandler}
+                                        >
+                                            <IonIcon icon={closeCircleOutline} slot="icon-only" />
+                                        </IonButton>
+                                    }
+                                </IonItem>
                             }
-                        </IonItem>
+                            {!!certificateName &&
+                                <IonItem style={{ '--padding-start': 0 }}>
+                                    <IonIcon icon={person} color="primary" />
+                                    <IonLabel style={{ marginLeft: 10, whiteSpace: 'normal' }}>
+                                        <IonText color="primary">
+                                            <h2>{t('CERTIFICATES.certificateName')}</h2>
+                                        </IonText>
+                                        <p>{certificateName}</p>
+                                    </IonLabel>
+                                    {!result &&
+                                        <IonButton
+                                            color="medium"
+                                            fill="clear"
+                                            slot="end"
+                                            onClick={deleteNameHandler}
+                                        >
+                                            <IonIcon icon={closeCircleOutline} slot="icon-only" />
+                                        </IonButton>
+                                    }
+                                </IonItem>
+                            }
+                        </>
                     }
                     {!!error ?
                         <IonItem color="danger">
                             <IonLabel style={{ whiteSpace: 'normal' }}>
                                 <h2><b>{t('GENERAL.error')}</b></h2>
                                 <p>
-                                    {error.message}
+                                    <Trans
+                                        i18nKey={error.message}
+                                    >
+                                        {error.message}
+                                    </Trans>
                                 </p>
                             </IonLabel>
-                            {error.canDismiss &&
+                            {error.canDismiss ?
                                 <IonButton
                                     color="light"
                                     fill="clear"
@@ -361,6 +489,19 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                                 >
                                     <IonIcon icon={closeCircleOutline} slot="icon-only" />
                                 </IonButton>
+                                :
+                                <>
+                                    {error.canDismiss !== undefined &&
+                                        <IonButton
+                                            color="light"
+                                            fill="clear"
+                                            slot="end"
+                                            onClick={reloadPage}
+                                        >
+                                            <IonIcon icon={refresh} slot="icon-only" />
+                                        </IonButton>
+                                    }
+                                </>
                             }
                         </IonItem>
                         :
@@ -384,7 +525,7 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                                     </p>
                                     <IonButton
                                         disabled={isLoading}
-                                        onClick={connectHandler}
+                                        onClick={connectWalletHandler}
                                     >
                                         {isLoading ? <IonSpinner /> : t('CERTIFICATES.TAB1.connectWalletButton')}
                                     </IonButton>
@@ -494,6 +635,9 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                                         numberOfPieces={400}
                                     />
                                     <h3>{t('CERTIFICATES.TAB5.title')}</h3>
+                                    <NFTCertificate
+                                        certificate={result as any}
+                                    />
                                     <IonButton
                                         onClick={reloadPage}
                                     >

@@ -134,7 +134,7 @@
     "TAB2": {
       "title": "Select an event"
     },
-    "description": "Generate an <strong>NFT participation certificate</strong> for an event using <strong>Ethereum</strong>.",
+    "description": "Generate an <strong>NFT participation certificate</strong> for an event the <strong>Ethereum blockchain</strong>.",
     "disclaimer": "All generated NFTs comply with the <1>EIP-721 <1/></1> standard.",
     "NOTE": {
       "title": "This is a test",
@@ -142,7 +142,7 @@
     },
     "connectedWallet": "Connected wallet",
     "ERRORS": {
-      "wrongNetwork": "Please connect to Ropsten testnet to proceed.",
+      "wrongNetwork": "Please connect to <strong>Ropsten testnet</strong> to proceed.",
       "noTicket": "There are no tickets found with this email for this event."
     },
     "selectedEvent": "Selected event",
@@ -161,6 +161,7 @@
     "TAB5": {
       "title": "NFT certificate successfully minted!",
       "reloadButton": "Mint another certificate"
-    }
+    },
+    "browserNotCompatible": "This browser is not compatible with dApps."
   }
 }
