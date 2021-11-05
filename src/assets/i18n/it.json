@@ -156,12 +156,18 @@
     "TAB4": {
       "title": "Anteprima certificato NFT",
       "mintCertificateButton": "Genera certificato",
-      "alert": "NON potrai annullare questa operazione"
+      "alert": "NON potrai annullare questa operazione",
+      "mintingLoading": "Stiamo generando il certificato"
     },
     "TAB5": {
       "title": "Certificato NFT generato con successo!",
       "reloadButton": "Genera un altro certificato"
     },
-    "browserNotCompatible": "Questo browser non è compatibile con le dApp."
+    "browserNotCompatible": "Questo browser non è compatibile con le dApp.",
+    "ownedButton": "1 certificato",
+    "ownedButton_plural": "{{count}} certificati",
+    "MODAL": {
+      "title": "I tuoi certificati NFT"
+    }
   }
 }

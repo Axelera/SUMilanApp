@@ -156,12 +156,18 @@
     "TAB4": {
       "title": "NFT certificate preview",
       "mintCertificateButton": "Mint certificate",
-      "alert": "You will NOT be able to cancel this operation"
+      "alert": "You will NOT be able to cancel this operation",
+      "mintingLoading": "Minting your certificate"
     },
     "TAB5": {
       "title": "NFT certificate successfully minted!",
       "reloadButton": "Mint another certificate"
     },
-    "browserNotCompatible": "This browser is not compatible with dApps."
+    "browserNotCompatible": "This browser is not compatible with dApps.",
+    "ownedButton": "1 certificate",
+    "ownedButton_plural": "{{count}} certificates",
+    "MODAL": {
+      "title": "Your NFT certificates"
+    }
   }
 }

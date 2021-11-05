@@ -17,6 +17,7 @@ import {
     IonText,
     IonTitle,
     IonToolbar,
+    useIonModal,
 } from '@ionic/react';
 import { RouteComponentProps } from "react-router";
 import { useEffect, useState } from 'react';
@@ -32,7 +33,6 @@ import { EventModel, EventStateModel } from '../../models/event.model';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchEvents } from '../../store/events/eventsSlice';
 import EventChoice from './EventChoice/EventChoice';
-import web3 from '../../services/web3/web3';
 import certificateBase from '../../assets/images/certificateBase.png';
 import InputComponent from '../../components/Input/InputComponent';
 import { EventTimeStatus, getEventTimeStatus } from '../../utils/eventTimeUtils';
@@ -44,6 +44,7 @@ import NFTCertificate from '../../components/NFTCertificate/NFTCertificate';
 import * as web3Utils from "../../utils/web3";
 import * as CONSTANTS from "../../constants";
 import CenteredContainer from '../../components/CenteredContainer/CenteredContainer';
+import OwnedCertificatesModal from '../../components/OwnedCertificatesModal/OwnedCertificatesModal';
 
 import './Certificates.css';
 
@@ -108,7 +109,17 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
     const [certificateName, setCertificateName] = useState<string>('');
 
     const [result, setResult] = useState<NFTCertificateExtendedModel>();
+    const [mintingTxHash, setMintingTxHash] = useState<string>();
     const [ownedCertificates, setOwnedCertificates] = useState<NFTCertificateExtendedModel[]>([]);
+
+    const handleModalDismiss = () => {
+        dismissCertificatesModal();
+    };
+
+    const [presentCertificatesModal, dismissCertificatesModal] = useIonModal(OwnedCertificatesModal, {
+        certificates: ownedCertificates,
+        onDismiss: handleModalDismiss,
+    });
 
     const { t } = useTranslation();
 
@@ -228,26 +239,36 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
         try {
             if (account && certificateName && selectedEvent) {
                 const res = await mintCertificate(account, certificateName, selectedEvent.identifier);
-                const subscription = SUMilanCertificateService.SUMilanCertificate.events.Transfer(contractSubscriptionOptions)
-                    .on('data', async (event: any) => {
-                        console.log('Transfer event data', event);
-                        const transactionHash = event.transactionHash;
-                        if (transactionHash === res.transactionHash) {
-                            const tokenId = event.returnValues.tokenId;
-                            const NFTCertificate = await SUMilanCertificateService.getNFTCertificateExtended(tokenId);
-                            setResult(NFTCertificate);
-                            subscription.unsubscribe();
-                            setIsLoading(false);
-                        }
-                    })
-                    .on('error', (err: any) => {
-                        console.log('Transfer event error', err);
-                        setError({
-                            message: err.message,
-                            canDismiss: false,
-                        });
-                    })
-                    .on('connected', (subscriptionId: string) => console.log('subscriptionId', subscriptionId));
+                if (res.transactionHash) {
+                    setMintingTxHash(res.transactionHash);
+                    const subscription = SUMilanCertificateService.SUMilanCertificate.events.Transfer(contractSubscriptionOptions)
+                        .on('data', async (event: any) => {
+                            const transactionHash = event.transactionHash;
+                            if (transactionHash === res.transactionHash) {
+                                console.log('Transfer event data', event);
+                                const tokenId = event.returnValues.tokenId;
+                                const NFTCertificate = await SUMilanCertificateService.getNFTCertificateExtended(tokenId);
+                                NFTCertificate.txHash = transactionHash;
+                                setResult(NFTCertificate);
+                                setOwnedCertificates(prevCerts => {
+                                    const newCerts = [...prevCerts];
+                                    newCerts.push(NFTCertificate);
+                                    return newCerts;
+                                });
+                                subscription.unsubscribe();
+                                setIsLoading(false);
+                                setMintingTxHash(undefined);
+                            }
+                        })
+                        .on('error', (err: any) => {
+                            console.log('Transfer event error', err);
+                            setError({
+                                message: err.message,
+                                canDismiss: false,
+                            });
+                        })
+                        .on('connected', (subscriptionId: string) => console.log('subscriptionId', subscriptionId));
+                }
             }
         } catch (e: any) {
             setError(
@@ -258,6 +279,10 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
             );
             setIsLoading(false);
         }
+    };
+
+    const viewCertificatesHandler = () => {
+        presentCertificatesModal();
     };
 
     useEffect(() => {
@@ -422,6 +447,21 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                                             {account}
                                         </p>
                                     </IonLabel>
+                                    {ownedCertificates.length > 0 &&
+                                        <IonButton
+                                            color="secondary"
+                                            fill="solid"
+                                            slot="end"
+                                            onClick={viewCertificatesHandler}
+                                        >
+                                            <Trans
+                                                i18nKey="CERTIFICATES.ownedButton"
+                                                count={ownedCertificates.length}
+                                            >
+                                                {{ count: ownedCertificates.length }} certificates
+                                            </Trans>
+                                        </IonButton>
+                                    }
                                 </IonItem>
                             }
                             {!!selectedEvent &&
@@ -610,13 +650,30 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                                             disabled={isLoading}
                                             onClick={mintCertificateHandler}
                                         >
-                                            {isLoading ? <IonSpinner /> :
+                                            {isLoading ?
+                                                <>
+                                                    {t('CERTIFICATES.TAB4.mintingLoading')}
+                                                    <IonSpinner />
+                                                </>
+                                                :
                                                 <>
                                                     <IonIcon slot="start" icon={school} />
                                                     {t('CERTIFICATES.TAB4.mintCertificateButton')}
                                                 </>
                                             }
                                         </IonButton>
+                                        {!!mintingTxHash &&
+                                            <IonItem>
+                                                <IonLabel>
+                                                    <h3>Transaction hash (pending...)</h3>
+                                                    <p>
+                                                        <a href={web3Utils.getExplorerUrl(mintingTxHash, 'tx')} target="_blank" rel="noreferrer">
+                                                            {mintingTxHash} <IonIcon icon={openOutline} />
+                                                        </a>
+                                                    </p>
+                                                </IonLabel>
+                                            </IonItem>
+                                        }
                                         <IonItem className="alert-item" lines="none" color="warning">
                                             <IonIcon icon={alert} />
                                             <IonLabel style={{ marginLeft: 10, whiteSpace: 'normal' }}>
