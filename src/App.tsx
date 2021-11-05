@@ -48,26 +48,26 @@ const safariWebId = !process.env.NODE_ENV || process.env.NODE_ENV === 'developme
 const allowLocalhost = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 
 /* RESET OneSignal */
-const oneSignalDbReset = window.localStorage.getItem('ONESIGNAL_DB_RESET');
-const isDbReset = oneSignalDbReset ? JSON.parse(oneSignalDbReset).value : false;
-if (!isDbReset) {
-  const res = window.indexedDB.deleteDatabase("ONE_SIGNAL_SDK_DB");
-  res.onsuccess = ev => {
-    console.log('DELETED ONE_SIGNAL_SDK_DB indexedDB', ev);
-    window.localStorage.setItem('ONESIGNAL_DB_RESET', JSON.stringify({ timestamp: new Date().getTime(), value: true }));
-  };
-  res.onerror = ev => {
-    console.log('Error deleting ONE_SIGNAL_SDK_DB indexedDB', ev);
-    window.localStorage.setItem('ONESIGNAL_DB_RESET', JSON.stringify({ timestamp: new Date().getTime(), value: false }));
-  };
-  res.onblocked = ev => {
-    console.log('Blocked when deleting ONE_SIGNAL_SDK_DB indexedDB', ev);
-    window.localStorage.setItem('ONESIGNAL_DB_RESET', JSON.stringify({ timestamp: new Date().getTime(), value: false }));
-  };
-}
+// const oneSignalDbReset = window.localStorage.getItem('ONESIGNAL_DB_RESET');
+// const isDbReset = oneSignalDbReset ? JSON.parse(oneSignalDbReset).value : false;
+// if (!isDbReset) {
+//   const res = window.indexedDB.deleteDatabase("ONE_SIGNAL_SDK_DB");
+//   res.onsuccess = ev => {
+//     console.log('DELETED ONE_SIGNAL_SDK_DB indexedDB', ev);
+//     window.localStorage.setItem('ONESIGNAL_DB_RESET', JSON.stringify({ timestamp: new Date().getTime(), value: true }));
+//   };
+//   res.onerror = ev => {
+//     console.log('Error deleting ONE_SIGNAL_SDK_DB indexedDB', ev);
+//     window.localStorage.setItem('ONESIGNAL_DB_RESET', JSON.stringify({ timestamp: new Date().getTime(), value: false }));
+//   };
+//   res.onblocked = ev => {
+//     console.log('Blocked when deleting ONE_SIGNAL_SDK_DB indexedDB', ev);
+//     window.localStorage.setItem('ONESIGNAL_DB_RESET', JSON.stringify({ timestamp: new Date().getTime(), value: false }));
+//   };
+// }
 /* */
 
-const oneSignalConfigurtion = {
+const oneSignalConfiguration = {
   allowLocalhostAsSecureOrigin: allowLocalhost,
   notifyButton: {
     enable: false,
@@ -102,7 +102,7 @@ i18n
 const App: React.FC = () => {
 
   useEffect(() => {
-    OneSignal.initialize(oneSignalAppId, oneSignalConfigurtion);
+    OneSignal.initialize(oneSignalAppId, oneSignalConfiguration);
   }, []);
 
   const homeRouter = (
