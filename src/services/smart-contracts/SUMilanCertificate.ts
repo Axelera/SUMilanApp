@@ -9,7 +9,7 @@ const Contract = new web3.eth.Contract(SUMilanCertificateAbi as any, CONSTANTS.C
 export const getContractData = async (): Promise<ContractDataModel> => {
     const name = await Contract.methods.name().call();
     const symbol = await Contract.methods.symbol().call();
-    const totalSupply = await Contract.methods.totalSupply().call();
+    const totalSupply = parseInt(await Contract.methods.totalSupply().call());
     return {
         name,
         address: CONSTANTS.CONTRACT_ADDRESS,

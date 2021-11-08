@@ -168,6 +168,7 @@
     "ownedButton_plural": "{{count}} certificates",
     "MODAL": {
       "title": "Your NFT certificates"
-    }
+    },
+    "loadingCertificates": "Loading your certificates"
   }
 }

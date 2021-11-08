@@ -111,6 +111,7 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
     const [result, setResult] = useState<NFTCertificateExtendedModel>();
     const [mintingTxHash, setMintingTxHash] = useState<string>();
     const [ownedCertificates, setOwnedCertificates] = useState<NFTCertificateExtendedModel[]>([]);
+    const [loadingCertificates, setLoadingCertificates] = useState(false);
 
     const handleModalDismiss = () => {
         dismissCertificatesModal();
@@ -138,8 +139,10 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
             if (accounts.length > 0) {
                 const acc = accounts[0];
                 setAccount(acc);
+                setLoadingCertificates(true);
                 const certificatesOfAddress = await SUMilanCertificateService.getNFTCertificatesOfAddress(acc);
                 setOwnedCertificates(certificatesOfAddress);
+                setLoadingCertificates(false);
             } else {
                 setAccount(undefined);
             }
@@ -173,7 +176,6 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                 return;
             }
             await loadContractData();
-            await loadAccount();
         }
     }
 
@@ -254,6 +256,14 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                                     const newCerts = [...prevCerts];
                                     newCerts.push(NFTCertificate);
                                     return newCerts;
+                                });
+                                setContractData(prevData => {
+                                    if (prevData) {
+                                        const newData = { ...prevData };
+                                        newData.totalSupply = newData.totalSupply + 1;
+                                        return newData;
+                                    }
+                                    return prevData;
                                 });
                                 subscription.unsubscribe();
                                 setIsLoading(false);
@@ -447,7 +457,17 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                                             {account}
                                         </p>
                                     </IonLabel>
-                                    {ownedCertificates.length > 0 &&
+                                    {loadingCertificates &&
+                                        <IonButton
+                                            color="secondary"
+                                            fill="solid"
+                                            slot="end"
+                                            disabled
+                                        >
+                                            {t('CERTIFICATES.loadingCertificates')} <IonSpinner style={{ height: 18 }} />
+                                        </IonButton>
+                                    }
+                                    {!loadingCertificates && ownedCertificates.length > 0 &&
                                         <IonButton
                                             color="secondary"
                                             fill="solid"
