@@ -32,6 +32,7 @@ import Event from './pages/Event/Event';
 import Young from './pages/Young/Young';
 import Chapter from './pages/Chapter/Chapter';
 import Activist from './pages/Activist/Activits';
+import Certificates from './pages/Certificates/Certificates';
 
 import en from './assets/i18n/en.json';
 import it from './assets/i18n/it.json';
@@ -47,26 +48,26 @@ const safariWebId = !process.env.NODE_ENV || process.env.NODE_ENV === 'developme
 const allowLocalhost = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 
 /* RESET OneSignal */
-const oneSignalDbReset = window.localStorage.getItem('ONESIGNAL_DB_RESET');
-const isDbReset = oneSignalDbReset ? JSON.parse(oneSignalDbReset).value : false;
-if (!isDbReset) {
-  const res = window.indexedDB.deleteDatabase("ONE_SIGNAL_SDK_DB");
-  res.onsuccess = ev => {
-    console.log('DELETED ONE_SIGNAL_SDK_DB indexedDB', ev);
-    window.localStorage.setItem('ONESIGNAL_DB_RESET', JSON.stringify({ timestamp: new Date().getTime(), value: true }));
-  };
-  res.onerror = ev => {
-    console.log('Error deleting ONE_SIGNAL_SDK_DB indexedDB', ev);
-    window.localStorage.setItem('ONESIGNAL_DB_RESET', JSON.stringify({ timestamp: new Date().getTime(), value: false }));
-  };
-  res.onblocked = ev => {
-    console.log('Blocked when deleting ONE_SIGNAL_SDK_DB indexedDB', ev);
-    window.localStorage.setItem('ONESIGNAL_DB_RESET', JSON.stringify({ timestamp: new Date().getTime(), value: false }));
-  };
-}
+// const oneSignalDbReset = window.localStorage.getItem('ONESIGNAL_DB_RESET');
+// const isDbReset = oneSignalDbReset ? JSON.parse(oneSignalDbReset).value : false;
+// if (!isDbReset) {
+//   const res = window.indexedDB.deleteDatabase("ONE_SIGNAL_SDK_DB");
+//   res.onsuccess = ev => {
+//     console.log('DELETED ONE_SIGNAL_SDK_DB indexedDB', ev);
+//     window.localStorage.setItem('ONESIGNAL_DB_RESET', JSON.stringify({ timestamp: new Date().getTime(), value: true }));
+//   };
+//   res.onerror = ev => {
+//     console.log('Error deleting ONE_SIGNAL_SDK_DB indexedDB', ev);
+//     window.localStorage.setItem('ONESIGNAL_DB_RESET', JSON.stringify({ timestamp: new Date().getTime(), value: false }));
+//   };
+//   res.onblocked = ev => {
+//     console.log('Blocked when deleting ONE_SIGNAL_SDK_DB indexedDB', ev);
+//     window.localStorage.setItem('ONESIGNAL_DB_RESET', JSON.stringify({ timestamp: new Date().getTime(), value: false }));
+//   };
+// }
 /* */
 
-const oneSignalConfigurtion = {
+const oneSignalConfiguration = {
   allowLocalhostAsSecureOrigin: allowLocalhost,
   notifyButton: {
     enable: false,
@@ -101,7 +102,7 @@ i18n
 const App: React.FC = () => {
 
   useEffect(() => {
-    OneSignal.initialize(oneSignalAppId, oneSignalConfigurtion);
+    OneSignal.initialize(oneSignalAppId, oneSignalConfiguration);
   }, []);
 
   const homeRouter = (
@@ -118,6 +119,7 @@ const App: React.FC = () => {
         <Route path="/young" exact={true} component={Young} />
         <Route path="/chapter" exact={true} component={Chapter} />
         <Route path="/activist" exact={true} component={Activist} />
+        <Route path="/certificates" exact={true} component={Certificates} />
         <Route path="/event/:id/" component={Event} />
       </IonRouterOutlet>
     </IonSplitPane>

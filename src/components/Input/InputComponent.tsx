@@ -11,6 +11,7 @@ export interface InputProps {
     name: string;
     control?: Control;
     label?: string;
+    placeholder?: string;
     errors?: DeepMap<Record<string, any>, FieldError>;
 }
 
@@ -18,6 +19,7 @@ const InputComponent: React.FC<InputProps> = ({
     name,
     control,
     label,
+    placeholder,
     errors,
 }) => {
     const { t } = useTranslation();
@@ -29,7 +31,12 @@ const InputComponent: React.FC<InputProps> = ({
                     <IonLabel position="floating">{label}</IonLabel>
                 )}
                 <Controller
-                    render={({ field: { onChange, value } }) => <IonInput onIonChange={({ detail: { value } }) => onChange(value)} />}
+                    render={({ field: { onChange, value } }) =>
+                        <IonInput
+                            onIonChange={({ detail: { value } }) => onChange(value)}
+                            placeholder={placeholder}
+                        />
+                    }
                     name={name}
                     control={control}
                 />

@@ -1,0 +1,16 @@
+.certificate-card {
+    max-width: 500px;
+    margin: 10px 0;
+}
+.certificate-card img {
+    border-bottom: var(--ion-color-medium) solid 1px;
+}
+.certificate-card ion-card-header {
+    padding-bottom: 0;
+}
+.certificate-card ion-list-header {
+    padding-left: 0;
+}
+.certificate-card ion-label, a, p {
+    white-space: normal;
+}
