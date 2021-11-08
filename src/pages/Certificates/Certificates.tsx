@@ -43,7 +43,6 @@ import { ContractDataModel, NFTCertificateExtendedModel } from '../../models/cer
 import NFTCertificate from '../../components/NFTCertificate/NFTCertificate';
 import * as web3Utils from "../../utils/web3";
 import * as CONSTANTS from "../../constants";
-import CenteredContainer from '../../components/CenteredContainer/CenteredContainer';
 import OwnedCertificatesModal from '../../components/OwnedCertificatesModal/OwnedCertificatesModal';
 
 import './Certificates.css';
@@ -347,16 +346,26 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                     </IonToolbar>
                 </IonHeader>
                 <IonContent>
-                    <CenteredContainer>
+                    <div className="centered-container">
                         <Trans i18nKey="CERTIFICATES.description">
                             Generate an <strong>NFT participation certificate</strong> for an event using the <strong>Ethereum blockchain</strong>.
                         </Trans>
                         <IonText color="danger">
-                            <p>{t('CERTIFICATES.browserNotCompatible')}</p>
+                            <p>
+                                <Trans i18nKey="CERTIFICATES.browserNotCompatible">
+                                    This browser is not compatible with dApps
+                                    <br />
+                                    or
+                                    <br />
+                                    You've not installed/enabled a <strong>crypto wallet</strong>.
+                                    <br />
+                                    We suggest using <a href="https://metamask.io/" target="_blank" rel="noreferrer">Metamask <IonIcon icon={openOutline} /></a>.
+                                </Trans>
+                            </p>
                         </IonText>
-                    </CenteredContainer>
-                </IonContent>
-            </IonPage>
+                    </div>
+                </IonContent >
+            </IonPage >
         );
     }
 

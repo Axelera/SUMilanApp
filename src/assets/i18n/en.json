@@ -134,7 +134,7 @@
     "TAB2": {
       "title": "Select an event"
     },
-    "description": "Generate an <strong>NFT participation certificate</strong> for an event the <strong>Ethereum blockchain</strong>.",
+    "description": "Generate an <strong>NFT participation certificate</strong> for an event using the <strong>Ethereum blockchain</strong>.",
     "disclaimer": "All generated NFTs comply with the <1>EIP-721 <1/></1> standard.",
     "NOTE": {
       "title": "This is a test",
@@ -163,7 +163,7 @@
       "title": "NFT certificate successfully minted!",
       "reloadButton": "Mint another certificate"
     },
-    "browserNotCompatible": "This browser is not compatible with dApps.",
+    "browserNotCompatible": "This browser is not compatible with dApps\n<br/>\nor\n<br/>\nYou've not installed/enabled a <strong>crypto wallet</strong>.\n<br/>\nWe suggest using <9>Metamask <1></1></9>.",
     "ownedButton": "1 certificate",
     "ownedButton_plural": "{{count}} certificates",
     "MODAL": {
