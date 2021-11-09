@@ -28,7 +28,7 @@ const Mentimeter: React.FC<EventComponentProps> = (props: EventComponentProps) =
                 <div style={{ position: 'relative', height: '100%', overflow: 'hidden' }}>
                     <iframe
                         title={`menti-${props.event.id}`}
-                        sandbox='allow-scripts allow-same-origin'
+                        sandbox='allow-scripts allow-same-origin allow-forms'
                         allowFullScreen={true}
                         height='100%'
                         width='100%'
