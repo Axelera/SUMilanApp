@@ -124,8 +124,10 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
     const { t } = useTranslation();
 
     const loadContractData = async () => {
-        const data = await SUMilanCertificateService.getContractData();
-        setContractData(data);
+        if (!contractData) {
+            const data = await SUMilanCertificateService.getContractData();
+            setContractData(data);
+        }
     };
 
     const loadAccount = async () => {
@@ -154,12 +156,13 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
         // @ts-ignore
         if (window.ethereum) {
             // @ts-ignore
-            window.ethereum.on('chainChanged', (chainId: string) => {
+            window.ethereum.on('chainChanged', async (chainId: string) => {
                 if (chainId !== '0x3') {
                     setError({
                         message: t('CERTIFICATES.ERRORS.wrongNetwork'),
                     });
                 } else {
+                    await loadContractData();
                     setError(undefined);
                 }
             });
