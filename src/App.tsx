@@ -116,7 +116,7 @@ const App: React.FC = () => {
           <Redirect to="/home" />
         </Route>
         <Route path="/home" exact={true} component={Home} />
-        <Route path="/young" exact={true} component={Young} />
+        {/* <Route path="/young" exact={true} component={Young} /> */}
         <Route path="/chapter" exact={true} component={Chapter} />
         <Route path="/activist" exact={true} component={Activist} />
         <Route path="/certificates" exact={true} component={Certificates} />

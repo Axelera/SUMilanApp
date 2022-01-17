@@ -36,11 +36,11 @@ const appPages: AppPage[] = [
     iosIcon: informationCircleOutline,
     mdIcon: informationCircleSharp,
   },
-  {
-    url: '/young',
-    iosIcon: balloonOutline,
-    mdIcon: balloonSharp
-  },
+  // {
+  //   url: '/young',
+  //   iosIcon: balloonOutline,
+  //   mdIcon: balloonSharp
+  // },
   {
     url: '/activist',
     iosIcon: peopleOutline,
