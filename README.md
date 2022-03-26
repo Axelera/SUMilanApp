@@ -1,5 +1,5 @@
 # SingularityU Milan Chapter web app
-![image](src/assets/images/title-logo.png)
+![image](apps/sumilan-app/src/assets/images/title-logo.png)
 This is the source code for the web app created by the [SingularityU Milan Chapter](https://www.singularityumilan.com/) to improve the way people attend our events.
 It is designed to help people find information and study materials more easily, without losing focus on the current event.
 It is also a collection of past SU Milan Chapter events with related study materials.
@@ -23,17 +23,17 @@ It is also a collection of past SU Milan Chapter events with related study mater
 - Amazon API Gateway API Key (see [here](https://github.com/Axelera/SUMilanCertificates/blob/master/api/lambda/README.md) for details)
 
 ### Install
-- clone this repo: `git clone https://github.com/Luca8991/su-milan.git`
-- navigate inside the created folder: `cd su-milan`
+- clone this repo: `git clone https://github.com/Axelera/SUMilanApp.git`
+- navigate inside the created folder: `cd SUMilanApp`
 - create a file called `.env.local` and put these lines inside:
 ```
-REACT_APP_SUPABASE_URL="<obtained in the requirements>"
-REACT_APP_SUPABASE_PUBLIC_KEY="<obtained in the requirements>"
-REACT_APP_ONESIGNAL_DEVELOPMENT_KEY="<obtained in the requirements>"
-REACT_APP_ONESIGNAL_PRODUCTION_KEY="<obtained in the requirements>"
-REACT_APP_ONESIGNAL_SAFARI_WEB_ID="<obtained in the requirements>"
-REACT_APP_IBM_EVENTBRITE_WRAPPER_KEY="<obtained in the requirements>"
-REACT_APP_AWS_LAMBDA_CERTIFICATE_API_KEY="<obtained in the requirements>"
+NX_SUPABASE_URL="<obtained in the requirements>"
+NX_SUPABASE_PUBLIC_KEY="<obtained in the requirements>"
+NX_ONESIGNAL_DEVELOPMENT_KEY="<obtained in the requirements>"
+NX_ONESIGNAL_PRODUCTION_KEY="<obtained in the requirements>"
+NX_ONESIGNAL_SAFARI_WEB_ID="<obtained in the requirements>"
+NX_IBM_EVENTBRITE_WRAPPER_KEY="<obtained in the requirements>"
+NX_AWS_LAMBDA_CERTIFICATE_API_KEY="<obtained in the requirements>"
 ```
 - install dependencies: `npm install`
 
