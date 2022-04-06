@@ -1,0 +1,57 @@
+{
+  "root": "apps/notify-activist-request",
+  "sourceRoot": "apps/notify-activist-request/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/notify-activist-request",
+        "main": "apps/notify-activist-request/src/index.js",
+        "tsConfig": "apps/notify-activist-request/tsconfig.app.json"
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "generatePackageJson": true
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "notify-activist-request:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/notify-activist-request/**/*.js"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/notify-activist-request"],
+      "options": {
+        "jestConfig": "apps/notify-activist-request/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "package": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npx nx run notify-activist-request:build:production",
+          "cd dist/apps/notify-activist-request && npm install --production",
+          "cd dist/apps/notify-activist-request && zip -rq notify-activist-request.zip ."
+        ],
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,0 +1,176 @@
+{
+  "root": "apps/sumilan-app",
+  "sourceRoot": "apps/sumilan-app/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/sumilan-app",
+        "index": "apps/sumilan-app/src/index.html",
+        "baseHref": "/",
+        "main": "apps/sumilan-app/src/main.tsx",
+        "polyfills": "apps/sumilan-app/src/polyfills.ts",
+        "tsConfig": "apps/sumilan-app/tsconfig.app.json",
+        "assets": [
+          {
+            "glob": "icon/*",
+            "input": "apps/sumilan-app/src/assets",
+            "output": "assets"
+          },
+          {
+            "glob": "logo.png",
+            "input": "apps/sumilan-app/src/assets",
+            "output": "assets"
+          },
+          {
+            "glob": "**/*",
+            "input": "apps/sumilan-app/src/public",
+            "output": "."
+          }
+        ],
+        "styles": ["apps/sumilan-app/src/styles.css"],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/sumilan-app/src/environments/environment.ts",
+              "with": "apps/sumilan-app/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "options": {
+        "buildTarget": "sumilan-app:build",
+        "hmr": true
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "sumilan-app:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/sumilan-app/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/sumilan-app"],
+      "options": {
+        "jestConfig": "apps/sumilan-app/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "cap": {
+      "executor": "@nxtend/capacitor:cap",
+      "options": {
+        "cmd": "--help"
+      }
+    },
+    "add": {
+      "executor": "@nxtend/capacitor:cap",
+      "options": {
+        "cmd": "add"
+      },
+      "configurations": {
+        "ios": {
+          "cmd": "add ios"
+        },
+        "android": {
+          "cmd": "add android"
+        }
+      }
+    },
+    "copy": {
+      "executor": "@nxtend/capacitor:cap",
+      "options": {
+        "cmd": "copy"
+      },
+      "configurations": {
+        "ios": {
+          "cmd": "copy ios"
+        },
+        "android": {
+          "cmd": "copy android"
+        }
+      }
+    },
+    "open": {
+      "executor": "@nxtend/capacitor:cap",
+      "options": {
+        "cmd": "open"
+      },
+      "configurations": {
+        "ios": {
+          "cmd": "open ios"
+        },
+        "android": {
+          "cmd": "open android"
+        }
+      }
+    },
+    "run": {
+      "executor": "@nxtend/capacitor:cap",
+      "options": {
+        "cmd": "run"
+      },
+      "configurations": {
+        "ios": {
+          "cmd": "run ios"
+        },
+        "android": {
+          "cmd": "run android"
+        }
+      }
+    },
+    "sync": {
+      "executor": "@nxtend/capacitor:cap",
+      "options": {
+        "cmd": "sync"
+      },
+      "configurations": {
+        "ios": {
+          "cmd": "sync ios"
+        },
+        "android": {
+          "cmd": "sync android"
+        }
+      }
+    },
+    "update": {
+      "executor": "@nxtend/capacitor:cap",
+      "options": {
+        "cmd": "update"
+      },
+      "configurations": {
+        "ios": {
+          "cmd": "update ios"
+        },
+        "android": {
+          "cmd": "update android"
+        }
+      }
+    }
+  },
+  "tags": []
+}

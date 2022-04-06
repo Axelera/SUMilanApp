@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "projects": {
+    "eventbrite-wrapper": "libs/eventbrite-wrapper",
+    "notify-activist-request": "apps/notify-activist-request",
+    "smart-contract": "libs/smart-contract",
+    "smart-contract-api": "apps/smart-contract-api",
+    "sumilan-app": "apps/sumilan-app",
+    "sumilan-app-e2e": "apps/sumilan-app-e2e"
+  }
+}

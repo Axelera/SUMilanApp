@@ -1,0 +1,62 @@
+{
+  "root": "apps/smart-contract-api",
+  "sourceRoot": "apps/smart-contract-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "cache": false,
+      "options": {
+        "outputPath": "dist/apps/smart-contract-api",
+        "main": "apps/smart-contract-api/src/index.js",
+        "tsConfig": "apps/smart-contract-api/tsconfig.app.json",
+        "assets": ["apps/smart-contract-api/src/assets"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "generatePackageJson": true
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "smart-contract-api:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/smart-contract-api/**/*.js"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/smart-contract-api"],
+      "options": {
+        "jestConfig": "apps/smart-contract-api/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "package": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npx nx run smart-contract:compile",
+          "npx nx run smart-contract:copy-contract-to-api",
+          "npx nx run smart-contract-api:build:production",
+          "cd dist/apps/smart-contract-api && npm install --production",
+          "cd dist/apps/smart-contract-api && zip -rq smart-contract-api.zip .",
+          "rm apps/smart-contract-api/src/assets/SUMilanCertificate.json"
+        ],
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}

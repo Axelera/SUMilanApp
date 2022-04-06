@@ -1,0 +1,25 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@sumilan-app/eventbrite-wrapper": [
+        "libs/eventbrite-wrapper/src/index.js"
+      ],
+      "@sumilan-app/smart-contract": ["libs/smart-contract/src/index.js"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}
