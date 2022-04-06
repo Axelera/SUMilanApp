@@ -1,0 +1,7 @@
+# Smart Contracts
+**/artifacts
+**/cache
+
+# OpenZeppelin
+.openzeppelin/dev-*.json
+.openzeppelin/.session

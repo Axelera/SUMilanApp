@@ -1,0 +1,61 @@
+{
+  "root": "libs/smart-contract",
+  "sourceRoot": "libs/smart-contract/src",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/smart-contract/**/*.js"]
+      }
+    },
+    "compile": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npx hardhat compile",
+        "cwd": "libs/smart-contract"
+      }
+    },
+    "copy-contract-to-api": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "cp artifacts/contracts/SUMilanCertificateUpgradeable.sol/SUMilanCertificate.json ../../apps/smart-contract-api/src/assets/SUMilanCertificate.json",
+        "cwd": "libs/smart-contract"
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npx hardhat run --network ropsten scripts/deploy.js",
+        "cwd": "libs/smart-contract"
+      },
+      "defaultConfiguration": "local",
+      "configurations": {
+        "local": {
+          "command": "npx hardhat run --network hardhat scripts/deploy.js"
+        }
+      }
+    },
+    "upgrade": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npx hardhat run --network ropsten scripts/upgrade.js",
+        "cwd": "libs/smart-contract"
+      },
+      "defaultConfiguration": "local",
+      "configurations": {
+        "local": {
+          "command": "npx hardhat run --network hardhat scripts/upgrade.js"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npx hardhat --network hardhat test",
+        "cwd": "libs/smart-contract"
+      }
+    }
+  },
+  "tags": []
+}

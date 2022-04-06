@@ -35,5 +35,6 @@
         "babel": true
       }
     }
-  }
+  },
+  "defaultProject": "notify-activist-request"
 }

@@ -1,0 +1,22 @@
+{
+  "root": "libs/eventbrite-wrapper",
+  "sourceRoot": "libs/eventbrite-wrapper/src",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/eventbrite-wrapper/**/*.js"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/eventbrite-wrapper"],
+      "options": {
+        "jestConfig": "libs/eventbrite-wrapper/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
