@@ -34,7 +34,8 @@
     "INFO": {
       "moderators": "Moderators",
       "relators": "Relators",
-      "title": "Info"
+      "title": "Info",
+      "ticketsButton": "Tickets"
     },
     "LIVE": {
       "availablePlatforms": "You'll find the live also on",

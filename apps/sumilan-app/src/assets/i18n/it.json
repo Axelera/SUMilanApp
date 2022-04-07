@@ -34,7 +34,8 @@
     "INFO": {
       "moderators": "Moderatori",
       "relators": "Relatori",
-      "title": "Info"
+      "title": "Info",
+      "ticketsButton": "Biglietti"
     },
     "LIVE": {
       "availablePlatforms": "Trovi la diretta anche su",
