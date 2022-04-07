@@ -1,31 +1,27 @@
+import { useContext } from 'react';
 import {
     IonAvatar,
     IonContent,
-    IonFab,
-    IonFabButton,
     IonFooter,
-    IonIcon,
     IonItem,
     IonLabel,
     IonList,
     IonListHeader,
     IonPage,
 } from '@ionic/react';
-import { headsetOutline, ticketOutline } from 'ionicons/icons';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import { useTranslation } from 'react-i18next';
-import { useContext } from 'react';
 
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import EventTimeComponent from '../../../components/EventTime/EventTimeComponent';
 import SocialLinkComponent from '../../../components/SocialLinkComponent/SocialLinkComponent';
-import { EventComponentProps, EventRelatorModel, EventTimeContextModel, TicketsLinkModel } from "../../../models/event.model";
+import { EventComponentProps, EventRelatorModel, EventTimeContextModel } from "../../../models/event.model";
 import avatar from '../../../../assets/images/avatar.png';
 import { EventTimeStatus } from '../../../utils/eventTimeUtils';
 import BottomLivePlayer from '../../../components/BottomLivePlayer/BottomLivePlayer';
-import { TicketsLinkType } from '../../../models/types.model';
 import { EventTimeContext } from '../../../contexts/EventTime';
+import TicketsButton from '../../../components/TicketsButton/TicketsButton';
 
 import './Info.css';
 
@@ -49,27 +45,6 @@ const Relator = (data: { relator: EventRelatorModel }) => {
 
         </IonItem>
     )
-};
-
-const TicketsButton = (data: { ticketsLink: TicketsLinkModel }) => {
-    let icon;
-
-    switch (data.ticketsLink.type) {
-        case TicketsLinkType.EVENTBRITE:
-            icon = ticketOutline;
-            break;
-        case TicketsLinkType.CLUBHOUSE:
-            icon = headsetOutline;
-            break;
-        default:
-            icon = ticketOutline;
-    }
-
-    return <IonFab vertical="bottom" horizontal="center" slot="fixed">
-        <IonFabButton color="tertiary" href={data.ticketsLink.url} target="_blank">
-            <IonIcon icon={icon} />
-        </IonFabButton>
-    </IonFab>
 };
 
 const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
@@ -100,28 +75,26 @@ const Info: React.FC<EventComponentProps> = (props: EventComponentProps) => {
                         <ReactMarkdown rehypePlugins={[rehypeRaw]} children={event.description.replace(/\\n/g, '\n')} />
                     </div>
                 </IonItem>
-                {event.relators ?
-                    (
-                        <IonList style={{ marginBottom: 5 }}>
-                            <IonListHeader style={{ paddingLeft: 10 }}>{t('EVENT.INFO.relators')}</IonListHeader>
-                            {event.relators.map((relator: EventRelatorModel, index: number) => <Relator key={index} relator={relator} />)}
-                        </IonList>
-                    )
-                    :
-                    null}
-                {event.moderators ?
-                    (
-                        <IonList style={{ marginBottom: 66 }}>
-                            <IonListHeader style={{ paddingLeft: 10 }}>{t('EVENT.INFO.moderators')}</IonListHeader>
-                            {event.moderators.map((moderator: EventRelatorModel, index: number) => <Relator key={index} relator={moderator} />)}
-                        </IonList>
-                    )
-                    :
-                    null}
+                {event.relators &&
+                    <IonList style={{ marginBottom: 5 }}>
+                        <IonListHeader style={{ paddingLeft: 10 }}>{t('EVENT.INFO.relators')}</IonListHeader>
+                        {event.relators.map((relator: EventRelatorModel, index: number) => <Relator key={index} relator={relator} />)}
+                    </IonList>
+                }
+                {event.moderators &&
+                    <IonList style={{ marginBottom: 66 }}>
+                        <IonListHeader style={{ paddingLeft: 10 }}>{t('EVENT.INFO.moderators')}</IonListHeader>
+                        {event.moderators.map((moderator: EventRelatorModel, index: number) => <Relator key={index} relator={moderator} />)}
+                    </IonList>
+                }
                 {event.ticketsLink
                     && eventTimeStatus !== EventTimeStatus.PASSED
                     && eventTimeStatus !== EventTimeStatus.TODAY_PASSED
-                    && <TicketsButton ticketsLink={event.ticketsLink} />}
+                    && <TicketsButton
+                        ticketsLink={event.ticketsLink}
+                        ebEventId={event.ebEventId}
+                    />
+                }
             </IonContent>
             <IonFooter>
                 <BottomLivePlayer

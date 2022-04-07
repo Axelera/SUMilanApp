@@ -57,6 +57,7 @@
       "executor": "@nrwl/web:dev-server",
       "options": {
         "buildTarget": "sumilan-app:build",
+        "ssl": true,
         "hmr": true
       },
       "configurations": {
