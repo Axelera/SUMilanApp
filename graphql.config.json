@@ -1,0 +1,35 @@
+{
+    "overwrite": true,
+    "schema": [
+      {
+        "${NX_SUPABASE_GRAPHQL_ENDPOINT}": {
+          "headers": {
+            "apikey": "${NX_SUPABASE_PUBLIC_KEY}"
+          }
+        }
+      }
+    ],
+    "documents": "libs/api/src/lib/**/*.graphql",
+    "extensions": {
+      "codegen": {
+        "generates": {
+          "libs/api/src/lib/generated/generated.ts": {
+            "plugins": [
+              "typescript",
+              "typescript-operations",
+              "typescript-urql"
+            ],
+            "config": {
+              "skipTypeNameForRoot": true,
+              "skipTypename": true,
+              "withHooks": true,
+              "withComponent": false,
+              "withHOC": false,
+              "enumAsTypes": true
+            }
+          }
+        }
+      }
+    }
+  }
+  

@@ -1,6 +1,11 @@
-var Jimp = require('jimp');
+import Jimp from 'jimp';
 
-const generateImg = (name, event, date, saveToLocal = false) => {
+export const generateCertificateImg = (
+  name: string,
+  event: string,
+  date: string,
+  saveToLocal = false
+): Promise<Buffer> => {
   return new Promise((resolve, reject) => {
     Jimp.read('../assets/base.png', async (err, base) => {
       if (err) {
@@ -53,5 +58,3 @@ const generateImg = (name, event, date, saveToLocal = false) => {
     });
   });
 };
-
-module.exports.generateCertificateImg = generateImg;

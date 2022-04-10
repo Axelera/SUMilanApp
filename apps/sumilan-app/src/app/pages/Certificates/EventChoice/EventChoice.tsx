@@ -1,3 +1,4 @@
+import React from "react";
 import {
     IonCard,
     IonCardHeader,
@@ -5,41 +6,42 @@ import {
     IonCardTitle,
 } from "@ionic/react";
 
-import { EventModel } from "../../../models/event.model";
 import EventTimeComponent from "../../../components/EventTime/EventTimeComponent";
 import { EventTimeProvider } from "../../../contexts/EventTime";
+import { Events } from "@sumilan-app/api";
+import { getEventType } from "../../../utils/events";
 
 import './EventChoice.css';
 
 type Props = {
-    event: EventModel;
-    onClick: (event: EventModel) => any;
+    event: Partial<Events>;
+    onClick: (event: Partial<Events>) => void;
 };
 
 const EventChoice: React.FC<Props> = ({ event, onClick }) => {
 
-    const cardClickHandler = (ev: any) => {
+    const cardClickHandler = (ev: React.MouseEvent<HTMLIonCardElement, MouseEvent>) => {
         ev.stopPropagation();
         onClick(event);
     };
 
     return (
-        <EventTimeProvider date={event.date} duration={event.duration}>
+        <EventTimeProvider date={event.start_timestamp} duration={event.duration || 0}>
             <IonCard
                 key={event.id}
                 onClick={cardClickHandler}
                 button={true}
                 className="event-card"
             >
-                <div className="card-image" style={{ backgroundImage: `url(${event.imageUrl}` }}></div>
+                <div className="card-image" style={{ backgroundImage: `url(${event.event_image_url}` }}></div>
                 <IonCardHeader>
                     <IonCardTitle>
-                        {event.title}
+                        {event.event_title}
                     </IonCardTitle>
                     <IonCardSubtitle>
-                        {event.type.toUpperCase()}
+                        {getEventType(event.event_type)}
                     </IonCardSubtitle>
-                    <EventTimeComponent date={event.date} duration={event.duration} />
+                    <EventTimeComponent date={event.start_timestamp} duration={event.duration || 0} />
                 </IonCardHeader>
             </IonCard>
         </EventTimeProvider>

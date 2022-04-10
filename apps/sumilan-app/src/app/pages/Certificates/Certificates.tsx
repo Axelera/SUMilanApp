@@ -29,13 +29,9 @@ import { object, string } from 'yup';
 import { DateTime } from "luxon";
 import Confetti from 'react-confetti';
 
-import { EventModel, EventStateModel } from '../../models/event.model';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { fetchEvents } from '../../store/events/eventsSlice';
 import EventChoice from './EventChoice/EventChoice';
 import certificateBase from '../../../assets/images/certificateBase.png';
 import InputComponent from '../../components/Input/InputComponent';
-import { EventTimeStatus, getEventTimeStatus } from '../../utils/eventTimeUtils';
 import { checkHasTicket } from '../../services/cloud-functions/eventbriteWrapper';
 import { mintCertificate } from '../../services/mint-certificate/mintApi';
 import * as SUMilanCertificateService from '../../services/smart-contracts/SUMilanCertificate';
@@ -44,40 +40,23 @@ import NFTCertificate from '../../components/NFTCertificate/NFTCertificate';
 import * as web3Utils from "../../utils/web3";
 import * as CONSTANTS from "../../constants";
 import OwnedCertificatesModal from '../../components/OwnedCertificatesModal/OwnedCertificatesModal';
+import { Events, useGetMintableEventsQuery } from '@sumilan-app/api';
+import { isProductionEnv, PROGRESS_STEPS } from '../../constants';
 
 import './Certificates.css';
 
-const STEPS = [
-    {
-        id: 1,
-        progress: 0,
-    },
-    {
-        id: 2,
-        progress: .25,
-    },
-    {
-        id: 3,
-        progress: .50,
-    },
-    {
-        id: 4,
-        progress: .75,
-    },
-    {
-        id: 5,
-        progress: 1,
-    },
-];
+declare global {
+    interface Window {
+        ethereum: any;
+    }
+}
 
 const validationSchema = object().shape({
     name: string().required('nameRequired').min(2, 'nameTooShort'),
     email: string(),
 });
 
-const isProduction = process.env['NODE_ENV'] && process.env['NODE_ENV'] === 'production';
-
-if (isProduction) {
+if (isProductionEnv()) {
     validationSchema.fields.email = validationSchema.fields.email.required('emailRequired').email('emailInvalid');
 }
 
@@ -90,7 +69,7 @@ const contractSubscriptionOptions = {
 
 const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
     const eventId = new URLSearchParams(location.search).get('eventId');
-    const [step, setStep] = useState(STEPS[0]);
+    const [step, setStep] = useState(PROGRESS_STEPS[0]);
 
     const [contractData, setContractData] = useState<ContractDataModel>();
 
@@ -99,10 +78,10 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
 
     const [account, setAccount] = useState<string>();
 
-    const dispatch = useAppDispatch();
-    const { items: events, status, error: eventsError } = useAppSelector<EventStateModel>(state => state.events);
-    const [availableEvents, setAvailableEvents] = useState<EventModel[]>([]);
-    const [selectedEvent, setSelectedEvent] = useState<EventModel>();
+    const [queryEventsResult] = useGetMintableEventsQuery();
+    const { data, error: queryError, fetching } = queryEventsResult;
+    const [availableEvents, setAvailableEvents] = useState<Partial<Events[]>>([]);
+    const [selectedEvent, setSelectedEvent] = useState<Partial<Events>>();
 
     const { control, handleSubmit, formState: { errors: formErrors } } = useForm({ resolver: yupResolver(validationSchema) });
     const [certificateName, setCertificateName] = useState<string>('');
@@ -131,9 +110,7 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
     };
 
     const loadAccount = async () => {
-        // @ts-ignore
         if (window.ethereum) {
-            // @ts-ignore
             const accounts = await window.ethereum.request({
                 method: 'eth_requestAccounts',
             });
@@ -153,9 +130,7 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
     }
 
     const loadBlockChain = async () => {
-        // @ts-ignore
         if (window.ethereum) {
-            // @ts-ignore
             window.ethereum.on('chainChanged', async (chainId: string) => {
                 if (chainId !== '0x3') {
                     setError({
@@ -166,11 +141,9 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                     setError(undefined);
                 }
             });
-            // @ts-ignore
-            window.ethereum.on('accountsChanged', async (accounts) => {
+            window.ethereum.on('accountsChanged', async () => {
                 await loadAccount();
             });
-            // @ts-ignore
             if (window.ethereum.networkVersion !== '3') {
                 setError({
                     message: t('CERTIFICATES.ERRORS.wrongNetwork'),
@@ -199,7 +172,7 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
         setSelectedEvent(undefined);
     };
 
-    const eventClickHandler = (event: EventModel) => {
+    const eventClickHandler = (event: Partial<Events>) => {
         setSelectedEvent(event);
     };
 
@@ -208,8 +181,8 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
         setIsLoading(true);
         try {
             if (selectedEvent) {
-                if (isProduction) {
-                    const hasTicket = await checkHasTicket(email.trim().toLowerCase(), selectedEvent.ebEventId as string);
+                if (isProductionEnv()) {
+                    const hasTicket = await checkHasTicket(email.trim().toLowerCase(), selectedEvent.eventbrite_event_id as string);
                     if (hasTicket) {
                         setCertificateName(name.trim());
                     } else {
@@ -242,7 +215,7 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
         setIsLoading(true);
         try {
             if (account && certificateName && selectedEvent) {
-                const res = await mintCertificate(account, certificateName, selectedEvent.identifier);
+                const res = await mintCertificate(account, certificateName, selectedEvent.identifier as string);
                 if (res.transactionHash) {
                     setMintingTxHash(res.transactionHash);
                     const subscription = SUMilanCertificateService.SUMilanCertificate.events.Transfer(contractSubscriptionOptions)
@@ -298,17 +271,14 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
     };
 
     useEffect(() => {
-        if (!events || events.length === 0) {
-            dispatch(fetchEvents());
-        } else {
-            setAvailableEvents(events.filter(e => {
-                return e.canMintCertificate && getEventTimeStatus(DateTime.fromISO(e.date), e.duration) === EventTimeStatus.PASSED;
-            }));
+        if (data) {
+            const tmpEvents = data.eventsCollection?.edges.map((item) => item.node) || [];
+            setAvailableEvents(tmpEvents as Events[]);
             if (eventId && !selectedEvent) {
-                setSelectedEvent(events.find(e => e.canMintCertificate && e.identifier === eventId));
+                setSelectedEvent(tmpEvents.find(e => e?.identifier === eventId) as Events);
             }
         }
-    }, [events, dispatch, eventId, selectedEvent]);
+    }, [data, eventId, selectedEvent]);
 
     useEffect(() => {
         loadBlockChain();
@@ -316,27 +286,26 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
 
     useEffect(() => {
         if (!account && !selectedEvent && !certificateName && !result) {
-            setStep(STEPS[0]);
+            setStep(PROGRESS_STEPS[0]);
         } else if (account && !selectedEvent && !certificateName && !result) {
-            setStep(STEPS[1]);
+            setStep(PROGRESS_STEPS[1]);
         } else if (account && selectedEvent && !certificateName && !result) {
-            setStep(STEPS[2]);
+            setStep(PROGRESS_STEPS[2]);
         } else if (account && selectedEvent && certificateName && !result) {
-            setStep(STEPS[3]);
+            setStep(PROGRESS_STEPS[3]);
         } else if (account && selectedEvent && certificateName && result) {
-            setStep(STEPS[4]);
+            setStep(PROGRESS_STEPS[4]);
         }
     }, [account, selectedEvent, certificateName, result]);
 
-    if (eventsError) {
-        return <p style={{ margin: 15 }}>{t('GENERAL.error')}! {eventsError.message}</p>;
+    if (queryError) {
+        return <p style={{ margin: 15 }}>{t('GENERAL.error')}! {queryError.message}</p>;
     }
 
-    if (status === 'loading') {
+    if (fetching) {
         return <p style={{ margin: 15 }}>{t('GENERAL.loading')}</p>;
     }
 
-    // @ts-ignore
     if (!window.ethereum) {
         return (
             <IonPage>
@@ -431,7 +400,7 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                     <hr className="line-separator" />
                     <div style={{ marginBottom: 30 }}>
                         <div className="progress-dots-container">
-                            {STEPS.map((s, index) => {
+                            {PROGRESS_STEPS.map((s, index) => {
                                 const isActive = step.id >= s.id;
                                 return (
                                     <div
@@ -503,7 +472,7 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                                         <IonText color="tertiary">
                                             <h2>{t('CERTIFICATES.selectedEvent')}</h2>
                                         </IonText>
-                                        <p>{selectedEvent.title}</p>
+                                        <p>{selectedEvent.event_title}</p>
                                     </IonLabel>
                                     {!result &&
                                         <IonButton
@@ -540,7 +509,7 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                             }
                         </>
                     }
-                    {!!error ?
+                    {error ?
                         <IonItem color="danger">
                             <IonLabel style={{ whiteSpace: 'normal' }}>
                                 <h2><b>{t('GENERAL.error')}</b></h2>
@@ -552,7 +521,7 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                                     </Trans>
                                 </p>
                             </IonLabel>
-                            {error.canDismiss ?
+                            {error.canDismiss &&
                                 <IonButton
                                     color="light"
                                     fill="clear"
@@ -561,19 +530,16 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                                 >
                                     <IonIcon icon={closeCircleOutline} slot="icon-only" />
                                 </IonButton>
-                                :
-                                <>
-                                    {error.canDismiss !== undefined &&
-                                        <IonButton
-                                            color="light"
-                                            fill="clear"
-                                            slot="end"
-                                            onClick={reloadPage}
-                                        >
-                                            <IonIcon icon={refresh} slot="icon-only" />
-                                        </IonButton>
-                                    }
-                                </>
+                            }
+                            {error.canDismiss !== undefined &&
+                                <IonButton
+                                    color="light"
+                                    fill="clear"
+                                    slot="end"
+                                    onClick={reloadPage}
+                                >
+                                    <IonIcon icon={refresh} slot="icon-only" />
+                                </IonButton>
                             }
                         </IonItem>
                         :
@@ -611,7 +577,7 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                                             {availableEvents?.map(event => {
                                                 return (
                                                     <IonCol
-                                                        key={event.id}
+                                                        key={event?.id}
                                                         sizeXs="12"
                                                         sizeSm="6"
                                                         sizeMd="6"
@@ -620,7 +586,7 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                                                         style={{ padding: 0 }}
                                                     >
                                                         <EventChoice
-                                                            event={event}
+                                                            event={event as Events}
                                                             onClick={eventClickHandler}
                                                         />
                                                     </IonCol>
@@ -668,12 +634,12 @@ const Certificates: React.FC<RouteComponentProps> = ({ location }) => {
                                             </div>
                                             <div className="certificate-preview-event">
                                                 <IonText color="primary">
-                                                    <p><b>{selectedEvent?.title}</b></p>
+                                                    <p><b>{selectedEvent?.event_title}</b></p>
                                                 </IonText>
                                             </div>
                                             <div className="certificate-preview-date">
                                                 <IonText color="tertiary">
-                                                    <p>Milano, {DateTime.fromISO(selectedEvent?.date as string).toLocaleString()}</p>
+                                                    <p>Milano, {DateTime.fromISO(selectedEvent?.start_timestamp as string).toLocaleString()}</p>
                                                 </IonText>
                                             </div>
                                         </div>

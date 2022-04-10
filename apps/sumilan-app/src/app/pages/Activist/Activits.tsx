@@ -8,11 +8,7 @@ import {
     IonToolbar,
     IonButton,
     IonIcon,
-    IonText,
     useIonAlert,
-    IonGrid,
-    IonRow,
-    IonCol,
     IonSpinner,
 } from "@ionic/react";
 import { mailOutline } from "ionicons/icons";
@@ -28,9 +24,9 @@ import { ActivistRequest } from "../../models/activist-request.model";
 import { loadRequest, registerRequest } from "../../services/activist-request/activistRequest";
 import InputComponent from "../../components/Input/InputComponent";
 import CenteredContainer from "../../components/CenteredContainer/CenteredContainer";
+import ChapterName from "../../components/ChapterName/ChapterName";
 
 import './Activist.css';
-import ChapterName from "../../components/ChapterName/ChapterName";
 
 const validationSchema = object().shape({
     email: string().required('emailRequired').email('emailInvalid'),
@@ -78,13 +74,11 @@ const Activist: React.FC = () => {
     }
 
     enrollActivist = request && request.accepted ? (
-        <>
-            <p>
-                <i>
-                    {t('ACTIVIST.accepted', { date: DateTime.fromISO(request.timestamp).toLocaleString() })}
-                </i>
-            </p>
-        </>
+        <p>
+            <i>
+                {t('ACTIVIST.accepted', { date: DateTime.fromISO(request.created_at).toLocaleString() })}
+            </i>
+        </p>
     ) : (<>
         <p>{t('ACTIVIST.moreInfo')}</p>
         <form onSubmit={handleSubmit(submitRequest)}>

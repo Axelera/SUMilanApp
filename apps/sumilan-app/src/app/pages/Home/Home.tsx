@@ -15,6 +15,7 @@ import {
     IonSkeletonText,
     useIonAlert,
 } from '@ionic/react';
+import { SearchbarChangeEventDetail } from '@ionic/core';
 import { RouteComponentProps } from 'react-router';
 import { search } from 'ionicons/icons';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -22,27 +23,30 @@ import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 
 import EventCardComponent from '../../components/EventCard/EventCardComponent';
-import { EventModel, EventRelatorModel, EventStateModel } from '../../models/event.model';
-import { EventTimeStatus, getEventTimeStatus } from '../../utils/eventTimeUtils';
-import { fetchEvents } from '../../store/events/eventsSlice';
 import { ActivistRequestState } from '../../models/activist-request.model';
 import { loadActivistRequest, storeActivistRequest } from '../../store/activist/activistSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { Events, EventTimeStatus, useGetEventsQuery } from '@sumilan-app/api';
 
 import './Home.css';
 
 interface GroupedEventsModel {
-    passed: EventModel[];
-    scheduled: EventModel[];
-    today: EventModel[];
+    passed: Partial<Events>[];
+    scheduled: Partial<Events>[];
+    today: Partial<Events>[];
 }
 
-const EventsList = (data: { events: EventModel[], title: any, props: any }) => {
+interface EventsListComponentWithRouteProps extends RouteComponentProps {
+    events: Partial<Events>[];
+    title: string;
+}
+
+const EventsList: React.FC<EventsListComponentWithRouteProps> = ({ events, title, ...props }) => {
     return (
         <React.Fragment>
-            {data.title}
+            <div className="events-separator">{title}</div>
             <IonRow>
-                {data.events.map(event => {
+                {events.map(event => {
                     return (
                         <IonCol
                             key={event.id}
@@ -53,7 +57,7 @@ const EventsList = (data: { events: EventModel[], title: any, props: any }) => {
                             sizeXl="4"
                             style={{ padding: 0 }}
                         >
-                            <EventCardComponent {...data.props} event={event} />
+                            <EventCardComponent {...props} event={event} />
                         </IonCol>
                     );
                 })}
@@ -62,20 +66,11 @@ const EventsList = (data: { events: EventModel[], title: any, props: any }) => {
     );
 };
 
-const isQueryInRelators = (query: string, relators: EventRelatorModel[] | undefined): boolean => {
-    if (relators) {
-        for (const relator of relators) {
-            if (relator.name.toLowerCase().includes(query)) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
 const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     const dispatch = useAppDispatch();
-    const { items, status, error } = useAppSelector<EventStateModel>(state => state.events);
+    const [events] = useGetEventsQuery();
+    const { data, error, fetching } = events;
+
     const activistRequestState = useAppSelector<ActivistRequestState>(state => state.activistRequest);
 
     const [isSearchbarVisible, setIsSearchbarVisible] = useState(false);
@@ -96,8 +91,8 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
         setIsSearchbarVisible((state) => !state);
     }
 
-    const searchInputHandler = (data: any) => {
-        const input = data.detail.value?.trim()?.toLowerCase();
+    const searchInputHandler = (data: CustomEvent<SearchbarChangeEventDetail>) => {
+        const input = data.detail.value?.trim()?.toLowerCase() || '';
         setSearchQuery(input);
     };
 
@@ -120,34 +115,36 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     }, [present, history, dispatch, t]);
 
     useEffect(() => {
-        let fEvents = [...items];
-        if (searchQuery) {
-            fEvents = items.filter(ev => {
-                return ev.title.toLowerCase().includes(searchQuery) ||
-                    ev.type.toLowerCase().includes(searchQuery) ||
-                    ev.description.toLowerCase().includes(searchQuery) ||
-                    isQueryInRelators(searchQuery, ev.relators) ||
-                    isQueryInRelators(searchQuery, ev.moderators);
-            });
-        }
+        const fEvents = data?.eventsCollection?.edges.map(item => item.node) || [];
         const groupedEvents: GroupedEventsModel = {
             passed: [],
             scheduled: [],
             today: [],
-        }
+        };
         for (const ev of fEvents) {
-            const evDateTime = DateTime.fromISO(ev.date);
-            if (getEventTimeStatus(evDateTime, ev.duration) === EventTimeStatus.PASSED) {
-                groupedEvents.passed.push(ev);
-            } else if (getEventTimeStatus(evDateTime, ev.duration) === EventTimeStatus.SCHEDULED) {
-                groupedEvents.scheduled.push(ev);
-            } else {
-                groupedEvents.today.push(ev);
+            if (!searchQuery || (searchQuery &&
+                ev?.event_title.toLowerCase().includes(searchQuery) ||
+                ev?.event_type.toLowerCase().includes(searchQuery) ||
+                ev?.event_description?.toLowerCase().includes(searchQuery)
+            )) {
+                if (ev?.event_time_status === EventTimeStatus.Passed) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    //@ts-ignore
+                    groupedEvents.passed.push(ev);
+                } else if (ev?.event_time_status === EventTimeStatus.Scheduled) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    //@ts-ignore
+                    groupedEvents.scheduled.push(ev);
+                } else {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    //@ts-ignore
+                    groupedEvents.today.push(ev);
+                }
             }
         }
         groupedEvents.passed = groupedEvents.passed.reverse();
         setFilteredEvents(groupedEvents);
-    }, [searchQuery, items]);
+    }, [searchQuery, data]);
 
     useEffect(() => {
         if (isSearchbarVisible) {
@@ -156,7 +153,6 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     }, [isSearchbarVisible]);
 
     useEffect(() => {
-        dispatch(fetchEvents());
         dispatch(loadActivistRequest());
     }, [dispatch]);
 
@@ -214,7 +210,7 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
         );
     }
 
-    if (status === 'loading') {
+    if (fetching) {
         return (
             <IonPage>
                 <IonHeader>
@@ -253,14 +249,32 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
             </IonHeader>
             <IonContent fullscreen>
                 <IonGrid style={{ padding: 0 }}>
-                    {filteredEvents.today.length > 0 ? <EventsList events={filteredEvents.today} title={<div className="events-separator">{t('HOME.Events.today')}</div>} props={{ ...props }} /> : null}
-                    {filteredEvents.scheduled.length > 0 ? <EventsList events={filteredEvents.scheduled} title={<div className="events-separator">{t('HOME.Events.scheduled')}</div>} props={{ ...props }} /> : null}
-                    {filteredEvents.passed.length > 0 ? <EventsList events={filteredEvents.passed} title={<div className="events-separator">{t('HOME.Events.past')}</div>} props={{ ...props }} /> : null}
+                    {filteredEvents.today.length > 0 &&
+                        <EventsList
+                            events={filteredEvents.today}
+                            title={t('HOME.Events.today')}
+                            {...props}
+                        />
+                    }
+                    {filteredEvents.scheduled.length > 0 &&
+                        <EventsList
+                            events={filteredEvents.scheduled}
+                            title={t('HOME.Events.scheduled')}
+                            {...props}
+                        />
+                    }
+                    {filteredEvents.passed.length > 0 &&
+                        <EventsList
+                            events={filteredEvents.passed}
+                            title={t('HOME.Events.past')}
+                            {...props}
+                        />
+                    }
                     {isSearchbarVisible &&
                         filteredEvents.passed.length === 0 &&
                         filteredEvents.scheduled.length === 0 &&
-                        filteredEvents.today.length === 0 ?
-                        <p style={{ margin: 15 }}>{t('HOME.Search.empty')}</p> : null
+                        filteredEvents.today.length === 0 &&
+                        <p style={{ margin: 15 }}>{t('HOME.Search.empty')}</p>
                     }
                 </IonGrid>
             </IonContent>

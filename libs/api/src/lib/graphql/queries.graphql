@@ -1,0 +1,154 @@
+query GetEvents {
+  eventsCollection {
+    edges {
+      node {
+        id
+        identifier
+        event_image_url
+        event_title
+        event_description
+        start_timestamp
+        event_type
+        duration
+        canceled
+        event_time_status
+        video_url
+        voting_url
+        slidesCollection {
+          totalCount
+        }
+      }
+    }
+  }
+}
+
+query GetEventDetails($identifier: String!) {
+  eventsCollection(filter: {identifier: {eq: $identifier}}) {
+    edges {
+      node {
+        start_timestamp
+        duration
+        event_description
+        event_image_url
+        event_time_status
+        event_title
+        event_type
+        eventbrite_event_id
+        facebook_video_url
+        id
+        identifier
+        linkedin_video_url
+        room_url
+        slides_auth_required
+        tickets_type
+        tickets_url
+        twitter_video_url
+        video_url
+        voting_url
+        canceled
+        event_speakerCollection {
+          edges {
+            node {
+              speakers {
+                linkedin_url
+                facebook_url
+                id
+                speaker_description
+                speaker_image_url
+                speaker_name
+                twitter_url
+                website_url
+              }
+              speaker_type
+            }
+          }
+        }
+        slidesCollection {
+          edges {
+            node {
+              id
+              show_before_event_start
+              slide_description
+              slide_title
+              slide_type
+              slide_url
+            }
+          }
+          totalCount
+        }
+      }
+    }
+  }
+}
+
+query GetMintableEvents {
+  eventsCollection(
+    filter: {
+      can_mint_certificate: {
+        eq: true
+      },
+      end_timestamp: {
+        lt: "now()"
+      }
+    }
+  ) {
+    edges {
+      node {
+        id
+        identifier
+        event_image_url
+        event_title
+        event_description
+        start_timestamp
+        event_type
+        duration
+        canceled
+        event_time_status
+        eventbrite_event_id
+      }
+    }
+  }
+}
+
+query GetEventToMint($identifier: String!) {
+  eventsCollection(
+    filter: {
+      identifier: {
+        eq: $identifier
+      },
+      can_mint_certificate: {
+        eq: true
+      },
+      end_timestamp: {
+        lt: "now()"
+      }
+    }
+  ) {
+    edges {
+      node {
+        id
+        identifier
+        event_title
+        start_timestamp
+        event_time_status
+      }
+    }
+  }
+}
+
+query CheckActivistRequest($email: String!) {
+  activist_requestsCollection(
+    filter: {
+      email: {
+        eq: $email
+      }
+    }
+  ) {
+    edges {
+      node {
+        id
+        email
+      }
+    }
+  }
+}

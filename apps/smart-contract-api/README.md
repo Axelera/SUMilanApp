@@ -29,10 +29,9 @@ CONTRACT_ADDRESS="<the contract address>"
 
 PINATA_API_KEY="<obtained in the requirements>"
 PINATA_SECRET_API_KEY="<obtained in the requirements>"
-PINATA_JWT="<obtained in the requirements>"
 
-SUPABASE_URL="<obtained in the requirements>"
-SUPABASE_KEY="<obtained in the requirements>"
+NX_SUPABASE_GRAPHQL_ENDPOINT="<obtained in the requirements>"
+NX_SUPABASE_PUBLIC_KEY="<obtained in the requirements>"
 ```
 
 ### Run

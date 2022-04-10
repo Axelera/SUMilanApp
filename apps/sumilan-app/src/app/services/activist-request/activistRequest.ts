@@ -10,19 +10,16 @@ export const loadRequest = async (): Promise<ActivistRequest | null> => {
 
 export const registerRequest = async (email: string, accepted: boolean): Promise<PostgrestResponse<ActivistRequest> | undefined> => {
     if (email) {
-        const { data } = await supabase.from<ActivistRequest>('activist-requests').select('*').eq('email', email);
+        const fromTable = supabase.from<ActivistRequest>('activist_requests');
+        const { data } = await fromTable.select('*').eq('email', email);
         let res: PostgrestResponse<ActivistRequest>;
         if (data && data.length > 0) {
-            res = await supabase
-                .from<ActivistRequest>('activist-requests')
-                .update({ accepted, timestamp: new Date().toUTCString() })
-                .match({ email });
+            res = await fromTable.update({
+                accepted,
+                created_at: new Date().toUTCString(),
+            }).match({ email });
         } else {
-            res = await supabase
-                .from<ActivistRequest>('activist-requests')
-                .insert([
-                    { email, accepted }
-                ]);
+            res = await fromTable.insert([{ email, accepted }]);
         }
         if (res.data) {
             await storage.setObject('enrolled-activist', res.data[0]);

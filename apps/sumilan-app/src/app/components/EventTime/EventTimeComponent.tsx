@@ -8,9 +8,10 @@ import { DateTime } from "luxon";
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { EventTimeStatus, formatTimeDuration } from '../../utils/eventTimeUtils';
+import { formatTimeDuration } from '../../utils/eventTimeUtils';
 import { EventTimeContext } from '../../contexts/EventTime';
 import { EventTimeContextModel } from '../../models/event.model';
+import { EventTimeStatus } from '@sumilan-app/api';
 
 import './EventTimeComponent.css';
 
@@ -26,38 +27,38 @@ const TimeIcon = () => {
     return <IonIcon icon={timeOutline} className="time-icon" />;
 };
 
-const TimeContainer = (props: any) => {
+const TimeContainer: React.FC = ({ children }) => {
     return (
-        <p className="time-container"><TimeIcon />{props.children}</p>
+        <p className="time-container"><TimeIcon />{children}</p>
     );
 };
 
-const EventTimeComponent: React.FC<EventTimeProps> = (props: EventTimeProps) => {
-    const dt = DateTime.fromISO(props.date);
+const EventTimeComponent: React.FC<EventTimeProps> = ({ date, duration }) => {
+    const dt = DateTime.fromISO(date);
     const { timeStatus: eventTimeStatus } = useContext(EventTimeContext) as EventTimeContextModel;
 
     const { t } = useTranslation();
 
-    if (eventTimeStatus === EventTimeStatus.PASSED) {
+    if (eventTimeStatus === EventTimeStatus.Passed) {
         // yesterday or before
         return (
             <TimeContainer>
-                {dt.toLocaleString(dateFormat)} ({formatTimeDuration(props.duration)})
+                {dt.toLocaleString(dateFormat)} ({formatTimeDuration(duration)})
             </TimeContainer>
         );
-    } else if (eventTimeStatus === EventTimeStatus.TODAY_SCHEDULED) {
+    } else if (eventTimeStatus === EventTimeStatus.TodayScheduled) {
         return (
             <TimeContainer>
-                {t('EVENT.Time.today', { time: dt.toLocaleString(DateTime.TIME_24_SIMPLE) })} ({formatTimeDuration(props.duration)})
+                {t('EVENT.Time.today', { time: dt.toLocaleString(DateTime.TIME_24_SIMPLE) })} ({formatTimeDuration(duration)})
             </TimeContainer>
         );
-    } else if (eventTimeStatus === EventTimeStatus.TODAY_PASSED) {
+    } else if (eventTimeStatus === EventTimeStatus.TodayPassed) {
         return (
             <TimeContainer>
-                {t('EVENT.Time.today', { time: dt.toLocaleString(DateTime.TIME_24_SIMPLE) })} ({t('EVENT.Time.ended', { time: dt.plus({ minutes: props.duration }).toLocaleString(DateTime.TIME_24_SIMPLE) })})
+                {t('EVENT.Time.today', { time: dt.toLocaleString(DateTime.TIME_24_SIMPLE) })} ({t('EVENT.Time.ended', { time: dt.plus({ minutes: duration }).toLocaleString(DateTime.TIME_24_SIMPLE) })})
             </TimeContainer>
         );
-    } else if (eventTimeStatus === EventTimeStatus.TODAY_LIVE) {
+    } else if (eventTimeStatus === EventTimeStatus.TodayLive) {
         return (
             <span>
                 <IonChip style={{ marginLeft: 0 }} color="danger" outline>
@@ -67,15 +68,15 @@ const EventTimeComponent: React.FC<EventTimeProps> = (props: EventTimeProps) => 
                     <IonIcon icon={ellipse} style={{ fontSize: '12px' }} className="blinking" />
                 </IonChip>
                 ({t('EVENT.Time.ends', {
-                    duration: formatTimeDuration(props.duration),
-                    time: dt.plus({ minutes: props.duration }).toLocaleString(DateTime.TIME_24_SIMPLE),
+                    duration: formatTimeDuration(duration),
+                    time: dt.plus({ minutes: duration }).toLocaleString(DateTime.TIME_24_SIMPLE),
                 })})
             </span>
         );
-    } else if (eventTimeStatus === EventTimeStatus.SCHEDULED) {
+    } else if (eventTimeStatus === EventTimeStatus.Scheduled) {
         return (
             <TimeContainer>
-                {dt.toLocaleString(dateFormat)} ({formatTimeDuration(props.duration)})
+                {dt.toLocaleString(dateFormat)} ({formatTimeDuration(duration)})
             </TimeContainer>
         );
     }

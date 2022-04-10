@@ -8,8 +8,10 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/notify-activist-request",
-        "main": "apps/notify-activist-request/src/index.js",
-        "tsConfig": "apps/notify-activist-request/tsconfig.app.json"
+        "main": "apps/notify-activist-request/src/index.ts",
+        "tsConfig": "apps/notify-activist-request/tsconfig.app.json",
+        "outputFileName": "index.js",
+        "externalDependencies": "none"
       },
       "configurations": {
         "production": {
@@ -30,7 +32,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/notify-activist-request/**/*.js"]
+        "lintFilePatterns": ["apps/notify-activist-request/**/*.ts"]
       }
     },
     "test": {

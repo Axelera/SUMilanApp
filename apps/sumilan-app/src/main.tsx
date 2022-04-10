@@ -1,19 +1,32 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createClient, Provider } from 'urql';
+import { Provider as StoreProvider } from 'react-redux'
+
 import App from './app/App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux'
 import { store } from './app/store/store';
 import { AuthProvider } from './app/contexts/Auth';
 
+const client = createClient({
+  url: process.env['NX_SUPABASE_GRAPHQL_ENDPOINT'] as string,
+  fetchOptions: () => ({
+    headers: {
+      apikey: process.env['NX_SUPABASE_PUBLIC_KEY'] as string,
+    },
+  })
+});
+
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
+    <StoreProvider store={store}>
       <AuthProvider>
-        <App />
+        <Provider value={client}>
+          <App />
+        </Provider>
       </AuthProvider>
-    </Provider>
+    </StoreProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

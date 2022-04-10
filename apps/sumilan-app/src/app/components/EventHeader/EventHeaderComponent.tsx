@@ -15,16 +15,16 @@ import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { EventTimeContext } from '../../contexts/EventTime';
-import { EventModel, EventTimeContextModel } from '../../models/event.model';
-import { EventTimeStatus } from '../../utils/eventTimeUtils';
+import { EventTimeContextModel } from '../../models/event.model';
+import { Events, EventTimeStatus } from '@sumilan-app/api';
 
 import './EventHeaderComponent.css';
 
 type Props = {
-    event: EventModel;
+    event: Partial<Events>;
 };
 
-const EventHeaderComponent: React.FC<Props> = (props: Props) => {
+const EventHeaderComponent: React.FC<Props> = ({ event }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isShared, setIsShared] = useState(false);
     const [present] = useIonAlert();
@@ -32,10 +32,10 @@ const EventHeaderComponent: React.FC<Props> = (props: Props) => {
     const { timeStatus } = useContext(EventTimeContext) as EventTimeContextModel;
 
     const shareButtonHandler = async () => {
-        const url = `https://app.singularityumilan.com/event/${props.event.identifier}`;
+        const url = `https://app.singularityumilan.com/event/${event.identifier}`;
         const shareData = {
             title: t('SHARE.Event.title'),
-            text: t('SHARE.Event.message', {eventTitle: props.event.title}),
+            text: t('SHARE.Event.message', { eventTitle: event.event_title }),
             url,
         };
         if (navigator.share?.name) {
@@ -90,14 +90,14 @@ const EventHeaderComponent: React.FC<Props> = (props: Props) => {
     };
 
     const liveIndicator = () => {
-        if (timeStatus === EventTimeStatus.TODAY_LIVE) {
+        if (timeStatus === EventTimeStatus.TodayLive) {
             return (
                 <IonButton color="danger">
                     <IonIcon slot="icon-only" icon={ellipse} size="small" className="blinking" />
                 </IonButton>
             );
         }
-        return <></>;
+        return null;
     };
 
     const shareButton = isLoading ?
@@ -115,7 +115,7 @@ const EventHeaderComponent: React.FC<Props> = (props: Props) => {
                 <IonButtons slot="start">
                     <IonBackButton defaultHref="/home" />
                 </IonButtons>
-                <IonTitle>{props.event.title}</IonTitle>
+                <IonTitle>{event.event_title}</IonTitle>
                 <IonButtons slot="end">
                     {liveIndicator()}
                     {shareButton}

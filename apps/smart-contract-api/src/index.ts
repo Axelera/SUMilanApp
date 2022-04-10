@@ -1,26 +1,24 @@
-const { mintNFT, checkIfCanMint } = require('./app/mint-nft');
-const { generateCertificateImg } = require('./app/img-generator');
-const { getEventData } = require('./app/event-query');
-const { uploadToIPFS } = require('./app/pinata-upload');
-const { getNFTMetadata } = require('./app/utils');
+import { format } from 'date-fns';
 
-exports.handler = async (event, context, callback) => {
+import { getEventData } from './app/database';
+import { generateCertificateImg } from './app/img-generator';
+import { checkIfCanMint, mintNFT } from './app/mint-nft';
+import { uploadToIPFS } from './app/pinata-upload';
+import { getNFTMetadata } from './app/utils';
+
+export const handler = async (event, context, callback) => {
   try {
-    // console.log(event);
-    const { recipientAddress, recipientName, eventId } = event;
+    const { recipientAddress, recipientName, eventIdentifier } = event;
 
-    const eventData = await getEventData(eventId);
-    if (eventData.error) {
-      callback(new Error(`Error: ${eventData.error}`));
-      return;
-    }
+    const eventData = await getEventData(eventIdentifier);
+    const eventDate = format(new Date(eventData.start_timestamp), 'dd/MM/yyyy');
 
-    await checkIfCanMint(recipientAddress, 'ipfs://dummyURI', eventId);
+    await checkIfCanMint(recipientAddress, 'ipfs://dummyURI', eventIdentifier);
 
     const certificateBuffer = await generateCertificateImg(
       recipientName,
-      eventData.title,
-      `Milano, ${eventData.date}`
+      eventData.event_title,
+      `Milano, ${eventDate}`
     );
     const certificateIpfsHash = await uploadToIPFS(
       certificateBuffer,
@@ -29,8 +27,8 @@ exports.handler = async (event, context, callback) => {
 
     const nftMetadata = getNFTMetadata(
       recipientName,
-      eventData.title,
-      eventData.date,
+      eventData.event_title,
+      eventDate,
       certificateIpfsHash
     );
     // console.log(nftMetadata);
@@ -41,7 +39,7 @@ exports.handler = async (event, context, callback) => {
     // console.log(`NFT metadata uploaded to IPFS: ${nftMetadataIpfsHash}`);
 
     const tokenUri = `ipfs://${nftMetadataIpfsHash}`;
-    const txHash = await mintNFT(recipientAddress, tokenUri, eventId);
+    const txHash = await mintNFT(recipientAddress, tokenUri, eventIdentifier);
     return {
       statusCode: 200,
       body: JSON.stringify({

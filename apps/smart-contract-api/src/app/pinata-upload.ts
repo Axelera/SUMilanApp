@@ -1,13 +1,13 @@
-const { Readable } = require('stream');
-const pinataSDK = require('@pinata/sdk');
+import { Readable } from 'stream';
+import pinataSDK from '@pinata/sdk';
 
-const pinataApiKey = process.env.PINATA_API_KEY;
-const pinataSecretApiKey = process.env.PINATA_SECRET_API_KEY;
+const pinataApiKey = process.env['PINATA_API_KEY'];
+const pinataSecretApiKey = process.env['PINATA_SECRET_API_KEY'];
 const pinata = pinataSDK(pinataApiKey, pinataSecretApiKey);
 
 pinata
   .testAuthentication()
-  .then((result) => {
+  .then(() => {
     //handle successful authentication here
     console.log('Successfully authenticated to Pinata');
   })
@@ -16,17 +16,18 @@ pinata
     console.log(err);
   });
 
-const uploadToIPFS = (buffer, name) => {
+export const uploadToIPFS = (buffer: Buffer, name: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     const readableStream = Readable.from(buffer);
-    const options = {
-      pinataOptions: {
-        cidVersion: 0,
-      },
-    };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     readableStream.path = name;
     pinata
-      .pinFileToIPFS(readableStream, options)
+      .pinFileToIPFS(readableStream, {
+        pinataOptions: {
+          cidVersion: 0,
+        },
+      })
       .then((result) => {
         resolve(result.IpfsHash);
       })
@@ -38,5 +39,3 @@ const uploadToIPFS = (buffer, name) => {
       });
   });
 };
-
-module.exports.uploadToIPFS = uploadToIPFS;

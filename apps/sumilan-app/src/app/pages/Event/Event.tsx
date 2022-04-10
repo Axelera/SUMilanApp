@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {
     IonButton,
     IonContent,
@@ -22,13 +23,13 @@ import Live from './Live/Live';
 import Mentimeter from './Mentimeter/Mentimeter';
 import Slides from './Slides/Slides';
 import Info from './Info/Info';
-import { EventModel, EventStateModel } from '../../models/event.model';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { fetchEvents } from '../../store/events/eventsSlice';
 import { VideoPlayerProvider } from '../../contexts/VideoPlayer';
 import { EventTimeProvider } from '../../contexts/EventTime';
+import { Events, useGetEventDetailsQuery } from '@sumilan-app/api';
 
 import './Event.css';
+import { EventDetailsModel } from '../../models/event.model';
+import { getRelatorsAndModerators } from '../../utils/events';
 
 const getCurrentUrl = (url: string) => {
     if (url.endsWith('/')) {
@@ -37,36 +38,35 @@ const getCurrentUrl = (url: string) => {
     return url;
 };
 
-interface EventPageProps extends RouteComponentProps<{
-    id: string;
-}> { };
-
-const Event: React.FC<EventPageProps> = ({ history, match }) => {
+const Event: React.FC<RouteComponentProps<{ id: string; }>> = ({ history, match }) => {
     const id = match.params.id;
     const currentUrl = getCurrentUrl(match.url);
 
-    const dispatch = useAppDispatch();
-    const { items, status, error } = useAppSelector<EventStateModel>(state => state.events);
-    const [event, setEvent] = useState(items.find(ev => ev.identifier === id));
+    const [eventQueryResult] = useGetEventDetailsQuery({ variables: { identifier: id } });
+    const { data, error, fetching } = eventQueryResult;
+    const [event, setEvent] = useState<EventDetailsModel>();
     const { t } = useTranslation();
 
     useEffect(() => {
-        if (!items || items.length === 0) {
-            dispatch(fetchEvents());
-        } else {
-            setEvent(items.find(ev => ev.identifier === id));
+        if (data?.eventsCollection?.edges && data?.eventsCollection?.edges.length > 0) {
+            if (data?.eventsCollection?.edges[0].node) {
+                // @ts-ignore
+                setEvent({
+                    ...data?.eventsCollection?.edges[0].node,
+                    // @ts-ignore
+                    ...getRelatorsAndModerators(data?.eventsCollection?.edges[0].node)
+                });
+            }
         }
-    }, [items, dispatch, event, id]);
+    }, [data]);
 
     if (error) {
         return <p style={{ margin: 15 }}>{t('GENERAL.error')}! {error.message}</p>;
     }
 
-    if (status === 'loading') {
+    if (fetching) {
         return <p style={{ margin: 15 }}>{t('GENERAL.loading')}</p>;
     }
-
-    console.log(event);
 
     if (!event) {
         return (
@@ -86,23 +86,11 @@ const Event: React.FC<EventPageProps> = ({ history, match }) => {
         );
     }
 
-    const routes = ['info'];
-
-    if (event?.videoUrl) {
-        routes.push('live');
-    }
-
-    if (event?.votingUrl) {
-        routes.push('mentimeter');
-    }
-
-    if (event?.slides && event?.slides.length > 0) {
-        routes.push('slides');
-    }
-
+    const additionalRoutes: string[] = [];
     const additionalTabButtons = [];
 
-    if (event?.videoUrl) {
+    if (event.video_url) {
+        additionalRoutes.push('live');
         additionalTabButtons.push(
             <IonTabButton key="live-tab-button" tab="live" href={`${currentUrl}/live`}>
                 <IonLabel>{t('EVENT.LIVE.title')}</IonLabel>
@@ -111,7 +99,8 @@ const Event: React.FC<EventPageProps> = ({ history, match }) => {
         );
     }
 
-    if (event?.votingUrl) {
+    if (event.voting_url) {
+        additionalRoutes.push('mentimeter');
         additionalTabButtons.push(
             <IonTabButton key="mentimeter-tab-button" tab="mentimeter" href={`${currentUrl}/mentimeter`}>
                 <IonLabel>{t('EVENT.MENTIMETER.title')}</IonLabel>
@@ -120,7 +109,8 @@ const Event: React.FC<EventPageProps> = ({ history, match }) => {
         );
     }
 
-    if ((event?.slides && event?.slides.length > 0) || (event?.preSlides && event?.preSlides.length > 0)) {
+    if (event.slidesCollection?.totalCount && event.slidesCollection?.totalCount > 0) {
+        additionalRoutes.push('slides');
         additionalTabButtons.push(
             <IonTabButton key="slides-tab-button" tab="slides" href={`${currentUrl}/slides`}>
                 <IonLabel>{t('EVENT.SLIDES.title')}</IonLabel>
@@ -129,11 +119,9 @@ const Event: React.FC<EventPageProps> = ({ history, match }) => {
         );
     }
 
-    console.log(match);
-
     return (
         <VideoPlayerProvider>
-            <EventTimeProvider date={event.date} duration={event.duration}>
+            <EventTimeProvider date={event.start_timestamp} duration={event.duration || 0}>
                 <IonTabs>
                     <IonRouterOutlet>
                         <Route
@@ -144,29 +132,38 @@ const Event: React.FC<EventPageProps> = ({ history, match }) => {
                         <Route
                             path={`${currentUrl}/info`}
                             render={() => <Info
-                                event={event as EventModel}
+                                event={event}
                             />}
                             exact
                         />
                         <Route
                             path={`${currentUrl}/live`}
-                            render={() => <Live
-                                event={event as EventModel}
-                            />}
+                            render={() => additionalRoutes.includes('live')
+                                ? <Live
+                                    event={event}
+                                />
+                                : <Redirect to={`${currentUrl}/info`} exact />
+                            }
                             exact
                         />
                         <Route
                             path={`${currentUrl}/mentimeter`}
-                            render={() => <Mentimeter
-                                event={event as EventModel}
-                            />}
+                            render={() => additionalRoutes.includes('mentimeter')
+                                ? <Mentimeter
+                                    event={event}
+                                />
+                                : <Redirect to={`${currentUrl}/info`} exact />
+                            }
                             exact
                         />
                         <Route
                             path={`${currentUrl}/slides`}
-                            render={() => <Slides
-                                event={event as EventModel}
-                            />}
+                            render={() => additionalRoutes.includes('slides')
+                                ? <Slides
+                                    event={event}
+                                />
+                                : <Redirect to={`${currentUrl}/info`} exact />
+                            }
                             exact
                         />
                     </IonRouterOutlet>
@@ -175,7 +172,7 @@ const Event: React.FC<EventPageProps> = ({ history, match }) => {
                             <IonLabel>{t('EVENT.INFO.title')}</IonLabel>
                             <IonIcon icon={informationCircleOutline}></IonIcon>
                         </IonTabButton>
-                        {additionalTabButtons.map((btn: any, index: number) => btn)}
+                        {additionalTabButtons.map((btn) => btn)}
                     </IonTabBar>
                 </IonTabs>
             </EventTimeProvider>

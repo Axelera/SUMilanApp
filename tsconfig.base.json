@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@sumilan-app/api": ["libs/api/src/index.ts"],
       "@sumilan-app/eventbrite-wrapper": [
         "libs/eventbrite-wrapper/src/index.js"
       ],

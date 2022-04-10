@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
     IonContent,
-    IonList,
     IonPage,
-    IonListHeader,
     IonFooter,
     IonButton,
     IonIcon,
@@ -17,11 +15,11 @@ import { useTranslation } from 'react-i18next';
 
 import BottomLivePlayer from '../../../components/BottomLivePlayer/BottomLivePlayer';
 import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
-import EventSlideItemComponent from '../../../components/EventSlideItemComponent/EventSlideItemComponent';
-import { EventComponentProps, EventSlideModel, LocalTicketData } from '../../../models/event.model';
+import { EventComponentProps, LocalTicketData } from '../../../models/event.model';
 import { checkHasTicket, getLocalTicket, setLocalTicket as setLocTicket } from '../../../services/cloud-functions/eventbriteWrapper';
 import InputComponent from '../../../components/Input/InputComponent';
 import CenteredContainer from '../../../components/CenteredContainer/CenteredContainer';
+import SlidesList from '../../../components/SlidesList/SlidesList';
 
 import './Slides.css';
 
@@ -29,7 +27,7 @@ const validationSchema = object().shape({
     email: string().required('emailRequired').email('emailInvalid'),
 });
 
-const Slides: React.FC<EventComponentProps> = ({ event }: EventComponentProps) => {
+const Slides: React.FC<EventComponentProps> = ({ event }) => {
     const [localTicket, setLocalTicket] = useState<LocalTicketData | null>(null);
     const { control, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(validationSchema) });
     const [ticketCheckResult, setTicketCheckResult] = useState<string | null>(null);
@@ -42,9 +40,9 @@ const Slides: React.FC<EventComponentProps> = ({ event }: EventComponentProps) =
         setIsLoading(true);
         try {
             const email = data.email.trim().toLowerCase();
-            const hasTicket = await checkHasTicket(email, event.ebEventId as string);
+            const hasTicket = await checkHasTicket(email, event.eventbrite_event_id as string);
             if (hasTicket) {
-                await setLocTicket(email, event.ebEventId as string);
+                await setLocTicket(email, event.eventbrite_event_id as string);
                 setLocalTicket({ email });
             } else {
                 setTicketCheckResult(t('SLIDES.TicketRequired.noTicket'));
@@ -57,8 +55,8 @@ const Slides: React.FC<EventComponentProps> = ({ event }: EventComponentProps) =
 
     useEffect(() => {
         const checkLocalTicket = async () => {
-            if (event.slidesAuthRequired && event.ebEventId) {
-                const localTicket = await getLocalTicket(event.ebEventId);
+            if (event.slides_auth_required && event.eventbrite_event_id) {
+                const localTicket = await getLocalTicket(event.eventbrite_event_id);
                 setLocalTicket(localTicket);
             }
         };
@@ -76,7 +74,7 @@ const Slides: React.FC<EventComponentProps> = ({ event }: EventComponentProps) =
         );
     };
 
-    if (event.slidesAuthRequired && !localTicket) {
+    if (event.slides_auth_required && !localTicket) {
         return (
             <IonPage>
                 <EventHeaderComponent event={event} />
@@ -86,7 +84,7 @@ const Slides: React.FC<EventComponentProps> = ({ event }: EventComponentProps) =
                         <h3>{t('SLIDES.TicketRequired.noTicketQuestion')}</h3>
                         <IonButton
                             color="tertiary"
-                            href={event.ticketsLink?.url}
+                            href={event.tickets_url as string}
                             strong
                         >
                             <IonIcon slot="start" icon={ticketOutline} />
@@ -119,31 +117,12 @@ const Slides: React.FC<EventComponentProps> = ({ event }: EventComponentProps) =
         <IonPage>
             <EventHeaderComponent event={event} />
             <IonContent>
-                {
-                    event.preSlides && event.preSlides.length > 0 ?
-                        (
-                            <IonList>
-                                <IonListHeader>{t('EVENT.SLIDES.studyMaterial')}</IonListHeader>
-                                {event.preSlides.map((slideData: EventSlideModel, index: number) => <EventSlideItemComponent key={Math.random()} slideData={slideData} />)}
-                            </IonList>
-                        )
-                        : null
-                }
-                {
-                    event.slides && event.slides.length > 0 ?
-                        (
-                            <IonList>
-                                <IonListHeader>{t('EVENT.SLIDES.slides')}</IonListHeader>
-                                {event.slides.map((slideData: EventSlideModel, index: number) => <EventSlideItemComponent key={Math.random()} slideData={slideData} />)}
-                            </IonList>
-                        )
-                        : null
-                }
+                <SlidesList event={event} />
             </IonContent>
             <IonFooter>
                 <BottomLivePlayer
                     eventId={event.identifier}
-                    eventImageUrl={event.imageUrl}
+                    eventImageUrl={event.event_image_url as string}
                 />
             </IonFooter>
         </IonPage>

@@ -7,7 +7,7 @@ import { VideoPlayerContext } from '../../contexts/VideoPlayer';
 import { VideoPlayerContextModel } from '../../models/videoplayer.model';
 import { EventTimeContext } from '../../contexts/EventTime';
 import { EventTimeContextModel } from '../../models/event.model';
-import { EventTimeStatus } from '../../utils/eventTimeUtils';
+import { EventTimeStatus } from '@sumilan-app/api';
 
 import './BottomLivePlayer.css';
 
@@ -34,67 +34,69 @@ const BottomLivePlayer = ({ eventId, eventImageUrl }: Props) => {
     const { isVideoPlaying, playedSeconds, videoDuration, isBottomPlayerVisible, isVideoEnded, pauseVideo, toggleVideoPlay, closeBottomPlayer } = useContext(VideoPlayerContext) as VideoPlayerContextModel;
     const { timeStatus } = useContext(EventTimeContext) as EventTimeContextModel;
 
-    const isLive = timeStatus === EventTimeStatus.TODAY_LIVE;
+    const isLive = timeStatus === EventTimeStatus.TodayLive;
 
     const onCloseBottomPlayer = () => {
         pauseVideo();
         closeBottomPlayer();
     };
 
+    if (!isBottomPlayerVisible) {
+        return null;
+    }
+
     return (
-        <>
-            {isBottomPlayerVisible ? <div className="bottom-video-container">
-                <Link to={`/event/${eventId}/live`} style={{ height: '100%' }}>
-                    <div className="player-image" style={{ backgroundImage: `url(${eventImageUrl})` }}></div>
-                </Link>
-                <IonToolbar color="light" className="bottom-toolbar">
-                    <IonButtons slot="start">
-                        <IonButton
-                            color="primary"
-                            fill="clear"
-                            shape="round"
-                            onClick={toggleVideoPlay}
-                        >
-                            <IonIcon slot="icon-only" icon={isVideoEnded ? reload : (isVideoPlaying ? pause : play)} />
-                        </IonButton>
-                    </IonButtons>
-                    <IonTitle style={{
-                        fontSize: 16,
-                        paddingLeft: isPlatform('ios') ? 40 : 0,
-                        paddingRight: 0,
+        <div className="bottom-video-container">
+            <Link to={`/event/${eventId}/live`} style={{ height: '100%' }}>
+                <div className="player-image" style={{ backgroundImage: `url(${eventImageUrl})` }}></div>
+            </Link>
+            <IonToolbar color="light" className="bottom-toolbar">
+                <IonButtons slot="start">
+                    <IonButton
+                        color="primary"
+                        fill="clear"
+                        shape="round"
+                        onClick={toggleVideoPlay}
+                    >
+                        <IonIcon slot="icon-only" icon={isVideoEnded ? reload : (isVideoPlaying ? pause : play)} />
+                    </IonButton>
+                </IonButtons>
+                <IonTitle style={{
+                    fontSize: 16,
+                    paddingLeft: isPlatform('ios') ? 40 : 0,
+                    paddingRight: 0,
+                }}>
+                    <div className="time-container" style={{
+                        flexDirection: isLive ? 'column' : 'row',
+                        justifyContent: isLive ? 'center' : 'flex-start',
+                        alignItems: isLive ? 'flex-start' : 'center',
                     }}>
-                        <div className="time-container" style={{
-                            flexDirection: isLive ? 'column' : 'row',
-                            justifyContent: isLive ? 'center' : 'flex-start',
-                            alignItems: isLive ? 'flex-start' : 'center',
-                        }}>
-                            <div style={{ width: 60, height: 15, fontSize: 15 }}>
-                                {formatTime(playedSeconds)}
-                            </div>
-                            {!isLive && videoDuration && <div style={{ fontSize: 11, height: 16 }}>
-                                {' / ' + formatTime(videoDuration)}
-                            </div>}
-                            {isLive && <div>
-                                <IonText color="danger">In Diretta</IonText>
-                                <IonIcon style={{ fontSize: 10, marginLeft: 5 }} color="danger" className="blinking" icon={ellipse} />
-                            </div>}
+                        <div style={{ width: 60, height: 15, fontSize: 15 }}>
+                            {formatTime(playedSeconds)}
                         </div>
-                    </IonTitle>
-                    <IonButtons slot="end">
-                        <IonButton
-                            color="dark"
-                            size="small"
-                            className="close-button"
-                            fill="clear"
-                            shape="round"
-                            onClick={onCloseBottomPlayer}
-                        >
-                            <IonIcon size="small" slot="icon-only" icon={closeCircle} />
-                        </IonButton>
-                    </IonButtons>
-                </IonToolbar>
-            </div> : <></>}
-        </>
+                        {!isLive && videoDuration && <div style={{ fontSize: 11, height: 16 }}>
+                            {' / ' + formatTime(videoDuration)}
+                        </div>}
+                        {isLive && <div>
+                            <IonText color="danger">In Diretta</IonText>
+                            <IonIcon style={{ fontSize: 10, marginLeft: 5 }} color="danger" className="blinking" icon={ellipse} />
+                        </div>}
+                    </div>
+                </IonTitle>
+                <IonButtons slot="end">
+                    <IonButton
+                        color="dark"
+                        size="small"
+                        className="close-button"
+                        fill="clear"
+                        shape="round"
+                        onClick={onCloseBottomPlayer}
+                    >
+                        <IonIcon size="small" slot="icon-only" icon={closeCircle} />
+                    </IonButton>
+                </IonButtons>
+            </IonToolbar>
+        </div>
     );
 };
 

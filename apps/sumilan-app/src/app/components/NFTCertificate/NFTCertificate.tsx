@@ -1,4 +1,4 @@
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonItem, IonLabel, IonList, IonListHeader } from "@ionic/react";
+import { IonButton, IonCard, IonCardContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader } from "@ionic/react";
 import { openOutline } from "ionicons/icons";
 
 import { NFTCertificateExtendedModel } from "../../models/certificates.model";

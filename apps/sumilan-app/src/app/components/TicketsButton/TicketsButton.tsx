@@ -3,28 +3,28 @@ import { IonButton, IonIcon } from "@ionic/react";
 import { ticketOutline, headsetOutline } from "ionicons/icons";
 import { useTranslation } from "react-i18next";
 
-import { TicketsLinkModel } from "../../models/event.model";
-import { TicketsLinkType } from "../../models/types.model";
 import { loadEventbriteWidgets } from "../../utils/eventbrite";
+import { Events, TicketsType } from "@sumilan-app/api";
 
 import 'animate.css';
 
 interface Props {
-    ticketsLink: TicketsLinkModel;
+    ticketsUrl: Events['tickets_url'];
+    ticketsType: TicketsType;
     ebEventId?: string; // eventbrite event id if ticket is eventbrite ticket
 };
 
-const TicketsButton: React.FC<Props> = ({ ticketsLink, ebEventId }) => {
+const TicketsButton: React.FC<Props> = ({ ticketsUrl, ticketsType, ebEventId }) => {
     const icon = useMemo(() => {
-        switch (ticketsLink.type) {
-            case TicketsLinkType.EVENTBRITE:
+        switch (ticketsType) {
+            case TicketsType.Eventbrite:
                 return ticketOutline;
-            case TicketsLinkType.CLUBHOUSE:
+            case TicketsType.Clubhouse:
                 return headsetOutline;
             default:
                 return ticketOutline;
         }
-    }, [ticketsLink.type]);
+    }, [ticketsType]);
     const buttonId = useMemo(() => {
         if (ebEventId) {
             return `eventbrite-widget-modal-trigger-button-${ebEventId}`;
@@ -38,7 +38,7 @@ const TicketsButton: React.FC<Props> = ({ ticketsLink, ebEventId }) => {
         if (ebEventId) {
             return event.currentTarget.click();
         }
-        window.open(ticketsLink.url, '_blank');
+        window.open(ticketsUrl as string, '_blank');
     };
 
     useEffect(() => {

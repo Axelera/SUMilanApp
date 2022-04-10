@@ -1,11 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import activistReducer from "./activist/activistSlice";
-import eventsReducer from "./events/eventsSlice";
 
 export const store = configureStore({
     reducer: {
-        events: eventsReducer,
         activistRequest: activistReducer,
     }
 });

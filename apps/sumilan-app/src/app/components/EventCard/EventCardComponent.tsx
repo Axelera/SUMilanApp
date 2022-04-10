@@ -14,19 +14,23 @@ import {
 import { fileTrayFull, help, logoYoutube, timeOutline } from "ionicons/icons";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import { RouteComponentProps } from "react-router";
 
-import { EventComponentWithRouteProps } from "../../models/event.model";
 import EventTimeComponent from "../EventTime/EventTimeComponent";
 import { EventTimeProvider } from "../../contexts/EventTime";
+import { getEventType } from "../../utils/events";
+import { Events } from "@sumilan-app/api";
 
 import './EventCardComponent.css';
 
-const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: EventComponentWithRouteProps) => {
-    const event = props.event;
+interface Props extends RouteComponentProps {
+    event?: Partial<Events>;
+}
 
-    const cardButtonClickHandler = (ev: any, page: string) => {
+const EventCardComponent: React.FC<Props> = ({ event, history }) => {
+    const cardButtonClickHandler = (ev: React.MouseEvent<HTMLIonButtonElement, MouseEvent>, page: string) => {
         ev.stopPropagation();
-        props.history.push(`/event/${event?.identifier}/${page}`);
+        history.push(`/event/${event?.identifier}/${page}`);
     };
 
     if (!event) {
@@ -76,7 +80,7 @@ const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: Event
 
     const buttons = [];
 
-    if (event.videoUrl) {
+    if (event.video_url) {
         buttons.push(
             <IonButton fill="clear" onClick={(ev) => cardButtonClickHandler(ev, 'live')} color="tertiary">
                 <IonIcon slot="icon-only" icon={logoYoutube} />
@@ -84,7 +88,7 @@ const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: Event
         );
     }
 
-    if (event.votingUrl) {
+    if (event.voting_url) {
         buttons.push(
             <IonButton fill="clear" onClick={(ev) => cardButtonClickHandler(ev, 'mentimeter')} color="tertiary">
                 <IonIcon slot="icon-only" icon={help} />
@@ -92,7 +96,7 @@ const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: Event
         );
     }
 
-    if ((event.slides && event.slides.length > 0) || (event.preSlides && event.preSlides.length > 0)) {
+    if (event.slidesCollection?.totalCount && event.slidesCollection?.totalCount > 0) {
         buttons.push(
             <IonButton fill="clear" onClick={(ev) => cardButtonClickHandler(ev, 'slides')} color="tertiary">
                 <IonIcon slot="icon-only" icon={fileTrayFull} />
@@ -101,25 +105,30 @@ const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: Event
     }
 
     return (
-        <EventTimeProvider date={event.date} duration={event.duration}>
-            <IonCard key={event.id} onClick={() => {
-                props.history.push(`/event/${event.identifier}/info`);
-            }} button={true} className="event-card">
-                <div className="card-image" style={{ backgroundImage: `url(${event.imageUrl}` }}></div>
+        <EventTimeProvider date={event.start_timestamp} duration={event.duration as number}>
+            <IonCard
+                key={event.id}
+                onClick={() => {
+                    history.push(`/event/${event.identifier}/info`);
+                }}
+                button={true}
+                className="event-card"
+            >
+                <div className="card-image" style={{ backgroundImage: `url(${event.event_image_url}` }}></div>
                 <IonCardHeader>
                     <IonCardTitle>
-                        {event.title}
+                        {event.event_title}
                     </IonCardTitle>
                     <IonCardSubtitle>
-                        {event.type.toUpperCase()}
+                        {getEventType(event.event_type)}
                     </IonCardSubtitle>
-                    <EventTimeComponent date={event.date} duration={event.duration} />
+                    <EventTimeComponent date={event.start_timestamp} duration={event.duration as number} />
                 </IonCardHeader>
                 <IonCardContent>
                     <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         <ReactMarkdown
                             rehypePlugins={[rehypeRaw]}
-                            children={event.description.replace(/\\n/g, '\n')}
+                            children={event.event_description?.replace(/\\n/g, '\n') || ''}
                             components={{
                                 p({ children }) {
                                     return (
@@ -130,13 +139,12 @@ const EventCardComponent: React.FC<EventComponentWithRouteProps> = (props: Event
                         />
                     </div>
                     {
-                        buttons.length > 0 ?
-                            <IonGrid className="event-actions-grid">
-                                <IonRow>
-                                    {buttons.map((button: any, index: number) => <IonCol key={index}>{button}</IonCol>)}
-                                </IonRow>
-                            </IonGrid>
-                            : null
+                        buttons.length > 0 &&
+                        <IonGrid className="event-actions-grid">
+                            <IonRow>
+                                {buttons.map((button, index) => <IonCol key={index}>{button}</IonCol>)}
+                            </IonRow>
+                        </IonGrid>
                     }
                 </IonCardContent>
             </IonCard>

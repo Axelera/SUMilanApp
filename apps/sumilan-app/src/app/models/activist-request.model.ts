@@ -2,7 +2,7 @@ export interface ActivistRequest {
     id: number;
     email: string;
     accepted: boolean;
-    timestamp: string;
+    created_at: string;
 }
 
 export interface AskedActivistRequest {

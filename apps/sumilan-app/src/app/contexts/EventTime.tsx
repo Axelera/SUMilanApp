@@ -2,7 +2,8 @@ import { createContext, useEffect, useState } from "react";
 import { DateTime } from "luxon";
 
 import { EventTimeContextModel } from "../models/event.model";
-import { EventTimeStatus, getEventTimeStatus, getMillisUntilLive, getMillisUntilPassed } from "../utils/eventTimeUtils";
+import { getEventTimeStatus, getMillisUntilLive, getMillisUntilPassed } from "../utils/eventTimeUtils";
+import { EventTimeStatus } from "@sumilan-app/api";
 
 export const EventTimeContext = createContext<EventTimeContextModel | null>(null);
 
@@ -17,11 +18,11 @@ export const EventTimeProvider: React.FC<Props> = ({ children, date, duration })
 
     useEffect(() => {
         let timeout: NodeJS.Timeout;
-        if (timeStatus === EventTimeStatus.TODAY_SCHEDULED) {
+        if (timeStatus === EventTimeStatus.TodayScheduled) {
             timeout = setTimeout(() => {
                 setTimeStatus(getEventTimeStatus(dt, duration));
             }, (getMillisUntilLive(dt) + 1));
-        } else if (timeStatus === EventTimeStatus.TODAY_LIVE) {
+        } else if (timeStatus === EventTimeStatus.TodayLive) {
             timeout = setTimeout(() => {
                 setTimeStatus(getEventTimeStatus(dt, duration));
             }, (getMillisUntilPassed(dt, duration) + 1));

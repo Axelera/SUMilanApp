@@ -1,32 +1,26 @@
 import { DateTime } from "luxon";
 
-export enum EventTimeStatus {
-    PASSED,
-    TODAY_PASSED,
-    TODAY_LIVE,
-    TODAY_SCHEDULED,
-    SCHEDULED,
-}
+import { EventTimeStatus } from "@sumilan-app/api";
 
 export const getEventTimeStatus = (date: DateTime, duration: number): EventTimeStatus => {
     const dt = date;
     const now = DateTime.now();
     if (dt.startOf('day') < now.startOf('day')) {
         // yesterday or before
-        return EventTimeStatus.PASSED;
+        return EventTimeStatus.Passed;
     } else if (dt.startOf('day') <= now.startOf('day')) { // === comparison doesn't work
         // today
         const diffInMinutes = dt.diffNow(['minutes']).minutes;
         if (diffInMinutes > 0) {
-            return EventTimeStatus.TODAY_SCHEDULED;
+            return EventTimeStatus.TodayScheduled;
         } else if (diffInMinutes <= 0 && diffInMinutes > -duration) {
-            return EventTimeStatus.TODAY_LIVE;
+            return EventTimeStatus.TodayLive;
         } else if (diffInMinutes < -duration) {
-            return EventTimeStatus.TODAY_PASSED;
+            return EventTimeStatus.TodayPassed;
         }
     }
     // default to tomorrow or later
-    return EventTimeStatus.SCHEDULED;
+    return EventTimeStatus.Scheduled;
 };
 
 export const formatTimeDuration = (duration: number): string => {
@@ -41,17 +35,6 @@ export const formatTimeDuration = (duration: number): string => {
     }
     return res;
 }
-
-export const isEventToday = (date: string): boolean => {
-    const dt = DateTime.fromISO(date);
-    const now = DateTime.now();
-    if (!(dt.startOf('day') < now.startOf('day')) && dt.startOf('day') <= now.startOf('day')) { // === comparison doesn't work
-        // today
-        return true;
-    }
-    // default to tomorrow or later
-    return false;
-};
 
 export const getMillisUntilLive = (date: DateTime): number => {
     const diffInMillis = date.diffNow(['milliseconds']).milliseconds;

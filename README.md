@@ -30,6 +30,7 @@ It is also a collection of past SU Milan Chapter events with related study mater
 - create a file called `.env` and put these lines inside:
 ```
 NX_SUPABASE_URL="<obtained in the requirements>"
+NX_SUPABASE_GRAPHQL_ENDPOINT="<insert here NX_SUPABASE_URL>/graphql/v1"
 NX_SUPABASE_PUBLIC_KEY="<obtained in the requirements>"
 NX_ONESIGNAL_DEVELOPMENT_KEY="<obtained in the requirements>"
 NX_ONESIGNAL_PRODUCTION_KEY="<obtained in the requirements>"
