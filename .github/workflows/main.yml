@@ -1,0 +1,32 @@
+# .github/actions/master.yml
+
+on:
+  push:
+    branches:
+      - master
+name: 🚀 Deploy webapp on push
+jobs:
+  web-deploy:
+    name: 🎉 Deploy webapp to FTP server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "14.17.0"
+
+      - name: 🔨 Build Project
+        run: |
+          npm install
+          npx nx run sumilan-app:build:production
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+        with:
+          server: ${{ secrets.ftp_server }}
+          username: ${{ secrets.ftp_username }}
+          password: ${{ secrets.ftp_password }}
+          local-dir: ./dist/apps/sumilan-app
