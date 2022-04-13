@@ -1,5 +1,3 @@
-# .github/actions/master.yml
-
 on:
   push:
     branches:
