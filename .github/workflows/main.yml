@@ -18,6 +18,17 @@ jobs:
           node-version: "14.17.0"
 
       - name: 🔨 Build Project
+        env:
+          NX_SUPABASE_URL: ${{ secrets.NX_SUPABASE_URL }}
+          NX_SUPABASE_GRAPHQL_ENDPOINT: ${{ secrets.NX_SUPABASE_GRAPHQL_ENDPOINT }}
+          NX_SUPABASE_PUBLIC_KEY: ${{ secrets.NX_SUPABASE_PUBLIC_KEY }}
+          NX_ONESIGNAL_DEVELOPMENT_KEY: ${{ secrets.NX_ONESIGNAL_DEVELOPMENT_KEY }}
+          NX_ONESIGNAL_PRODUCTION_KEY: ${{ secrets.NX_ONESIGNAL_PRODUCTION_KEY }}
+          NX_ONESIGNAL_SAFARI_WEB_ID: ${{ secrets.NX_ONESIGNAL_SAFARI_WEB_ID }}
+          NX_IBM_EVENTBRITE_WRAPPER_KEY: ${{ secrets.NX_IBM_EVENTBRITE_WRAPPER_KEY }}
+          NX_AWS_LAMBDA_CERTIFICATE_API_KEY: ${{ secrets.NX_AWS_LAMBDA_CERTIFICATE_API_KEY }}
+          NX_BUILD_NUMBER: ${{ github.run_number }}
+          NX_COMMIT_SHA: ${{ github.sha }}
         run: |
           npm install
           npx nx run sumilan-app:build:production
