@@ -17,7 +17,11 @@ jobs:
         with:
           node-version: "14.17.0"
 
-      - name: 🔨 Build Project
+      - name: 🔨 Build Nrwl Nx project
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: build
+          projects: sumilan-app
         env:
           NX_SUPABASE_URL: ${{ secrets.NX_SUPABASE_URL }}
           NX_SUPABASE_GRAPHQL_ENDPOINT: ${{ secrets.NX_SUPABASE_GRAPHQL_ENDPOINT }}
@@ -29,9 +33,7 @@ jobs:
           NX_AWS_LAMBDA_CERTIFICATE_API_KEY: ${{ secrets.NX_AWS_LAMBDA_CERTIFICATE_API_KEY }}
           NX_BUILD_NUMBER: ${{ github.run_number }}
           NX_COMMIT_SHA: ${{ github.sha }}
-        run: |
-          npm install
-          npx nx run sumilan-app:build:production
+
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
         with:
