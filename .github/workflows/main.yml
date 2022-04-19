@@ -17,11 +17,10 @@ jobs:
         with:
           node-version: "14.17.0"
 
-      - name: 🔨 Build Nrwl Nx project
-        uses: MansaGroup/nrwl-nx-action@v2
-        with:
-          targets: build
-          projects: sumilan-app
+      - name: 🔨 Build webapp
+        run: |
+          npm install
+          npx nx run sumilan-app:build:production
         env:
           NX_SUPABASE_URL: ${{ secrets.NX_SUPABASE_URL }}
           NX_SUPABASE_GRAPHQL_ENDPOINT: ${{ secrets.NX_SUPABASE_GRAPHQL_ENDPOINT }}
