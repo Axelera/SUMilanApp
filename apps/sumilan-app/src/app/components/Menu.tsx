@@ -11,13 +11,13 @@ import {
   IonMenuToggle,
 } from '@ionic/react';
 import { useLocation } from 'react-router-dom';
-import { balloonOutline, balloonSharp, documentTextOutline, documentTextSharp, globeOutline, homeOutline, homeSharp, informationCircleOutline, informationCircleSharp, logoGithub, logOutOutline, openOutline, peopleOutline, peopleSharp, school, schoolOutline } from 'ionicons/icons';
-import i18next from 'i18next';
+import { documentTextOutline, documentTextSharp, globeOutline, homeOutline, homeSharp, informationCircleOutline, informationCircleSharp, logoGithub, openOutline, peopleOutline, peopleSharp, school, schoolOutline } from 'ionicons/icons';
 import { useTranslation } from 'react-i18next';
 
 import LogoImage from './LogoImage/LogoImage';
 
 import './Menu.css';
+import { getAppVersion } from '../utils/version';
 
 interface AppPage {
   url: string;
@@ -36,11 +36,6 @@ const appPages: AppPage[] = [
     iosIcon: informationCircleOutline,
     mdIcon: informationCircleSharp,
   },
-  // {
-  //   url: '/young',
-  //   iosIcon: balloonOutline,
-  //   mdIcon: balloonSharp
-  // },
   {
     url: '/activist',
     iosIcon: peopleOutline,
@@ -62,7 +57,7 @@ const Menu: React.FC = () => {
               <IonMenuToggle key={index} autoHide={false}>
                 <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
                   <IonIcon slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
-                  <IonLabel>{t(appPage.url.substring(1).toUpperCase()+'.title')}</IonLabel>
+                  <IonLabel>{t(appPage.url.substring(1).toUpperCase() + '.title')}</IonLabel>
                 </IonItem>
               </IonMenuToggle>
             );
@@ -101,6 +96,11 @@ const Menu: React.FC = () => {
             <IonButton slot="end" fill="clear" href="https://www.robertocrosignani.com/" target="_blank">
               <IonIcon slot="icon-only" icon={globeOutline} />
             </IonButton>
+          </IonItem>
+          <IonItem lines="none">
+            <IonLabel style={{ margin: 0 }}>
+              <p>Version: {getAppVersion()}</p>
+            </IonLabel>
           </IonItem>
         </IonList>
       </IonFooter>

@@ -36,6 +36,7 @@ import Certificates from './pages/Certificates/Certificates';
 
 import en from '../assets/i18n/en.json';
 import it from '../assets/i18n/it.json';
+import { getAppVersion } from './utils/version';
 
 const oneSignalAppId = !process.env['NODE_ENV'] || process.env['NODE_ENV'] === 'development' ?
   process.env['NX_ONESIGNAL_DEVELOPMENT_KEY'] as string
@@ -79,6 +80,8 @@ i18n
       order: ["navigator"],
     },
   });
+
+console.log('VERSION:', getAppVersion());
 
 const App: React.FC = () => {
 
