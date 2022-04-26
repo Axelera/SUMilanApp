@@ -12,7 +12,6 @@ It is also a collection of past SU Milan Chapter events with related study mater
 - [Nx](https://nx.dev) used to manage the **monorepo**
 - [Hardhat](https://hardhat.org) used to develop, test, compile and deploy **smart contracts**
 - [Ethereum](https://ethereum.org) as the blockchain for **smart contracts**
-- [OneSignal](https://onesignal.com) used for **Push Notifications**
 - [IBM Cloud Functions](https://www.ibm.com/cloud/functions)+[Eventbrite API](https://www.eventbrite.com/platform/api) used to check if a user has bought a ticket from **Eventbrite**
 - [Amazon API Gateway](https://aws.amazon.com/api-gateway/)+[AWS Lambda](https://aws.amazon.com/lambda/) used to **mint NFT certificates** (see [Axelera/SUMilanCertificates](https://github.com/Axelera/SUMilanCertificates) for details)
 
@@ -20,7 +19,6 @@ It is also a collection of past SU Milan Chapter events with related study mater
 ### Requirements
 - `Node.js` and `npm`
 - Supabase API Keys ([how to obtain](https://supabase.io/docs/guides/with-react))
-- Onesignal API Keys ([how to obtain](https://documentation.onesignal.com/docs/web-push-custom-code-setup))
 - IBM Cloud Function API Key ([details](cloud-functions/README.md))
 - Amazon API Gateway API Key (see [here](https://github.com/Axelera/SUMilanCertificates/blob/master/api/lambda/README.md) for details)
 
@@ -32,9 +30,6 @@ It is also a collection of past SU Milan Chapter events with related study mater
 NX_SUPABASE_URL="<obtained in the requirements>"
 NX_SUPABASE_GRAPHQL_ENDPOINT="<insert here NX_SUPABASE_URL>/graphql/v1"
 NX_SUPABASE_PUBLIC_KEY="<obtained in the requirements>"
-NX_ONESIGNAL_DEVELOPMENT_KEY="<obtained in the requirements>"
-NX_ONESIGNAL_PRODUCTION_KEY="<obtained in the requirements>"
-NX_ONESIGNAL_SAFARI_WEB_ID="<obtained in the requirements>"
 NX_IBM_EVENTBRITE_WRAPPER_KEY="<obtained in the requirements>"
 NX_AWS_LAMBDA_CERTIFICATE_API_KEY="<obtained in the requirements>"
 ```

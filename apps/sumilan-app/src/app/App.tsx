@@ -1,8 +1,6 @@
-import { useEffect } from 'react';
 import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
-import OneSignal from 'react-onesignal';
 import i18n from "i18next";
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from "react-i18next";
@@ -38,28 +36,6 @@ import en from '../assets/i18n/en.json';
 import it from '../assets/i18n/it.json';
 import { getAppVersion } from './utils/version';
 
-const oneSignalAppId = !process.env['NODE_ENV'] || process.env['NODE_ENV'] === 'development' ?
-  process.env['NX_ONESIGNAL_DEVELOPMENT_KEY'] as string
-  :
-  process.env['NX_ONESIGNAL_PRODUCTION_KEY'] as string;
-const safariWebId = !process.env['NODE_ENV'] || process.env['NODE_ENV'] === 'development' ?
-  undefined
-  :
-  process.env['NX_ONESIGNAL_SAFARI_WEB_ID'] as string;
-const allowLocalhost = !process.env['NODE_ENV'] || process.env['NODE_ENV'] === 'development';
-
-const oneSignalConfiguration = {
-  appId: oneSignalAppId,
-  allowLocalhostAsSecureOrigin: allowLocalhost,
-  notifyButton: {
-    enable: false,
-  },
-  persistNotification: true,
-  autoResubscribe: true,
-  autoRegister: true,
-  safari_web_id: safariWebId,
-};
-
 i18n
   .use(LanguageDetector)
   .use(initReactI18next) // passes i18n down to react-i18next
@@ -84,10 +60,6 @@ i18n
 console.log('VERSION:', getAppVersion());
 
 const App: React.FC = () => {
-
-  useEffect(() => {
-    OneSignal.init(oneSignalConfiguration);
-  }, []);
 
   const homeRouter = (
     <IonSplitPane contentId="main">

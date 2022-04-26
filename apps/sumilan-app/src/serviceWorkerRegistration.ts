@@ -35,11 +35,11 @@ export function register(config?: Config) {
     }
 
     window.addEventListener('load', () => {
-      const swUrl = `${process.env['PUBLIC_URL']}/OneSignalSDKWorker.js`; // needed: https://documentation.onesignal.com/docs/onesignal-service-worker-faq#integrating-multiple-service-workers
+      // const swUrl = `${process.env['PUBLIC_URL']}/some-service-worker.js`; 
 
       if (isLocalhost) {
         // This is running on localhost. Let's check if a service worker still exists or not.
-        checkValidServiceWorker(swUrl, config);
+        // checkValidServiceWorker(swUrl, config);
 
         // Add some additional logging to localhost, pointing developers to the
         // service worker/PWA documentation.
@@ -51,7 +51,7 @@ export function register(config?: Config) {
         });
       } else {
         // Is not localhost. Just register service worker
-        registerValidSW(swUrl, config);
+        // registerValidSW(swUrl, config);
       }
     });
   }
