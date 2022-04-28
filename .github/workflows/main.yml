@@ -27,6 +27,7 @@ jobs:
           NX_SUPABASE_PUBLIC_KEY: ${{ secrets.NX_SUPABASE_PUBLIC_KEY }}
           NX_IBM_EVENTBRITE_WRAPPER_KEY: ${{ secrets.NX_IBM_EVENTBRITE_WRAPPER_KEY }}
           NX_AWS_LAMBDA_CERTIFICATE_API_KEY: ${{ secrets.NX_AWS_LAMBDA_CERTIFICATE_API_KEY }}
+          NX_GOOGLE_ANALYTICS_ID: ${{ secrets.NX_GOOGLE_ANALYTICS_ID }}
           NX_BUILD_NUMBER: ${{ github.run_number }}
           NX_COMMIT_SHA: ${{ github.sha }}
 
