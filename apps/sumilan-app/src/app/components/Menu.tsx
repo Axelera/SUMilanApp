@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import {
   IonButton,
   IonContent,
@@ -18,6 +19,7 @@ import LogoImage from './LogoImage/LogoImage';
 
 import './Menu.css';
 import { getAppVersion } from '../utils/version';
+import { openPreferenceCenter } from '../libs/avacy';
 
 interface AppPage {
   url: string;
@@ -44,11 +46,17 @@ const appPages: AppPage[] = [
 ];
 
 const Menu: React.FC = () => {
+  const menuRef = useRef<HTMLIonMenuElement>(null);
   const location = useLocation();
   const { t } = useTranslation();
 
+  const handleCookieClick = () => {
+    openPreferenceCenter();
+    menuRef.current?.close();
+  };
+
   return (
-    <IonMenu contentId="main" type="overlay">
+    <IonMenu contentId="main" type="overlay" ref={menuRef}>
       <IonContent>
         <IonList id="inbox-list">
           <LogoImage small={true} />
@@ -96,6 +104,11 @@ const Menu: React.FC = () => {
             <IonButton slot="end" fill="clear" href="https://www.robertocrosignani.com/" target="_blank">
               <IonIcon slot="icon-only" icon={globeOutline} />
             </IonButton>
+          </IonItem>
+          <IonItem lines="none" button onClick={handleCookieClick}>
+            <IonLabel style={{ margin: 0 }}>
+              <p>{t("COOKIES.preferences")}</p>
+            </IonLabel>
           </IonItem>
           <IonItem lines="none">
             <IonLabel style={{ margin: 0 }}>

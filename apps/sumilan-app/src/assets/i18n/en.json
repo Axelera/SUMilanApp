@@ -25,6 +25,9 @@
     },
     "ok": "Ok"
   },
+  "COOKIES": {
+    "preferences": "Cookie preferences"
+  },
   "CHAPTER": {
     "description": "<0/> is a community of activists studying exponential technologies to address the world's greatest challenges and build a better future for all.",
     "title": "Chapter info",

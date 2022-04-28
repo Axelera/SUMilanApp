@@ -35,6 +35,7 @@ import Certificates from './pages/Certificates/Certificates';
 import en from '../assets/i18n/en.json';
 import it from '../assets/i18n/it.json';
 import { getAppVersion } from './utils/version';
+import { loadGA } from './libs/ga';
 
 i18n
   .use(LanguageDetector)
@@ -58,6 +59,8 @@ i18n
   });
 
 console.log('VERSION:', getAppVersion());
+
+loadGA(process.env['NX_GOOGLE_ANALYTICS_ID'] as string);
 
 const App: React.FC = () => {
 

@@ -25,6 +25,9 @@
     },
     "ok": "Ok"
   },
+  "COOKIES": {
+    "preferences": "Preferenze cookie"
+  },
   "CHAPTER": {
     "description": "<0/> è una comunità di attivisti che studiano le tecnologie esponenziali per affrontare le più grandi sfide del mondo e costruire un futuro migliore per tutti.",
     "title": "Info sul chapter",
