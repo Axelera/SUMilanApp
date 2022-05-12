@@ -125,16 +125,25 @@ const EventCardComponent: React.FC<Props> = ({ event, history }) => {
                     <EventTimeComponent date={event.start_timestamp} duration={event.duration as number} />
                 </IonCardHeader>
                 <IonCardContent>
-                    <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <div className="event-card-description">
                         <ReactMarkdown
                             rehypePlugins={[rehypeRaw]}
-                            children={event.event_description?.replace(/\\n/g, '\n') || ''}
+                            children={event.event_description?.split('\n')[0] || ''}
                             components={{
                                 p({ children }) {
                                     return (
                                         <span>{children}</span>
                                     )
-                                }
+                                },
+                                a({ children }) {
+                                    return <span>{children}</span>;
+                                },
+                                ul({ children }) {
+                                    return <span>{children}</span>;
+                                },
+                                li({ children }) {
+                                    return <span>- {children}</span>;
+                                },
                             }}
                         />
                     </div>

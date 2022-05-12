@@ -31,7 +31,11 @@ const Info: React.FC<EventComponentProps> = ({ event }) => {
     return (
         <IonPage>
             <EventHeaderComponent event={event} />
-            <IonContent>
+            <IonContent
+                style={{
+                    '--padding-bottom': '80px', // ~ tickets button height + position
+                }}
+            >
                 <div style={{ width: '100%' }}>
                     <div className="event-image" style={{ backgroundImage: `url(${event.event_image_url})` }}></div>
                 </div>

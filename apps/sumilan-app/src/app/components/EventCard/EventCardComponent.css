@@ -28,3 +28,9 @@
 .time-container-loading ion-icon {
     margin: 2px 4px 0 0;
 }
+
+.event-card-description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
