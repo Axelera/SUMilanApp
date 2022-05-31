@@ -1,6 +1,5 @@
-import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
+import { IonApp } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { Redirect, Route } from 'react-router-dom';
 import i18n from "i18next";
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from "react-i18next";
@@ -24,18 +23,12 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-import Menu from './components/Menu';
-import Home from './pages/Home/Home';
-import Event from './pages/Event/Event';
-import Young from './pages/Young/Young';
-import Chapter from './pages/Chapter/Chapter';
-import Activist from './pages/Activist/Activits';
-import Certificates from './pages/Certificates/Certificates';
-
 import en from '../assets/i18n/en.json';
 import it from '../assets/i18n/it.json';
 import { getAppVersion } from './utils/version';
 import { loadGA } from './libs/ga';
+import Routes from './pages/Routes';
+import { AuthProvider } from './contexts/Auth';
 
 i18n
   .use(LanguageDetector)
@@ -64,30 +57,12 @@ loadGA(process.env['NX_GOOGLE_ANALYTICS_ID'] as string);
 
 const App: React.FC = () => {
 
-  const homeRouter = (
-    <IonSplitPane contentId="main">
-      <Menu />
-      <IonRouterOutlet id="main">
-        <Route path="/" exact>
-          <Redirect to="/home" />
-        </Route>
-        <Route path="/start" exact>
-          <Redirect to="/home" />
-        </Route>
-        <Route path="/home" exact={true} component={Home} />
-        {/* <Route path="/young" exact={true} component={Young} /> */}
-        <Route path="/chapter" exact={true} component={Chapter} />
-        <Route path="/activist" exact={true} component={Activist} />
-        <Route path="/certificates" exact={true} component={Certificates} />
-        <Route path="/event/:id/" render={(props) => <Event {...props} />} />
-      </IonRouterOutlet>
-    </IonSplitPane>
-  );
-
   return (
     <IonApp>
       <IonReactRouter>
-        {homeRouter}
+        <AuthProvider>
+          <Routes />
+        </AuthProvider>
       </IonReactRouter>
     </IonApp>
   );

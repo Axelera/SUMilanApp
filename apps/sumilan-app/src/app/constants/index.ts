@@ -24,3 +24,5 @@ export const PROGRESS_STEPS = [
         progress: 1,
     },
 ];
+
+export const ADMIN_DASHBOARD_BASE_PATH = '/admin';
