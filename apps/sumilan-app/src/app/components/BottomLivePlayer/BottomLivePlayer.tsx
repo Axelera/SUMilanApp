@@ -7,7 +7,7 @@ import { VideoPlayerContext } from '../../contexts/VideoPlayer';
 import { VideoPlayerContextModel } from '../../models/videoplayer.model';
 import { EventTimeContext } from '../../contexts/EventTime';
 import { EventTimeContextModel } from '../../models/event.model';
-import { EventTimeStatus } from '@sumilan-app/api';
+import { Event_Time_Status } from '@sumilan-app/api';
 
 import './BottomLivePlayer.css';
 
@@ -34,7 +34,7 @@ const BottomLivePlayer = ({ eventId, eventImageUrl }: Props) => {
     const { isVideoPlaying, playedSeconds, videoDuration, isBottomPlayerVisible, isVideoEnded, pauseVideo, toggleVideoPlay, closeBottomPlayer } = useContext(VideoPlayerContext) as VideoPlayerContextModel;
     const { timeStatus } = useContext(EventTimeContext) as EventTimeContextModel;
 
-    const isLive = timeStatus === EventTimeStatus.TodayLive;
+    const isLive = timeStatus === Event_Time_Status.TodayLive;
 
     const onCloseBottomPlayer = () => {
         pauseVideo();

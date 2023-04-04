@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 
 import { EventTimeContext } from '../../contexts/EventTime';
 import { EventTimeContextModel } from '../../models/event.model';
-import { Events, EventTimeStatus } from '@sumilan-app/api';
+import { Events, Event_Time_Status } from '@sumilan-app/api';
 
 import './EventHeaderComponent.css';
 
@@ -90,7 +90,7 @@ const EventHeaderComponent: React.FC<Props> = ({ event }) => {
     };
 
     const liveIndicator = () => {
-        if (timeStatus === EventTimeStatus.TodayLive) {
+        if (timeStatus === Event_Time_Status.TodayLive) {
             return (
                 <IonButton color="danger">
                     <IonIcon slot="icon-only" icon={ellipse} size="small" className="blinking" />

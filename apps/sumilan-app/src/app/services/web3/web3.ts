@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import Web3 from "web3/dist/web3.min"; // import compiled library to avoid webpack conflicts (https://stackoverflow.com/a/69433597/5094892)
 

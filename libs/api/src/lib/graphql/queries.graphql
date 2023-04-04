@@ -1,5 +1,5 @@
 query GetEvents {
-  eventsCollection {
+  eventsCollection(orderBy: {start_timestamp: DescNullsLast}) {
     edges {
       node {
         id
@@ -90,7 +90,8 @@ query GetMintableEvents {
       end_timestamp: {
         lt: "now()"
       }
-    }
+    },
+    orderBy: {start_timestamp: DescNullsLast}
   ) {
     edges {
       node {

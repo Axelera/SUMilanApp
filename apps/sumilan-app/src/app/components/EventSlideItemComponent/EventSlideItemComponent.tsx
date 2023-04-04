@@ -6,7 +6,7 @@ import {
 } from '@ionic/react';
 import { documentTextOutline, logoYoutube, newspaperOutline } from 'ionicons/icons';
 
-import { Slides, SlideType } from '@sumilan-app/api';
+import { Slides, Slide_Type } from '@sumilan-app/api';
 
 interface EventSlideItemProps {
     slideData: Slides;
@@ -16,13 +16,13 @@ const EventSlideItemComponent: React.FC<EventSlideItemProps> = ({ slideData }) =
     let icon;
 
     switch (slideData.slide_type) {
-        case SlideType.Slides:
+        case Slide_Type.Slides:
             icon = documentTextOutline;
             break;
-        case SlideType.Video:
+        case Slide_Type.Video:
             icon = logoYoutube;
             break;
-        case SlideType.Article:
+        case Slide_Type.Article:
             icon = newspaperOutline;
             break;
         default:

@@ -11,12 +11,11 @@ import { useTranslation } from 'react-i18next';
 import { formatTimeDuration } from '../../utils/eventTimeUtils';
 import { EventTimeContext } from '../../contexts/EventTime';
 import { EventTimeContextModel } from '../../models/event.model';
-import { EventTimeStatus } from '@sumilan-app/api';
+import { Event_Time_Status } from '@sumilan-app/api';
 
 import './EventTimeComponent.css';
 
 const dateFormat = Object.assign({}, DateTime.DATETIME_MED);
-delete dateFormat.year; // do not display year
 
 interface EventTimeProps {
     date: string;
@@ -39,26 +38,26 @@ const EventTimeComponent: React.FC<EventTimeProps> = ({ date, duration }) => {
 
     const { t } = useTranslation();
 
-    if (eventTimeStatus === EventTimeStatus.Passed) {
+    if (eventTimeStatus === Event_Time_Status.Passed) {
         // yesterday or before
         return (
             <TimeContainer>
                 {dt.toLocaleString(dateFormat)} ({formatTimeDuration(duration)})
             </TimeContainer>
         );
-    } else if (eventTimeStatus === EventTimeStatus.TodayScheduled) {
+    } else if (eventTimeStatus === Event_Time_Status.TodayScheduled) {
         return (
             <TimeContainer>
                 {t('EVENT.Time.today', { time: dt.toLocaleString(DateTime.TIME_24_SIMPLE) })} ({formatTimeDuration(duration)})
             </TimeContainer>
         );
-    } else if (eventTimeStatus === EventTimeStatus.TodayPassed) {
+    } else if (eventTimeStatus === Event_Time_Status.TodayPassed) {
         return (
             <TimeContainer>
                 {t('EVENT.Time.today', { time: dt.toLocaleString(DateTime.TIME_24_SIMPLE) })} ({t('EVENT.Time.ended', { time: dt.plus({ minutes: duration }).toLocaleString(DateTime.TIME_24_SIMPLE) })})
             </TimeContainer>
         );
-    } else if (eventTimeStatus === EventTimeStatus.TodayLive) {
+    } else if (eventTimeStatus === Event_Time_Status.TodayLive) {
         return (
             <span>
                 <IonChip style={{ marginLeft: 0 }} color="danger" outline>
@@ -73,7 +72,7 @@ const EventTimeComponent: React.FC<EventTimeProps> = ({ date, duration }) => {
                 })})
             </span>
         );
-    } else if (eventTimeStatus === EventTimeStatus.Scheduled) {
+    } else if (eventTimeStatus === Event_Time_Status.Scheduled) {
         return (
             <TimeContainer>
                 {dt.toLocaleString(dateFormat)} ({formatTimeDuration(duration)})

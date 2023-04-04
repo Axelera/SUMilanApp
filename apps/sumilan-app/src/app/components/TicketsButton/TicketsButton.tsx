@@ -4,22 +4,22 @@ import { ticketOutline, headsetOutline } from "ionicons/icons";
 import { useTranslation } from "react-i18next";
 
 import { loadEventbriteWidgets } from "../../utils/eventbrite";
-import { Events, TicketsType } from "@sumilan-app/api";
+import { Events, Tickets_Type } from "@sumilan-app/api";
 
 import 'animate.css';
 
 interface Props {
     ticketsUrl: Events['tickets_url'];
-    ticketsType: TicketsType;
+    ticketsType: Tickets_Type;
     ebEventId?: string; // eventbrite event id if ticket is eventbrite ticket
 };
 
 const TicketsButton: React.FC<Props> = ({ ticketsUrl, ticketsType, ebEventId }) => {
     const icon = useMemo(() => {
         switch (ticketsType) {
-            case TicketsType.Eventbrite:
+            case Tickets_Type.Eventbrite:
                 return ticketOutline;
-            case TicketsType.Clubhouse:
+            case Tickets_Type.Clubhouse:
                 return headsetOutline;
             default:
                 return ticketOutline;

@@ -14,7 +14,7 @@ import { EventComponentProps, EventTimeContextModel } from '../../../models/even
 import VideoPlayer from '../../../components/VideoPlayer/VideoPlayer';
 import { EventTimeContext } from '../../../contexts/EventTime';
 import StreamingUrlList from '../../../components/StreamingUrlList/StreamingUrlList';
-import { EventTimeStatus } from '@sumilan-app/api';
+import { Event_Time_Status } from '@sumilan-app/api';
 
 import './Live.css';
 
@@ -51,7 +51,7 @@ const Live: React.FC<EventComponentProps> = ({ event }) => {
                     </IonText>
                     <StreamingUrlList event={event} />
                 </div>
-                {event.room_url && eventTimeStatus !== EventTimeStatus.Passed ?
+                {event.room_url && eventTimeStatus !== Event_Time_Status.Passed ?
                     <div style={{ textAlign: 'center', marginTop: 20 }}>
                         <IonButton href={event.room_url} target="_blank">{t('EVENT.LIVE.networkingButton')}</IonButton>
                     </div>

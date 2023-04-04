@@ -26,7 +26,7 @@ import EventCardComponent from '../../components/EventCard/EventCardComponent';
 import { ActivistRequestState } from '../../models/activist-request.model';
 import { loadActivistRequest, storeActivistRequest } from '../../store/activist/activistSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { Events, EventTimeStatus, useGetEventsQuery } from '@sumilan-app/api';
+import { Events, Event_Time_Status, useGetEventsQuery } from '@sumilan-app/api';
 
 import './Home.css';
 
@@ -70,6 +70,8 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     const dispatch = useAppDispatch();
     const [events] = useGetEventsQuery();
     const { data, error, fetching } = events;
+
+    console.log('events', data);
 
     const activistRequestState = useAppSelector<ActivistRequestState>(state => state.activistRequest);
 
@@ -127,11 +129,11 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
                 ev?.event_type.toLowerCase().includes(searchQuery) ||
                 ev?.event_description?.toLowerCase().includes(searchQuery)
             )) {
-                if (ev?.event_time_status === EventTimeStatus.Passed) {
+                if (ev?.event_time_status === Event_Time_Status.Passed) {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     //@ts-ignore
                     groupedEvents.passed.push(ev);
-                } else if (ev?.event_time_status === EventTimeStatus.Scheduled) {
+                } else if (ev?.event_time_status === Event_Time_Status.Scheduled) {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     //@ts-ignore
                     groupedEvents.scheduled.push(ev);
@@ -142,7 +144,6 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
                 }
             }
         }
-        groupedEvents.passed = groupedEvents.passed.reverse();
         setFilteredEvents(groupedEvents);
     }, [searchQuery, data]);
 

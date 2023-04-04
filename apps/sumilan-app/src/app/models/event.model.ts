@@ -1,4 +1,4 @@
-import { Events, EventTimeStatus, Slides, Speakers } from "@sumilan-app/api";
+import { Events, Event_Time_Status, Slides, Speakers } from "@sumilan-app/api";
 
 export interface RelatorsAndModeratorsListModel {
     relators: Speakers[];
@@ -21,5 +21,5 @@ export interface LocalTicketData {
 };
 
 export interface EventTimeContextModel {
-    timeStatus: EventTimeStatus;
+    timeStatus: Event_Time_Status;
 };

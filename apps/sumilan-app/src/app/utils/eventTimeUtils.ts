@@ -1,26 +1,26 @@
 import { DateTime } from "luxon";
 
-import { EventTimeStatus } from "@sumilan-app/api";
+import { Event_Time_Status } from "@sumilan-app/api";
 
-export const getEventTimeStatus = (date: DateTime, duration: number): EventTimeStatus => {
+export const getEventTimeStatus = (date: DateTime, duration: number): Event_Time_Status => {
     const dt = date;
     const now = DateTime.now();
     if (dt.startOf('day') < now.startOf('day')) {
         // yesterday or before
-        return EventTimeStatus.Passed;
+        return Event_Time_Status.Passed;
     } else if (dt.startOf('day') <= now.startOf('day')) { // === comparison doesn't work
         // today
         const diffInMinutes = dt.diffNow(['minutes']).minutes;
         if (diffInMinutes > 0) {
-            return EventTimeStatus.TodayScheduled;
+            return Event_Time_Status.TodayScheduled;
         } else if (diffInMinutes <= 0 && diffInMinutes > -duration) {
-            return EventTimeStatus.TodayLive;
+            return Event_Time_Status.TodayLive;
         } else if (diffInMinutes < -duration) {
-            return EventTimeStatus.TodayPassed;
+            return Event_Time_Status.TodayPassed;
         }
     }
     // default to tomorrow or later
-    return EventTimeStatus.Scheduled;
+    return Event_Time_Status.Scheduled;
 };
 
 export const formatTimeDuration = (duration: number): string => {

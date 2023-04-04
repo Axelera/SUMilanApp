@@ -19,7 +19,7 @@ import BottomLivePlayer from '../../../components/BottomLivePlayer/BottomLivePla
 import { EventTimeContext } from '../../../contexts/EventTime';
 import TicketsButton from '../../../components/TicketsButton/TicketsButton';
 import { getEventType } from '../../../utils/events';
-import { EventTimeStatus, TicketsType } from '@sumilan-app/api';
+import { Event_Time_Status } from '@sumilan-app/api';
 import Speaker from '../../../components/Speaker/Speaker';
 
 import './Info.css';
@@ -78,11 +78,11 @@ const Info: React.FC<EventComponentProps> = ({ event }) => {
                     </IonList>
                 }
                 {event.tickets_url && event.eventbrite_event_id
-                    && eventTimeStatus !== EventTimeStatus.Passed
-                    && eventTimeStatus !== EventTimeStatus.TodayPassed
+                    && eventTimeStatus !== Event_Time_Status.Passed
+                    && eventTimeStatus !== Event_Time_Status.TodayPassed
                     && <TicketsButton
                         ticketsUrl={event.tickets_url as string}
-                        ticketsType={event.tickets_type as TicketsType}
+                        ticketsType={event.tickets_type}
                         ebEventId={event.eventbrite_event_id as string}
                     />
                 }

@@ -1,4 +1,4 @@
-import { Events, Slides, Speakers, SpeakerType } from "@sumilan-app/api";
+import { Events, Slides, Speakers, Speaker_Type } from "@sumilan-app/api";
 import { RelatorsAndModeratorsListModel, SlidesListModel } from "../models/event.model";
 
 export const getEventType = (event_type: string | undefined): string => {
@@ -11,9 +11,9 @@ export const getRelatorsAndModerators = (event: Partial<Events>): RelatorsAndMod
     const moderators: Speakers[] = [];
     if (speakers) {
         speakers.forEach((speaker) => {
-            if (speaker?.speaker_type === SpeakerType.Relator) {
+            if (speaker?.speaker_type === Speaker_Type.Relator) {
                 relators.push(speaker.speakers as Speakers);
-            } else if (speaker?.speaker_type === SpeakerType.Moderator) {
+            } else if (speaker?.speaker_type === Speaker_Type.Moderator) {
                 moderators.push(speaker.speakers as Speakers);
             }
         });

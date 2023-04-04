@@ -1,6 +1,7 @@
 import { Storage } from '@capacitor/storage';
 
-export const setObject = async (key: string, value: Object) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const setObject = async (key: string, value: any) => {
     await Storage.set({
         key,
         value: JSON.stringify(value)
