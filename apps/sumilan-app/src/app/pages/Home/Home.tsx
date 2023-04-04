@@ -71,8 +71,6 @@ const Home: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     const [events] = useGetEventsQuery();
     const { data, error, fetching } = events;
 
-    console.log('events', data);
-
     const activistRequestState = useAppSelector<ActivistRequestState>(state => state.activistRequest);
 
     const [isSearchbarVisible, setIsSearchbarVisible] = useState(false);
