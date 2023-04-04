@@ -31,7 +31,7 @@
   "CHAPTER": {
     "description": "<0/> è una comunità di attivisti che studiano le tecnologie esponenziali per affrontare le più grandi sfide del mondo e costruire un futuro migliore per tutti.",
     "title": "Info sul chapter",
-    "websiteButton": "Sito web"
+    "sourceCode": "Il source code di questa webapp è disponibile su <1><0 /> GitHub</1>."
   },
   "EVENT": {
     "INFO": {
@@ -95,11 +95,7 @@
     "emailPlaceholder": "Inserisci l'email"
   },
   "MENU": {
-    "Credits": {
-      "development": "Sviluppo",
-      "marketing": "Marketing",
-      "title": "Credits:"
-    },
+    "sourceCode": "Source code",
     "instructions": "Istruzioni di utilizzo"
   },
   "SHARE": {

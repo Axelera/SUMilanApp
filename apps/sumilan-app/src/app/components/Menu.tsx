@@ -20,6 +20,7 @@ import LogoImage from './LogoImage/LogoImage';
 import './Menu.css';
 import { getAppVersion } from '../utils/version';
 import { openPreferenceCenter } from '../libs/avacy';
+import { SUM_SOCIAL_LINKS } from '../data';
 
 interface AppPage {
   url: string;
@@ -86,23 +87,12 @@ const Menu: React.FC = () => {
       </IonContent>
       <IonFooter>
         <IonList style={{ padding: 0 }}>
-          <IonListHeader>{t('MENU.Credits.title')}</IonListHeader>
           <IonItem lines="full">
             <IonLabel style={{ margin: 0 }}>
-              <h3>Luca Bertelli</h3>
-              <p>{t('MENU.Credits.development')}</p>
+              <h3>{t('MENU.sourceCode')}</h3>
             </IonLabel>
-            <IonButton slot="end" fill="clear" href="https://github.com/Luca8991" target="_blank">
+            <IonButton slot="end" fill="clear" href={SUM_SOCIAL_LINKS.github} target="_blank">
               <IonIcon slot="icon-only" icon={logoGithub} />
-            </IonButton>
-          </IonItem>
-          <IonItem lines="none">
-            <IonLabel style={{ margin: 0 }}>
-              <h3>Roberto Crosignani</h3>
-              <p>{t('MENU.Credits.marketing')}</p>
-            </IonLabel>
-            <IonButton slot="end" fill="clear" href="https://www.robertocrosignani.com/" target="_blank">
-              <IonIcon slot="icon-only" icon={globeOutline} />
             </IonButton>
           </IonItem>
           <IonItem lines="none" button onClick={handleCookieClick}>

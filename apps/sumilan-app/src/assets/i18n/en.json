@@ -31,7 +31,7 @@
   "CHAPTER": {
     "description": "<0/> is a community of activists studying exponential technologies to address the world's greatest challenges and build a better future for all.",
     "title": "Chapter info",
-    "websiteButton": "Website"
+    "sourceCode": "The source code of this webapp is available on <1><0 /> GitHub</1>."
   },
   "EVENT": {
     "INFO": {
@@ -95,11 +95,7 @@
     "emailPlaceholder": "Enter the email"
   },
   "MENU": {
-    "Credits": {
-      "development": "Development",
-      "marketing": "Marketing",
-      "title": "Credits:"
-    },
+    "sourceCode": "Source code",
     "instructions": "Usage instructions"
   },
   "SHARE": {

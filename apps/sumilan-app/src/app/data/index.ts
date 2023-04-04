@@ -5,4 +5,5 @@ export const SUM_SOCIAL_LINKS = {
     'youtube': 'https://www.youtube.com/c/singularityumilan',
     'linkedin': 'https://www.linkedin.com/company/singularityu-milan-chapter/',
     'website': 'https://www.singularityumilan.com/',
+    'github': 'https://github.com/Axelera/SUMilanApp',
 };

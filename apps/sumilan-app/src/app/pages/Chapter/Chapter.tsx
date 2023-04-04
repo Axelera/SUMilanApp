@@ -6,10 +6,9 @@ import {
     IonPage,
     IonTitle,
     IonToolbar,
-    IonButton,
     IonIcon,
 } from "@ionic/react";
-import { logoFacebook, logoInstagram, logoLinkedin, logoTwitter, logoYoutube, openOutline } from "ionicons/icons";
+import { globeOutline, logoFacebook, logoGithub, logoInstagram, logoLinkedin, logoTwitter, logoYoutube } from "ionicons/icons";
 import { Trans, useTranslation } from "react-i18next";
 
 import logo from '../../../assets/images/logo-150x150.png';
@@ -38,14 +37,18 @@ const Chapter: React.FC = () => {
                             <ChapterName /> is a community of activists studying exponential technologies to address the world's greatest challenges and build a better future for all.
                         </Trans>
                     </p>
-                    <IonButton href={SUM_SOCIAL_LINKS.website} target="_blank" rel="noreferrer" color="primary" strong>
-                        {t('CHAPTER.websiteButton')}
-                        <IonIcon slot="end" icon={openOutline} />
-                    </IonButton>
+                    <p>
+                        <Trans i18nKey="CHAPTER.sourceCode">
+                            The source code of this webapp is available on <a href={SUM_SOCIAL_LINKS.github} target="_blank" rel="noreferrer"><IonIcon icon={logoGithub} /> GitHub</a>.
+                        </Trans>
+                    </p>
                 </div>
                 <div
                     className="social-links-container"
                 >
+                    <a href={SUM_SOCIAL_LINKS.website} target="_blank" rel="noreferrer">
+                        <IonIcon slot="icon-only" icon={globeOutline} size="large" />
+                    </a>
                     <a href={SUM_SOCIAL_LINKS.facebook} target="_blank" rel="noreferrer">
                         <IonIcon slot="icon-only" icon={logoFacebook} size="large" />
                     </a>
