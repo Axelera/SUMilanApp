@@ -11,10 +11,11 @@
         "compiler": "babel",
         "outputPath": "dist/apps/sumilan-app",
         "index": "apps/sumilan-app/src/index.html",
-        "baseHref": "/",
+        "baseHref": "/SUMilanApp/",
         "main": "apps/sumilan-app/src/main.tsx",
         "polyfills": "apps/sumilan-app/src/polyfills.ts",
         "tsConfig": "apps/sumilan-app/tsconfig.app.json",
+        "deployUrl": "https://axelera.github.io/SUMilanApp/",
         "assets": [
           {
             "glob": "icon/*",
