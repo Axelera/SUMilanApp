@@ -1,26 +1,43 @@
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy webapp to Pages
+
 on:
+  # Runs on pushes targeting the default branch
   push:
-    branches:
-      - master
-name: 🚀 Deploy webapp on push
+    branches: ["master"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
-  web-deploy:
-    name: 🎉 Deploy webapp to FTP server
+  # Single deploy job since we're just deploying
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-
     steps:
-      - name: 🚚 Get latest code
-        uses: actions/checkout@v2
-
-      - name: Use Node.js 14
-        uses: actions/setup-node@v2-beta
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: "14.17.0"
-
-      - name: 🔨 Build webapp
-        run: |
-          npm install
-          npx nx run sumilan-app:build:production
+          node-version: latest
+      - name: Install required NPM packages
+        run: npm install
+      - name: Build webapp
+        run: npx nx run sumilan-app:build:production
         env:
           NX_SUPABASE_URL: ${{ secrets.NX_SUPABASE_URL }}
           NX_SUPABASE_GRAPHQL_ENDPOINT: ${{ secrets.NX_SUPABASE_GRAPHQL_ENDPOINT }}
@@ -30,11 +47,12 @@ jobs:
           NX_GOOGLE_ANALYTICS_ID: ${{ secrets.NX_GOOGLE_ANALYTICS_ID }}
           NX_BUILD_NUMBER: ${{ github.run_number }}
           NX_COMMIT_SHA: ${{ github.sha }}
-
-      - name: 📂 Sync files
-        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+      - name: Setup Pages
+        uses: actions/configure-pages@v2
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          server: ${{ secrets.ftp_server }}
-          username: ${{ secrets.ftp_username }}
-          password: ${{ secrets.ftp_password }}
-          local-dir: ./dist/apps/sumilan-app/
+          path: 'dist/apps/sumilan-app/'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
