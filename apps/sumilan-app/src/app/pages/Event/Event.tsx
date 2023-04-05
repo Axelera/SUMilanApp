@@ -25,11 +25,12 @@ import Slides from './Slides/Slides';
 import Info from './Info/Info';
 import { VideoPlayerProvider } from '../../contexts/VideoPlayer';
 import { EventTimeProvider } from '../../contexts/EventTime';
-import { Events, useGetEventDetailsQuery } from '@sumilan-app/api';
+import { useGetEventDetailsQuery } from '@sumilan-app/api';
 
 import './Event.css';
 import { EventDetailsModel } from '../../models/event.model';
 import { getRelatorsAndModerators } from '../../utils/events';
+import EventHeaderComponent from '../../components/EventHeader/EventHeaderComponent';
 
 const getCurrentUrl = (url: string) => {
     if (url.endsWith('/')) {
@@ -120,63 +121,68 @@ const Event: React.FC<RouteComponentProps<{ id: string; }>> = ({ history, match 
     }
 
     return (
-        <VideoPlayerProvider>
-            <EventTimeProvider date={event.start_timestamp} duration={event.duration || 0}>
-                <IonTabs>
-                    <IonRouterOutlet>
-                        <Route
-                            path={currentUrl}
-                            render={() => <Redirect to={`${currentUrl}/info`} exact />}
-                            exact
-                        />
-                        <Route
-                            path={`${currentUrl}/info`}
-                            render={() => <Info
-                                event={event}
-                            />}
-                            exact
-                        />
-                        <Route
-                            path={`${currentUrl}/live`}
-                            render={() => additionalRoutes.includes('live')
-                                ? <Live
-                                    event={event}
+        <IonPage>
+            <VideoPlayerProvider>
+                <EventTimeProvider date={event.start_timestamp} duration={event.duration || 0}>
+                    <EventHeaderComponent event={event} />
+                    <IonContent>
+                        <IonTabs>
+                            <IonRouterOutlet>
+                                <Route
+                                    path={currentUrl}
+                                    render={() => <Redirect to={`${currentUrl}/info`} exact />}
+                                    exact
                                 />
-                                : <Redirect to={`${currentUrl}/info`} exact />
-                            }
-                            exact
-                        />
-                        <Route
-                            path={`${currentUrl}/mentimeter`}
-                            render={() => additionalRoutes.includes('mentimeter')
-                                ? <Mentimeter
-                                    event={event}
+                                <Route
+                                    path={`${currentUrl}/info`}
+                                    render={() => <Info
+                                        event={event}
+                                    />}
+                                    exact
                                 />
-                                : <Redirect to={`${currentUrl}/info`} exact />
-                            }
-                            exact
-                        />
-                        <Route
-                            path={`${currentUrl}/slides`}
-                            render={() => additionalRoutes.includes('slides')
-                                ? <Slides
-                                    event={event}
+                                <Route
+                                    path={`${currentUrl}/live`}
+                                    render={() => additionalRoutes.includes('live')
+                                        ? <Live
+                                            event={event}
+                                        />
+                                        : <Redirect to={`${currentUrl}/info`} exact />
+                                    }
+                                    exact
                                 />
-                                : <Redirect to={`${currentUrl}/info`} exact />
-                            }
-                            exact
-                        />
-                    </IonRouterOutlet>
-                    <IonTabBar slot="bottom">
-                        <IonTabButton tab="info" href={`${currentUrl}/info`}>
-                            <IonLabel>{t('EVENT.INFO.title')}</IonLabel>
-                            <IonIcon icon={informationCircleOutline}></IonIcon>
-                        </IonTabButton>
-                        {additionalTabButtons.map((btn) => btn)}
-                    </IonTabBar>
-                </IonTabs>
-            </EventTimeProvider>
-        </VideoPlayerProvider>
+                                <Route
+                                    path={`${currentUrl}/mentimeter`}
+                                    render={() => additionalRoutes.includes('mentimeter')
+                                        ? <Mentimeter
+                                            event={event}
+                                        />
+                                        : <Redirect to={`${currentUrl}/info`} exact />
+                                    }
+                                    exact
+                                />
+                                <Route
+                                    path={`${currentUrl}/slides`}
+                                    render={() => additionalRoutes.includes('slides')
+                                        ? <Slides
+                                            event={event}
+                                        />
+                                        : <Redirect to={`${currentUrl}/info`} exact />
+                                    }
+                                    exact
+                                />
+                            </IonRouterOutlet>
+                            <IonTabBar slot="top">
+                                <IonTabButton tab="info" href={`${currentUrl}/info`}>
+                                    <IonLabel>{t('EVENT.INFO.title')}</IonLabel>
+                                    <IonIcon icon={informationCircleOutline}></IonIcon>
+                                </IonTabButton>
+                                {additionalTabButtons.map((btn) => btn)}
+                            </IonTabBar>
+                        </IonTabs>
+                    </IonContent>
+                </EventTimeProvider>
+            </VideoPlayerProvider>
+        </IonPage>
     );
 };
 

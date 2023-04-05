@@ -7,7 +7,6 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import BottomLivePlayer from '../../../components/BottomLivePlayer/BottomLivePlayer';
-import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import { EventComponentProps } from '../../../models/event.model';
 
 const Mentimeter: React.FC<EventComponentProps> = ({ event }) => {
@@ -15,8 +14,11 @@ const Mentimeter: React.FC<EventComponentProps> = ({ event }) => {
 
     return (
         <IonPage>
-            <EventHeaderComponent event={event} />
-            <IonContent>
+            <IonContent
+                style={{
+                    '--padding-top': '20px',
+                }}
+            >
                 <div style={{ width: '100%', textAlign: 'center', margin: '20px 0' }}>
                     <IonButton
                         href={event.voting_url as string}

@@ -7,12 +7,11 @@ import {
   IonItem,
   IonLabel,
   IonList,
-  IonListHeader,
   IonMenu,
   IonMenuToggle,
 } from '@ionic/react';
 import { useLocation } from 'react-router-dom';
-import { documentTextOutline, documentTextSharp, globeOutline, homeOutline, homeSharp, informationCircleOutline, informationCircleSharp, logoGithub, openOutline, peopleOutline, peopleSharp, school, schoolOutline } from 'ionicons/icons';
+import { helpCircle, helpCircleOutline, homeOutline, homeSharp, informationCircleOutline, informationCircleSharp, logoGithub, openOutline, peopleOutline, peopleSharp, school, schoolOutline } from 'ionicons/icons';
 import { useTranslation } from 'react-i18next';
 
 import LogoImage from './LogoImage/LogoImage';
@@ -78,20 +77,20 @@ const Menu: React.FC = () => {
             <IonLabel>{t('CERTIFICATES.title')}</IonLabel>
           </IonItem>
         </IonList>
-        <IonList lines="full">
-          <IonItem href="https://www.singularityumilan.com/guida-rapida-app" target="_blank" detail={true} detailIcon={openOutline}>
-            <IonIcon slot="start" ios={documentTextOutline} md={documentTextSharp} />
-            <IonLabel>{t('MENU.instructions')}</IonLabel>
-          </IonItem>
-        </IonList>
       </IonContent>
       <IonFooter>
         <IonList style={{ padding: 0 }}>
-          <IonItem lines="full">
+          <IonList lines="full">
+            <IonItem href="https://github.com/Axelera/SUMilanApp/issues/new" target="_blank" detail={true} detailIcon={openOutline}>
+              <IonIcon slot="start" ios={helpCircleOutline} md={helpCircle} />
+              <IonLabel>{t('MENU.feedback')}</IonLabel>
+            </IonItem>
+          </IonList>
+          <IonItem href={SUM_SOCIAL_LINKS.github} target="_blank" lines="full">
             <IonLabel style={{ margin: 0 }}>
               <h3>{t('MENU.sourceCode')}</h3>
             </IonLabel>
-            <IonButton slot="end" fill="clear" href={SUM_SOCIAL_LINKS.github} target="_blank">
+            <IonButton slot="end" fill="clear">
               <IonIcon slot="icon-only" icon={logoGithub} />
             </IonButton>
           </IonItem>

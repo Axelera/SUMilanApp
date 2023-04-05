@@ -9,7 +9,6 @@ import { refresh } from 'ionicons/icons';
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 
-import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import { EventComponentProps, EventTimeContextModel } from '../../../models/event.model';
 import VideoPlayer from '../../../components/VideoPlayer/VideoPlayer';
 import { EventTimeContext } from '../../../contexts/EventTime';
@@ -28,8 +27,11 @@ const Live: React.FC<EventComponentProps> = ({ event }) => {
 
     return (
         <IonPage>
-            <EventHeaderComponent event={event} />
-            <IonContent>
+            <IonContent
+                style={{
+                    '--padding-top': '20px',
+                }}
+            >
                 <div style={{ width: '100%', textAlign: 'center' }}>
                     <IonText>
                         <span style={{ verticalAlign: 'sub' }}>{t('EVENT.LIVE.noLive')}</span>

@@ -43,11 +43,11 @@
     "LIVE": {
       "availablePlatforms": "You'll find the live also on",
       "networkingButton": "Networking room",
-      "noLive": "Can't see the live?",
+      "noLive": "Can't see the live? Reload the page",
       "title": "Live"
     },
     "MENTIMETER": {
-      "noQuestions": "Can't see the questions?",
+      "noQuestions": "Open questions in another tab",
       "title": "Mentimeter"
     },
     "NOEVENT": {
@@ -96,7 +96,7 @@
   },
   "MENU": {
     "sourceCode": "Source code",
-    "instructions": "Usage instructions"
+    "feedback": "Leave feedback"
   },
   "SHARE": {
     "Event": {

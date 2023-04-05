@@ -12,7 +12,6 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import { useTranslation } from 'react-i18next';
 
-import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import EventTimeComponent from '../../../components/EventTime/EventTimeComponent';
 import { EventComponentProps, EventTimeContextModel } from "../../../models/event.model";
 import BottomLivePlayer from '../../../components/BottomLivePlayer/BottomLivePlayer';
@@ -30,9 +29,9 @@ const Info: React.FC<EventComponentProps> = ({ event }) => {
 
     return (
         <IonPage>
-            <EventHeaderComponent event={event} />
             <IonContent
                 style={{
+                    '--padding-top': '20px',
                     '--padding-bottom': '80px', // ~ tickets button height + position
                 }}
             >

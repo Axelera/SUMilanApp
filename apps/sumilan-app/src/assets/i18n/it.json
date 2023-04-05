@@ -43,11 +43,11 @@
     "LIVE": {
       "availablePlatforms": "Trovi la diretta anche su",
       "networkingButton": "Stanza networking",
-      "noLive": "Non vedi la diretta?",
+      "noLive": "Non vedi la diretta? Ricarica la pagina",
       "title": "Diretta"
     },
     "MENTIMETER": {
-      "noQuestions": "Non riesci a vedere le domande?",
+      "noQuestions": "Apri le domande in un'altra scheda",
       "title": "Mentimeter"
     },
     "NOEVENT": {
@@ -96,7 +96,7 @@
   },
   "MENU": {
     "sourceCode": "Source code",
-    "instructions": "Istruzioni di utilizzo"
+    "feedback": "Lascia un feedback"
   },
   "SHARE": {
     "Event": {

@@ -14,7 +14,6 @@ import { lockOpen, ticketOutline } from 'ionicons/icons';
 import { useTranslation } from 'react-i18next';
 
 import BottomLivePlayer from '../../../components/BottomLivePlayer/BottomLivePlayer';
-import EventHeaderComponent from '../../../components/EventHeader/EventHeaderComponent';
 import { EventComponentProps, LocalTicketData } from '../../../models/event.model';
 import { checkHasTicket, getLocalTicket, setLocalTicket as setLocTicket } from '../../../services/cloud-functions/eventbriteWrapper';
 import InputComponent from '../../../components/Input/InputComponent';
@@ -66,8 +65,11 @@ const Slides: React.FC<EventComponentProps> = ({ event }) => {
     if (error) {
         return (
             <IonPage>
-                <EventHeaderComponent event={event} />
-                <IonContent>
+                <IonContent
+                    style={{
+                        '--padding-top': '20px',
+                    }}
+                >
                     <p>{t('GENERAL.longError')}</p>
                 </IonContent>
             </IonPage>
@@ -77,8 +79,11 @@ const Slides: React.FC<EventComponentProps> = ({ event }) => {
     if (event.slides_auth_required && !localTicket) {
         return (
             <IonPage>
-                <EventHeaderComponent event={event} />
-                <IonContent>
+                <IonContent
+                    style={{
+                        '--padding-top': '20px',
+                    }}
+                >
                     <div style={{ padding: 10, textAlign: 'center' }}>
                         <p>{t('SLIDES.TicketRequired.title')}</p>
                         <h3>{t('SLIDES.TicketRequired.noTicketQuestion')}</h3>
@@ -115,8 +120,11 @@ const Slides: React.FC<EventComponentProps> = ({ event }) => {
 
     return (
         <IonPage>
-            <EventHeaderComponent event={event} />
-            <IonContent>
+            <IonContent
+                style={{
+                    '--padding-top': '20px',
+                }}
+            >
                 <SlidesList event={event} />
             </IonContent>
             <IonFooter>
