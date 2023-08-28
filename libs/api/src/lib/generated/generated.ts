@@ -677,6 +677,7 @@ export type Events = Node & {
   linkedin_video_url?: Maybe<Scalars['String']>;
   /** Globally Unique Record Identifier */
   nodeId: Scalars['ID'];
+  qa_url?: Maybe<Scalars['String']>;
   room_url?: Maybe<Scalars['String']>;
   show: Scalars['Boolean'];
   slidesCollection?: Maybe<SlidesConnection>;
@@ -751,6 +752,7 @@ export type EventsFilter = {
   identifier?: InputMaybe<StringFilter>;
   linkedin_video_url?: InputMaybe<StringFilter>;
   nodeId?: InputMaybe<IdFilter>;
+  qa_url?: InputMaybe<StringFilter>;
   room_url?: InputMaybe<StringFilter>;
   show?: InputMaybe<BooleanFilter>;
   slides_auth_required?: InputMaybe<BooleanFilter>;
@@ -774,6 +776,7 @@ export type EventsInsertInput = {
   facebook_video_url?: InputMaybe<Scalars['String']>;
   identifier?: InputMaybe<Scalars['String']>;
   linkedin_video_url?: InputMaybe<Scalars['String']>;
+  qa_url?: InputMaybe<Scalars['String']>;
   room_url?: InputMaybe<Scalars['String']>;
   show?: InputMaybe<Scalars['Boolean']>;
   slides_auth_required?: InputMaybe<Scalars['Boolean']>;
@@ -806,6 +809,7 @@ export type EventsOrderBy = {
   id?: InputMaybe<OrderByDirection>;
   identifier?: InputMaybe<OrderByDirection>;
   linkedin_video_url?: InputMaybe<OrderByDirection>;
+  qa_url?: InputMaybe<OrderByDirection>;
   room_url?: InputMaybe<OrderByDirection>;
   show?: InputMaybe<OrderByDirection>;
   slides_auth_required?: InputMaybe<OrderByDirection>;
@@ -829,6 +833,7 @@ export type EventsUpdateInput = {
   facebook_video_url?: InputMaybe<Scalars['String']>;
   identifier?: InputMaybe<Scalars['String']>;
   linkedin_video_url?: InputMaybe<Scalars['String']>;
+  qa_url?: InputMaybe<Scalars['String']>;
   room_url?: InputMaybe<Scalars['String']>;
   show?: InputMaybe<Scalars['Boolean']>;
   slides_auth_required?: InputMaybe<Scalars['Boolean']>;
@@ -1073,14 +1078,14 @@ export type Tickets_TypeFilter = {
 export type GetEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetEventsQuery = { eventsCollection?: { edges: Array<{ node: { id: any, identifier: string, event_image_url?: string | null, event_title: string, event_description?: string | null, start_timestamp?: any | null, event_type: Event_Type, duration: number, canceled: boolean, event_time_status?: Event_Time_Status | null, video_url?: string | null, voting_url?: string | null, slidesCollection?: { totalCount: number } | null } }> } | null };
+export type GetEventsQuery = { eventsCollection?: { edges: Array<{ node: { id: any, identifier: string, event_image_url?: string | null, event_title: string, event_description?: string | null, start_timestamp?: any | null, event_type: Event_Type, duration: number, canceled: boolean, event_time_status?: Event_Time_Status | null, video_url?: string | null, voting_url?: string | null, qa_url?: string | null, slidesCollection?: { totalCount: number } | null } }> } | null };
 
 export type GetEventDetailsQueryVariables = Exact<{
   identifier: Scalars['String'];
 }>;
 
 
-export type GetEventDetailsQuery = { eventsCollection?: { edges: Array<{ node: { start_timestamp?: any | null, duration: number, event_description?: string | null, event_image_url?: string | null, event_time_status?: Event_Time_Status | null, event_title: string, event_type: Event_Type, eventbrite_event_id?: string | null, facebook_video_url?: string | null, id: any, identifier: string, linkedin_video_url?: string | null, room_url?: string | null, slides_auth_required: boolean, tickets_type: Tickets_Type, tickets_url?: string | null, twitter_video_url?: string | null, video_url?: string | null, voting_url?: string | null, canceled: boolean, event_speakerCollection?: { edges: Array<{ node: { speaker_type: Speaker_Type, speakers?: { linkedin_url?: string | null, facebook_url?: string | null, id: any, speaker_description?: string | null, speaker_image_url?: string | null, speaker_name: string, twitter_url?: string | null, website_url?: string | null } | null } }> } | null, slidesCollection?: { totalCount: number, edges: Array<{ node: { id: any, show_before_event_start: boolean, slide_description?: string | null, slide_title: string, slide_type: Slide_Type, slide_url: string } }> } | null } }> } | null };
+export type GetEventDetailsQuery = { eventsCollection?: { edges: Array<{ node: { start_timestamp?: any | null, duration: number, event_description?: string | null, event_image_url?: string | null, event_time_status?: Event_Time_Status | null, event_title: string, event_type: Event_Type, eventbrite_event_id?: string | null, facebook_video_url?: string | null, id: any, identifier: string, linkedin_video_url?: string | null, room_url?: string | null, slides_auth_required: boolean, tickets_type: Tickets_Type, tickets_url?: string | null, twitter_video_url?: string | null, video_url?: string | null, voting_url?: string | null, qa_url?: string | null, canceled: boolean, event_speakerCollection?: { edges: Array<{ node: { speaker_type: Speaker_Type, speakers?: { linkedin_url?: string | null, facebook_url?: string | null, id: any, speaker_description?: string | null, speaker_image_url?: string | null, speaker_name: string, twitter_url?: string | null, website_url?: string | null } | null } }> } | null, slidesCollection?: { totalCount: number, edges: Array<{ node: { id: any, show_before_event_start: boolean, slide_description?: string | null, slide_title: string, slide_type: Slide_Type, slide_url: string } }> } | null } }> } | null };
 
 export type GetMintableEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1119,6 +1124,7 @@ export const GetEventsDocument = gql`
         event_time_status
         video_url
         voting_url
+        qa_url
         slidesCollection {
           totalCount
         }
@@ -1155,6 +1161,7 @@ export const GetEventDetailsDocument = gql`
         twitter_video_url
         video_url
         voting_url
+        qa_url
         canceled
         event_speakerCollection {
           edges {

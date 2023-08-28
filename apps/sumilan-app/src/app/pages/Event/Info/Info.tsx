@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import {
     IonContent,
     IonFooter,
@@ -13,18 +12,15 @@ import rehypeRaw from 'rehype-raw';
 import { useTranslation } from 'react-i18next';
 
 import EventTimeComponent from '../../../components/EventTime/EventTimeComponent';
-import { EventComponentProps, EventTimeContextModel } from "../../../models/event.model";
+import { EventComponentProps } from "../../../models/event.model";
 import BottomLivePlayer from '../../../components/BottomLivePlayer/BottomLivePlayer';
-import { EventTimeContext } from '../../../contexts/EventTime';
 import TicketsButton from '../../../components/TicketsButton/TicketsButton';
 import { getEventType } from '../../../utils/events';
-import { Event_Time_Status } from '@sumilan-app/api';
 import Speaker from '../../../components/Speaker/Speaker';
 
 import './Info.css';
 
 const Info: React.FC<EventComponentProps> = ({ event }) => {
-    const { timeStatus: eventTimeStatus } = useContext(EventTimeContext) as EventTimeContextModel;
     const { t } = useTranslation();
 
     return (
@@ -76,15 +72,10 @@ const Info: React.FC<EventComponentProps> = ({ event }) => {
                         )}
                     </IonList>
                 }
-                {event.tickets_url && event.eventbrite_event_id
-                    && eventTimeStatus !== Event_Time_Status.Passed
-                    && eventTimeStatus !== Event_Time_Status.TodayPassed
-                    && <TicketsButton
-                        ticketsUrl={event.tickets_url as string}
-                        ticketsType={event.tickets_type}
-                        ebEventId={event.eventbrite_event_id as string}
-                    />
-                }
+                <TicketsButton
+                    ticketsUrl={event.tickets_url}
+                    ticketsType={event.tickets_type}
+                />
             </IonContent>
             <IonFooter>
                 <BottomLivePlayer

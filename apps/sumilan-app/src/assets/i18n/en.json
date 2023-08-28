@@ -50,6 +50,10 @@
       "noQuestions": "Open questions in another tab",
       "title": "Mentimeter"
     },
+    "QA": {
+      "noQuestions": "Open Q&A in another tab",
+      "title": "Q&A"
+    },
     "NOEVENT": {
       "message": "This event does not exist or is no longer available.",
       "title": "Event not available"
@@ -57,7 +61,7 @@
     "SLIDES": {
       "slides": "For further study",
       "studyMaterial": "Study material",
-      "title": "Study material"
+      "title": "Material"
     },
     "Time": {
       "ended": "ended at {{time}}",

@@ -16,6 +16,7 @@ import StreamingUrlList from '../../../components/StreamingUrlList/StreamingUrlL
 import { Event_Time_Status } from '@sumilan-app/api';
 
 import './Live.css';
+import NetworkingButton from '../../../components/NetworkingButton/NetworkingButton';
 
 const Live: React.FC<EventComponentProps> = ({ event }) => {
     const { t } = useTranslation();
@@ -53,12 +54,7 @@ const Live: React.FC<EventComponentProps> = ({ event }) => {
                     </IonText>
                     <StreamingUrlList event={event} />
                 </div>
-                {event.room_url && eventTimeStatus !== Event_Time_Status.Passed ?
-                    <div style={{ textAlign: 'center', marginTop: 20 }}>
-                        <IonButton href={event.room_url} target="_blank">{t('EVENT.LIVE.networkingButton')}</IonButton>
-                    </div>
-                    : null
-                }
+                <NetworkingButton roomUrl={event.room_url} />
             </IonContent>
         </IonPage>
     );

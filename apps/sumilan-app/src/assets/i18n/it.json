@@ -50,6 +50,10 @@
       "noQuestions": "Apri le domande in un'altra scheda",
       "title": "Mentimeter"
     },
+    "QA": {
+      "noQuestions": "Apri il Q&A in un'altra scheda",
+      "title": "Q&A"
+    },
     "NOEVENT": {
       "message": "Questo evento non esiste o non è più disponibile.",
       "title": "Evento non disponibile"

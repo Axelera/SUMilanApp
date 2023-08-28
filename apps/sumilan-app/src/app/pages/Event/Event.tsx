@@ -15,7 +15,7 @@ import {
 } from '@ionic/react';
 import { Route, Redirect } from 'react-router-dom';
 import { RouteComponentProps } from "react-router";
-import { fileTrayFull, help, informationCircleOutline, logoYoutube } from 'ionicons/icons';
+import { barChart, fileTrayFull, help, informationCircleOutline, logoYoutube } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -23,6 +23,7 @@ import Live from './Live/Live';
 import Mentimeter from './Mentimeter/Mentimeter';
 import Slides from './Slides/Slides';
 import Info from './Info/Info';
+import Qa from './Qa/Qa';
 import { VideoPlayerProvider } from '../../contexts/VideoPlayer';
 import { EventTimeProvider } from '../../contexts/EventTime';
 import { useGetEventDetailsQuery } from '@sumilan-app/api';
@@ -90,6 +91,16 @@ const Event: React.FC<RouteComponentProps<{ id: string; }>> = ({ history, match 
     const additionalRoutes: string[] = [];
     const additionalTabButtons = [];
 
+    if (event.slidesCollection?.totalCount && event.slidesCollection?.totalCount > 0) {
+        additionalRoutes.push('slides');
+        additionalTabButtons.push(
+            <IonTabButton key="slides-tab-button" tab="slides" href={`${currentUrl}/slides`}>
+                <IonLabel>{t('EVENT.SLIDES.title')}</IonLabel>
+                <IonIcon icon={fileTrayFull}></IonIcon>
+            </IonTabButton>
+        );
+    }
+
     if (event.video_url) {
         additionalRoutes.push('live');
         additionalTabButtons.push(
@@ -105,17 +116,17 @@ const Event: React.FC<RouteComponentProps<{ id: string; }>> = ({ history, match 
         additionalTabButtons.push(
             <IonTabButton key="mentimeter-tab-button" tab="mentimeter" href={`${currentUrl}/mentimeter`}>
                 <IonLabel>{t('EVENT.MENTIMETER.title')}</IonLabel>
-                <IonIcon icon={help}></IonIcon>
+                <IonIcon icon={barChart}></IonIcon>
             </IonTabButton>
         );
     }
 
-    if (event.slidesCollection?.totalCount && event.slidesCollection?.totalCount > 0) {
-        additionalRoutes.push('slides');
+    if (event.qa_url) {
+        additionalRoutes.push('qa');
         additionalTabButtons.push(
-            <IonTabButton key="slides-tab-button" tab="slides" href={`${currentUrl}/slides`}>
-                <IonLabel>{t('EVENT.SLIDES.title')}</IonLabel>
-                <IonIcon icon={fileTrayFull}></IonIcon>
+            <IonTabButton key="qa-tab-button" tab="qa" href={`${currentUrl}/qa`}>
+                <IonLabel>{t('EVENT.QA.title')}</IonLabel>
+                <IonIcon icon={help}></IonIcon>
             </IonTabButton>
         );
     }
@@ -141,6 +152,16 @@ const Event: React.FC<RouteComponentProps<{ id: string; }>> = ({ history, match 
                                     exact
                                 />
                                 <Route
+                                    path={`${currentUrl}/slides`}
+                                    render={() => additionalRoutes.includes('slides')
+                                        ? <Slides
+                                            event={event}
+                                        />
+                                        : <Redirect to={`${currentUrl}/info`} exact />
+                                    }
+                                    exact
+                                />
+                                <Route
                                     path={`${currentUrl}/live`}
                                     render={() => additionalRoutes.includes('live')
                                         ? <Live
@@ -161,9 +182,9 @@ const Event: React.FC<RouteComponentProps<{ id: string; }>> = ({ history, match 
                                     exact
                                 />
                                 <Route
-                                    path={`${currentUrl}/slides`}
-                                    render={() => additionalRoutes.includes('slides')
-                                        ? <Slides
+                                    path={`${currentUrl}/qa`}
+                                    render={() => additionalRoutes.includes('qa')
+                                        ? <Qa
                                             event={event}
                                         />
                                         : <Redirect to={`${currentUrl}/info`} exact />
