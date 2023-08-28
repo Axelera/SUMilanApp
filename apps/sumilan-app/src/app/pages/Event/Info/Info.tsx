@@ -53,6 +53,11 @@ const Info: React.FC<EventComponentProps> = ({ event }) => {
                         <ReactMarkdown
                             rehypePlugins={[rehypeRaw]}
                             children={event.event_description?.replace(/\\n/g, '\n') || ''}
+                            components={{
+                                a: ({
+                                    node, href, children, ...props
+                                }) => <a href={href} target="_blank" rel="noopener noreferrer" {...props}>{children}</a>,
+                            }}
                         />
                     </div>
                 </IonItem>
