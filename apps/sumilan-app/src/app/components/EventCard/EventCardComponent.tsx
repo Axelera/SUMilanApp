@@ -11,7 +11,7 @@ import {
     IonRow,
     IonSkeletonText,
 } from "@ionic/react";
-import { fileTrayFull, help, logoYoutube, timeOutline } from "ionicons/icons";
+import { barChart, fileTrayFull, help, logoYoutube, timeOutline } from "ionicons/icons";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { RouteComponentProps } from "react-router";
@@ -57,17 +57,17 @@ const EventCardComponent: React.FC<Props> = ({ event, history }) => {
                         <IonRow>
                             <IonCol>
                                 <IonButton fill="clear" color="medium">
+                                    <IonIcon slot="icon-only" icon={fileTrayFull} />
+                                </IonButton>
+                            </IonCol>
+                            <IonCol>
+                                <IonButton fill="clear" color="medium">
                                     <IonIcon slot="icon-only" icon={logoYoutube} />
                                 </IonButton>
                             </IonCol>
                             <IonCol>
                                 <IonButton fill="clear" color="medium">
-                                    <IonIcon slot="icon-only" icon={help} />
-                                </IonButton>
-                            </IonCol>
-                            <IonCol>
-                                <IonButton fill="clear" color="medium">
-                                    <IonIcon slot="icon-only" icon={fileTrayFull} />
+                                    <IonIcon slot="icon-only" icon={barChart} />
                                 </IonButton>
                             </IonCol>
                         </IonRow>
@@ -80,6 +80,14 @@ const EventCardComponent: React.FC<Props> = ({ event, history }) => {
 
     const buttons = [];
 
+    if (event.slidesCollection?.totalCount && event.slidesCollection?.totalCount > 0) {
+        buttons.push(
+            <IonButton fill="clear" onClick={(ev) => cardButtonClickHandler(ev, 'slides')} color="tertiary">
+                <IonIcon slot="icon-only" icon={fileTrayFull} />
+            </IonButton>
+        );
+    }
+
     if (event.video_url) {
         buttons.push(
             <IonButton fill="clear" onClick={(ev) => cardButtonClickHandler(ev, 'live')} color="tertiary">
@@ -91,15 +99,7 @@ const EventCardComponent: React.FC<Props> = ({ event, history }) => {
     if (event.voting_url) {
         buttons.push(
             <IonButton fill="clear" onClick={(ev) => cardButtonClickHandler(ev, 'mentimeter')} color="tertiary">
-                <IonIcon slot="icon-only" icon={help} />
-            </IonButton>
-        );
-    }
-
-    if (event.slidesCollection?.totalCount && event.slidesCollection?.totalCount > 0) {
-        buttons.push(
-            <IonButton fill="clear" onClick={(ev) => cardButtonClickHandler(ev, 'slides')} color="tertiary">
-                <IonIcon slot="icon-only" icon={fileTrayFull} />
+                <IonIcon slot="icon-only" icon={barChart} />
             </IonButton>
         );
     }
